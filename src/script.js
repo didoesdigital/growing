@@ -1,21 +1,27 @@
-let TODOData;
+let seasonalFoodData;
 
 const width = window.innerWidth;
 
 function init() {
+  console.log({seasonalFoodData});
 }
 
 function loadData() {
-  // const rowConversionFunction = ({
-  // }) => ({
-  // });
-  // d3.csv("./data/TODO.csv", rowConversionFunction)
-  //   .then((data) => {
-  //     TODOData = data;
-  //   })
-  //   .then(() => {
-  //     setTimeout(init(), 0);
-  //   });
+  d3.json(
+    "./data/seasonal-food-data.json"
+    // , (d) => {
+    //   return {
+    //     // ...: d.,
+    //     name: d.Name,
+    //   };
+    // }
+  )
+    .then((data) => {
+      seasonalFoodData = data;
+    })
+    .then(() => {
+      setTimeout(init(), 0);
+    });
 }
 
 function updateCopyright() {
@@ -26,4 +32,3 @@ function updateCopyright() {
 
 updateCopyright();
 loadData();
-
