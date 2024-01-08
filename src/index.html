@@ -5,22 +5,13 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="author" content="@DiDoesDigital" />
-    <meta
-      name="description"
-      content="Growing"
-    />
-    <meta
-      property="og:description"
-      content="Growing"
-    />
+    <meta name="description" content="Growing" />
+    <meta property="og:description" content="Growing" />
     <meta property="og:locale" content="en_AU" />
     <meta property="og:site_name" content="Di Does Digital" />
     <meta property="og:title" content="Growing" />
     <meta property="og:type" content="article" />
-    <meta
-      property="og:url"
-      content="https://didoesdigital.com/growing/"
-    />
+    <meta property="og:url" content="https://didoesdigital.com/growing/" />
 
     <link href="./styles.css" rel="stylesheet" type="text/css" />
 
@@ -54,9 +45,29 @@
                 ></small
               >
             </p>
-            <p style="margin-top: 1rem">
-              Growing…
-            </p>
+            <p style="margin-top: 1rem">Growing…</p>
+          </div>
+        </section>
+
+        <section>
+          <div class="content-area">
+            <article>
+              <div>
+                <!-- <h2>What's in season each month?</h2> -->
+                <h2>What's in season?</h2>
+                <div>
+                  <h3 id="in-season-this-month">This month</h3>
+                </div>
+                <div className="viz">
+                  <div id="foods-by-color"></div>
+                  <p>
+                    Foods that are out of season in
+                    <span id="selected-month">January</span> are crossed out
+                    e.g. <del id="example-out-of-season" class="out-of-season">Garlic</del>
+                  </p>
+                </div>
+              </div>
+            </article>
           </div>
         </section>
 
@@ -178,7 +189,6 @@
             </p>
           </div>
         </section>
-
       </div>
     </main>
 

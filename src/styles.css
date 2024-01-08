@@ -6,11 +6,19 @@
 
 :root {
   accent-color: #5f428f;
-  --violet-700: #5f428f;
   --coolgrey-100: #faf9fb;
   --coolgrey-200: #f2f1f4;
   --coolgrey-400: #e2e0e5;
+  --coolgrey-700: #676170;
   --coolgrey-900: #3c3941;
+  --truegrey-400: #e3e3e3;
+  --gold-400: #f5d6a3;
+  --green-400: #84dcc0;
+  --peach-400: #f2c4b0;
+  --red-500: #ed9798;
+  --violet-500: #b19cd3;
+  --violet-700: #5f428f;
+  --yellow-400: #f9e89d;
   --sans-serif-stack: "Source Sans 3", "Source Sans Pro", "Work Sans", "Lato",
     "Noto Sans", "Assistant", "Libre Franklin", "Open Sans", "Helvetica Neue",
     Helvetica, Arial, sans-serif;
@@ -104,4 +112,56 @@ text {
     margin-top: 3rem;
     /* text-align: center; */
   }
+}
+
+.color-heading {
+  color: var(--coolgrey-700);
+  text-transform: uppercase;
+  letter-spacing: 0.1rem;
+  font-weight: 400;
+  font-size: 1rem;
+}
+
+.tag {
+  background-color: var(--coolgrey-200);
+  border-radius: 0.25rem;
+  color: var(--coolgrey-900);
+  display: inline-block;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1;
+  margin-bottom: 0.25rem;
+  margin-right: 0.25rem;
+  padding: 0.25rem 0.5rem;
+}
+
+.tag.red {
+  background-color: var(--red-500);
+}
+.tag.green {
+  background-color: var(--green-400);
+}
+.tag.orange {
+  background-color: var(--gold-400);
+}
+.tag.purple {
+  background-color: var(--violet-500);
+}
+.tag.yellow {
+  background-color: var(--yellow-400);
+}
+.tag.brown {
+  background-color: var(--peach-400);
+}
+.tag.white {
+  background-color: #fff;
+  border: 1px solid var(--truegrey-400);
+  border-radius: 0.25rem;
+}
+
+/* .in-season {
+} */
+
+.out-of-season {
+  text-decoration: line-through;
 }
