@@ -19,9 +19,10 @@
   --violet-500: #b19cd3;
   --violet-700: #5f428f;
   --yellow-400: #f9e89d;
-  --sans-serif-stack: "Source Sans 3", "Source Sans Pro", "Work Sans", "Lato",
+  --sans-serif-stack: "Quicksand", "Source Sans 3", "Source Sans Pro", "Work Sans", "Lato",
     "Noto Sans", "Assistant", "Libre Franklin", "Open Sans", "Helvetica Neue",
     Helvetica, Arial, sans-serif;
+  --display-stack: "Quicksand", "Gluten", "Grandstander", "Times New Roman", Times, serif;
 }
 
 html {
@@ -41,7 +42,7 @@ body {
 h1,
 h2,
 h3 {
-  font-family: var(--sans-serif-stack);
+  font-family: var(--display-stack);
   line-height: 1.2;
   margin-top: 1.5rem;
 }
@@ -66,6 +67,7 @@ a {
 }
 
 #intro,
+#seasonality,
 #outro {
   max-width: 60rem;
   padding-left: 8px;
@@ -74,7 +76,6 @@ a {
 
 article {
   padding: 0;
-  max-width: 40rem;
   margin: 0 auto;
 }
 figure {
@@ -88,7 +89,7 @@ figure {
 
 text {
   fill: #3c3941;
-  font: 400 16px/1.4 "Source Sans 3", "Source Sans Pro", "Noto Sans", sans-serif;
+  font: 400 16px/1.4 var(--sans-serif-stack), sans-serif;
 }
 
 .footer-links {
@@ -120,6 +121,7 @@ text {
   letter-spacing: 0.1rem;
   font-weight: 400;
   font-size: 1rem;
+  padding-bottom: 0.5rem;
 }
 
 .tag {
