@@ -45,7 +45,13 @@
                 ></small
               >
             </p>
-            <p style="margin-top: 1rem">Growing…</p>
+            <p style="margin-top: 1rem">
+              Australia grows lots of fruit and vegetables locally.
+              "Seasonality" alludes to the times of year when harvesting a crop
+              is at its peak. Picking food locally when it's in season usually
+              means it'll be fresh, full of flavour, nutritious, and cheaper
+              than other times or from further away.
+            </p>
           </div>
         </section>
 
@@ -59,12 +65,15 @@
                   <h3 id="in-season-this-month">This month</h3>
                 </div>
                 <div className="viz">
-                  <div id="foods-by-color"></div>
                   <p>
                     Foods that are out of season in
                     <span id="selected-month">January</span> are crossed out
-                    e.g. <del id="example-out-of-season" class="out-of-season">Garlic</del>
+                    e.g.
+                    <del id="example-out-of-season" class="out-of-season"
+                      >Garlic</del
+                    >
                   </p>
+                  <div id="foods-by-color"></div>
                 </div>
               </div>
             </article>
@@ -76,16 +85,70 @@
           style="padding-left: 16px; padding-right: 16px; padding-bottom: 144px"
         >
           <div class="content-area">
-            <h2
+            <h3
               style="
                 margin-top: 6rem;
-                font-size: 3rem;
-                font-weight: 700;
-                text-align: center;
+                font-size: 1.5rem;
+                font-weight: 400;
+                text-align: left;
               "
             >
-              The end
-            </h2>
+              About the data
+            </h3>
+            <p style="margin-top: 1rem">
+              Seasonality of fruit and vegetables varies by climate and weather
+              conditions. A particularly dry or wet season can affect the
+              availability of certain crops. This data is a guide only. For now,
+              it's examining the general availability of fruit and vegetables in
+              Australia rather than by region.
+            </p>
+            <p style="margin-top: 1rem">
+              I'm gathering data from a few different sources and will update
+              this page as I learn.
+            </p>
+            <ul>
+              <li>
+                <a
+                  href="https://www.frugalandthriving.com.au/seasonal-eating/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  >Frugal and Thriving</a
+                >
+              </li>
+              <li>
+                <a
+                  href="http://seasonalfoodguide.com/australia-general-seasonal-fresh-produce-guide-fruits-vegetables-in-season-availability.html"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  >Seasonal Food Guide Australia</a
+                >
+              </li>
+              <li>
+                <a
+                  href="https://livelighter.com.au/eating-well/healthy-eating/fruit-and-veg/in-season/in-seasonwa"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  >LiveLighter In Season</a
+                >
+              </li>
+              <li>
+                <a
+                  href="https://www.coastalfresh.com.au/fruit-and-vegetable-calendar.html"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  >Coastal Fresh: Seasonal Fruit & Vegetable Calendar</a
+                >
+              </li>
+              <li>
+                <a
+                  href="https://www.qld.gov.au/about/pickqld/crops-by-season-and-location"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  >Queensland Government Harvest by month and location</a
+                >
+              </li>
+            </ul>
+
             <h3
               style="
                 margin-top: 6rem;
@@ -97,7 +160,7 @@
               About the code
             </h3>
             <p style="margin-top: 1rem">
-              You can see the code on
+              You can see the
               <a href="https://github.com/didoesdigital/growing"
                 >code on GitHub</a
               >.
