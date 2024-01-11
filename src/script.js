@@ -20,12 +20,17 @@ const width = window.innerWidth;
 
 function init() {
   // console.log({ seasonalFoodData });
-  showSelectedMonth();
+  setInitialSelectedMonth();
   showFoodsByColor();
 }
 
-function showSelectedMonth() {
-  selectedMonthIndex = new Date().getMonth();
+function setInitialSelectedMonth() {
+  const params = new URLSearchParams(document.location.search);
+  const month = params.get("month");
+  selectedMonthIndex = months.includes(month)
+    ? months.indexOf(month)
+    : new Date().getMonth();
+
   d3.select("#in-season-this-month").text(months[selectedMonthIndex]);
   d3.select("#selected-month").text(months[selectedMonthIndex]);
 
