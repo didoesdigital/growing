@@ -17,7 +17,9 @@
   --peach-400: #f2c4b0;
   --red-500: #ed9798;
   --violet-500: #b19cd3;
+  --violet-600: #9880c2;
   --violet-700: #5f428f;
+  --violet-900: #331a5b;
   --yellow-400: #f9e89d;
   --sans-serif-stack: "Quicksand", "Source Sans 3", "Source Sans Pro",
     "Work Sans", "Lato", "Noto Sans", "Assistant", "Libre Franklin", "Open Sans",
@@ -68,6 +70,49 @@ p {
 }
 a {
   color: var(--violet-700);
+}
+button {
+  background-color: transparent;
+  border: 1px solid transparent;
+  border-radius: 50%;
+  color: var(--violet-700);
+  cursor: pointer;
+  font-family: var(--sans-serif-stack);
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1;
+  padding: 0.5rem;
+  text-align: center;
+  text-decoration: none;
+  transition: color 0.15s ease-in-out;
+}
+button:hover {
+  transition: color 0.15s ease-in-out;
+  color: var(--violet-600);
+}
+button:active,
+button:focus {
+  transition: color 0.15s ease-in-out;
+  color: var(--violet-900);
+}
+
+#in-season-this-month,
+button#previous,
+button#next {
+  display: inline-flex;
+  align-items: center;
+}
+#in-season-this-month {
+  margin: 0;
+}
+
+.icon-arrow {
+  fill: var(--violet-700);
+  height: 1rem;
+  width: 1rem;
+}
+#previous .icon-arrow {
+  transform: rotate(180deg);
 }
 .page {
   align-items: center;

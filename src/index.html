@@ -54,6 +54,20 @@
     />
   </head>
   <body>
+    <svg style="display: none" aria-hidden="true">
+      <defs>
+        <symbol id="arrow" viewBox="0 0 20 18">
+          <path
+            d="M0.00119197 9.0466C0.001192 8.25856 0.43597 7.83737 1.30553 7.78302L17.3244 6.84553C18.0309 6.79118 18.6287 6.96781 19.1179 7.37541C19.607 7.78302 19.8516 8.34008 19.8516 9.0466C19.8516 9.72594 19.607 10.2694 19.1179 10.677C18.6287 11.1118 18.0309 11.2884 17.3244 11.2069L1.30553 10.3102C0.435969 10.2558 0.00119193 9.83463 0.00119197 9.0466Z"
+            fill="currentColor"
+          />
+          <path
+            d="M13.3164 0.398438C13.8599 0.398438 14.3082 0.643001 14.6615 1.13213L19.675 8.02065C19.8924 8.31956 20.0011 8.65924 20.0011 9.03967C20.0011 9.4201 19.8924 9.75977 19.675 10.0587L14.6207 16.8657C14.2675 17.3548 13.8191 17.5994 13.2756 17.5994C12.868 17.5994 12.4604 17.4363 12.0528 17.1102C11.6724 16.7842 11.4822 16.3766 11.4822 15.8874C11.4822 15.4798 11.6316 15.0586 11.9305 14.6239L16.2511 8.75434L16.2919 9.40651L11.849 3.41472C11.7131 3.2245 11.6044 3.03428 11.5229 2.84407C11.4686 2.65385 11.4414 2.46364 11.4414 2.27342C11.4414 1.64843 11.6588 1.18647 12.0936 0.887565C12.5284 0.56148 12.936 0.398438 13.3164 0.398438Z"
+            fill="currentColor"
+          />
+        </symbol>
+      </defs>
+    </svg>
     <main>
       <div class="page">
         <section id="intro">
@@ -75,7 +89,44 @@
               <div>
                 <!-- <h2>What's in season each month?</h2> -->
                 <h2>What's in season?</h2>
-                <h3 class="semi-bold" id="in-season-this-month">This month</h3>
+                <div
+                  style="
+                    display: flex;
+                    align-items: center;
+                    gap: 0.5rem;
+                    margin-top: 1rem;
+                    margin-bottom: 1rem;
+                    margin-left: -0.5rem;
+                  "
+                >
+                  <button
+                    id="previous"
+                    type="button"
+                    class="pagination"
+                    aria-label="Previous month"
+                    title="Previous month"
+                  >
+                    <svg class="icon-arrow">
+                      <use xlink:href="#arrow"></use>
+                    </svg>
+                  </button>
+                  <div style="min-width: 6.25rem; text-align: center">
+                    <h3 class="semi-bold" id="in-season-this-month">
+                      This month
+                    </h3>
+                  </div>
+                  <button
+                    id="next"
+                    type="button"
+                    class="pagination"
+                    aria-label="Next month"
+                    title="Next month"
+                  >
+                    <svg class="icon-arrow">
+                      <use xlink:href="#arrow"></use>
+                    </svg>
+                  </button>
+                </div>
                 <div class="viz">
                   <p>
                     Foods that are out of season in
