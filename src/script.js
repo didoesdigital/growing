@@ -73,6 +73,12 @@ function showFoodsByColor() {
     .text((d) => d.name);
 }
 
+function setMonthParam(newMonth) {
+  const url = new URL(location);
+  url.searchParams.set("month", newMonth);
+  history.pushState({}, "", url);
+}
+
 function isInSeason(d) {
   return d.allMonths[selectedMonthIndex] === "yes";
 }
