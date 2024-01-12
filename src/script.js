@@ -22,6 +22,7 @@ function init() {
   // console.log({ seasonalFoodData });
   setInitialSelectedMonth();
   showFoodsByColor();
+  makeInteractive();
 }
 
 function setInitialSelectedMonth() {
@@ -71,6 +72,18 @@ function showFoodsByColor() {
         `tag ${d.mainColor} ${isInSeason(d) ? "in-season" : "out-of-season"}`
     )
     .text((d) => d.name);
+}
+
+function makeInteractive() {
+  d3.select("#next").on("click", () => {
+    selectedMonthIndex = selectedMonthIndex === 11 ? 0 : selectedMonthIndex + 1;
+    setMonthParam(months[selectedMonthIndex]);
+  });
+
+  d3.select("#previous").on("click", () => {
+    selectedMonthIndex = selectedMonthIndex === 0 ? 11 : selectedMonthIndex - 1;
+    setMonthParam(months[selectedMonthIndex]);
+  });
 }
 
 function setMonthParam(newMonth) {
