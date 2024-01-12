@@ -15,14 +15,18 @@ const months = [
 
 let seasonalFoodData;
 let selectedMonthIndex = 0; // 0 is January in JavaScript
+let colorGroupedData;
+let colorSections;
+let tagsDiv;
 
 const width = window.innerWidth;
 
 function init() {
   // console.log({ seasonalFoodData });
   setInitialSelectedMonth();
-  showFoodsByColor();
+  setUpFoodsByColor();
   makeInteractive();
+  updateDataWithNewMonthSelection();
 }
 
 function setInitialSelectedMonth() {
@@ -31,7 +35,9 @@ function setInitialSelectedMonth() {
   selectedMonthIndex = months.includes(month)
     ? months.indexOf(month)
     : new Date().getMonth();
+}
 
+function updateDataWithNewMonthSelection() {
   d3.select("#in-season-this-month").text(months[selectedMonthIndex]);
   d3.select("#selected-month").text(months[selectedMonthIndex]);
 
@@ -39,14 +45,25 @@ function setInitialSelectedMonth() {
     (d) => d.allMonths[selectedMonthIndex] === "no"
   );
   d3.select("#example-out-of-season").text(exampleOutOfSeasonFood.name);
+
+  tagsDiv
+    .selectAll("span.tag")
+    .attr("aria-label", (d) =>
+      isInSeason(d) ? undefined : `${d.name} (out of season)`
+    )
+    .attr(
+      "class",
+      (d) =>
+        `tag ${d.mainColor} ${isInSeason(d) ? "in-season" : "out-of-season"}`
+    );
 }
 
-function showFoodsByColor() {
-  const colorGroupedData = d3
+function setUpFoodsByColor() {
+  colorGroupedData = d3
     .groups(seasonalFoodData, (d) => d.mainColor)
     .sort((a, b) => b[1].length - a[1].length);
 
-  const colorSections = d3
+  colorSections = d3
     .select("#foods-by-color")
     .selectAll("div")
     .data(colorGroupedData)
@@ -57,7 +74,7 @@ function showFoodsByColor() {
     .attr("class", "color-heading")
     .text((d) => `${d[0]}`);
 
-  const tagsDiv = colorSections.append("div").attr("class", "tags");
+  tagsDiv = colorSections.append("div").attr("class", "tags");
 
   tagsDiv
     .selectAll("div")
@@ -78,11 +95,13 @@ function makeInteractive() {
   d3.select("#next").on("click", () => {
     selectedMonthIndex = selectedMonthIndex === 11 ? 0 : selectedMonthIndex + 1;
     setMonthParam(months[selectedMonthIndex]);
+    updateDataWithNewMonthSelection();
   });
 
   d3.select("#previous").on("click", () => {
     selectedMonthIndex = selectedMonthIndex === 0 ? 11 : selectedMonthIndex - 1;
     setMonthParam(months[selectedMonthIndex]);
+    updateDataWithNewMonthSelection();
   });
 }
 
