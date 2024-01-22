@@ -93,42 +93,67 @@
                   style="
                     display: flex;
                     align-items: center;
-                    gap: 0.5rem;
+                    flex-wrap: wrap;
+                    gap: 8px;
                     margin-top: 1rem;
                     margin-bottom: 1rem;
-                    margin-left: -0.5rem;
                   "
                 >
-                  <button
-                    id="previous"
-                    type="button"
-                    class="pagination"
-                    aria-label="Previous month"
-                    title="Previous month"
+                  <div
+                    style="
+                      align-items: center;
+                      display: flex;
+                      flex: 1;
+                      gap: 0.5rem;
+                      margin-left: -0.5rem;
+                    "
                   >
-                    <svg class="icon-arrow">
-                      <use xlink:href="#arrow"></use>
-                    </svg>
-                  </button>
-                  <div style="min-width: 6.25rem; text-align: center">
-                    <h3 class="semi-bold" id="in-season-this-month">
-                      This month
-                    </h3>
+                    <button
+                      id="previous"
+                      type="button"
+                      class="pagination"
+                      aria-label="Previous month"
+                      title="Previous month"
+                    >
+                      <svg class="icon-arrow">
+                        <use xlink:href="#arrow"></use>
+                      </svg>
+                    </button>
+                    <div style="min-width: 6.25rem; text-align: center">
+                      <h3 class="semi-bold" id="in-season-this-month">
+                        This month
+                      </h3>
+                    </div>
+                    <button
+                      id="next"
+                      type="button"
+                      class="pagination"
+                      aria-label="Next month"
+                      title="Next month"
+                    >
+                      <svg class="icon-arrow">
+                        <use xlink:href="#arrow"></use>
+                      </svg>
+                    </button>
                   </div>
-                  <button
-                    id="next"
-                    type="button"
-                    class="pagination"
-                    aria-label="Next month"
-                    title="Next month"
+                  <div
+                    style="
+                      display: inline-block;
+                      min-width: 50%;
+                      white-space: nowrap;
+                    "
                   >
-                    <svg class="icon-arrow">
-                      <use xlink:href="#arrow"></use>
-                    </svg>
-                  </button>
+                    <label
+                      ><input
+                        type="checkbox"
+                        id="hide-out-of-season-checkbox"
+                      />
+                      Hide out of season foods</label
+                    >
+                  </div>
                 </div>
                 <div class="viz">
-                  <p>
+                  <p id="out-of-season-chart-note">
                     Foods that are out of season in
                     <span id="selected-month">January</span> are crossed out
                     e.g.

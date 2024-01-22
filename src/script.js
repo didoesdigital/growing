@@ -103,6 +103,10 @@ function makeInteractive() {
     setMonthParam(months[selectedMonthIndex]);
     updateDataWithNewMonthSelection();
   });
+
+  d3.select("#hide-out-of-season-checkbox").on("click", (e) => {
+    d3.select(".viz").classed("hide-out-of-season", e.target.checked);
+  });
 }
 
 function setMonthParam(newMonth) {

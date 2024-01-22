@@ -221,3 +221,8 @@ text {
 .out-of-season {
   text-decoration: line-through;
 }
+
+.hide-out-of-season #out-of-season-chart-note,
+.hide-out-of-season .out-of-season {
+  display: none;
+}
