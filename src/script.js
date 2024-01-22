@@ -92,6 +92,11 @@ function setUpFoodsByColor() {
 }
 
 function makeInteractive() {
+  makeHideOutOfSeasonCheckboxInteractive();
+  makeNextPreviousMonthButtonsInteractive();
+}
+
+function makeNextPreviousMonthButtonsInteractive() {
   d3.select("#next").on("click", () => {
     selectedMonthIndex = selectedMonthIndex === 11 ? 0 : selectedMonthIndex + 1;
     setMonthParam(months[selectedMonthIndex]);
@@ -103,7 +108,9 @@ function makeInteractive() {
     setMonthParam(months[selectedMonthIndex]);
     updateDataWithNewMonthSelection();
   });
+}
 
+function makeHideOutOfSeasonCheckboxInteractive() {
   d3.select("#hide-out-of-season-checkbox").on("click", (e) => {
     d3.select(".viz").classed("hide-out-of-season", e.target.checked);
   });
