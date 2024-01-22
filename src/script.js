@@ -111,6 +111,11 @@ function makeNextPreviousMonthButtonsInteractive() {
 }
 
 function makeHideOutOfSeasonCheckboxInteractive() {
+  const browserCheckedState = d3
+    .select("#hide-out-of-season-checkbox")
+    .property("checked");
+  d3.select(".viz").classed("hide-out-of-season", browserCheckedState);
+
   d3.select("#hide-out-of-season-checkbox").on("click", (e) => {
     d3.select(".viz").classed("hide-out-of-season", e.target.checked);
   });
