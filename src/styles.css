@@ -27,6 +27,24 @@
   --display-stack: "Quicksand", "Gluten", "Grandstander", "Times New Roman",
     Times, serif;
 }
+@media (prefers-color-scheme: dark) {
+  :root {
+    --coolgrey-100: #232027;
+    --coolgrey-200: #504c57;
+    --coolgrey-400: #868091;
+    --coolgrey-700: #eae8ed;
+    --coolgrey-900: #faf9fb;
+    --gold-400: #ecb255;
+    --green-400: #09a573;
+    --peach-400: #e17547;
+    --red-500: #ed9798;
+    --violet-500: #9880c2;
+    --violet-600: #b19cd3;
+    --violet-700: #d5cbe6;
+    --violet-900: #e4ddee;
+    --yellow-400: #f6d43c;
+  }
+}
 
 html {
   font-size: 16px;
@@ -136,10 +154,10 @@ figure {
   width: 100%;
 }
 
-.tick line,
+/* .tick line,
 .domain {
   stroke: var(--coolgrey-400);
-}
+} */
 
 text {
   fill: #3c3941;
@@ -189,6 +207,11 @@ text {
   margin-bottom: 0.25rem;
   margin-right: 0.25rem;
   padding: 0.25rem 0.5rem;
+}
+@media (prefers-color-scheme: dark) {
+  .tag {
+    color: var(--coolgrey-100);
+  }
 }
 
 .tag.red {
