@@ -15,18 +15,26 @@ const months = [
 
 let seasonalFoodData;
 let selectedMonthIndex = 0; // 0 is January in JavaScript
+let selectedRegion = "Australia";
 let colorGroupedData;
 let colorSections;
 let tagsDiv;
+let tagsSpans;
+
+const regionMap = {
+  "Australia": "AU",
+  "Queensland": "Qld",
+};
 
 const width = window.innerWidth;
 
 function init() {
-  // console.log({ seasonalFoodData });
   setInitialSelectedMonth();
+  setInitialSelectedRegion();
   setUpFoodsByColor();
   makeInteractive();
   updateDataWithNewMonthSelection();
+  updateDataWithRegionSelection();
 }
 
 function setInitialSelectedMonth() {
@@ -35,6 +43,13 @@ function setInitialSelectedMonth() {
   selectedMonthIndex = months.includes(month)
     ? months.indexOf(month)
     : new Date().getMonth();
+}
+
+function setInitialSelectedRegion() {
+  const browserCheckedRegionRadio = d3.selectAll(
+    'input[name="region"]:checked'
+  );
+  selectedRegion = browserCheckedRegionRadio.attr("id");
 }
 
 function updateDataWithNewMonthSelection() {
@@ -66,32 +81,78 @@ function setUpFoodsByColor() {
   colorSections = d3
     .select("#foods-by-color")
     .selectAll("div")
-    .data(colorGroupedData)
-    .join("div");
+    .data(
+      colorGroupedData.map((d) => [
+        d[0],
+        d[1].filter((d) => d.region === regionMap[selectedRegion]),
+      ])
+    )
+    .join("div")
+    .attr("id", (d) => `${d[0]}-section`)
+    .attr("class", (d) => `color-section`);
 
   colorSections
     .append("h2")
     .attr("class", "color-heading")
     .text((d) => `${d[0]}`);
 
-  tagsDiv = colorSections.append("div").attr("class", "tags");
+  tagsDiv = colorSections
+    .append("div")
+    .attr("class", "tags")
+    .attr("id", (d) => `${d[0]}-tags`);
+}
 
-  tagsDiv
-    .selectAll("div")
-    .data((d) => d[1])
-    .join("span")
-    .attr("aria-label", (d) =>
-      isInSeason(d) ? undefined : `${d.name} (out of season)`
+function updateDataWithRegionSelection() {
+  colorSections = d3
+    .select("#foods-by-color")
+    .selectAll("div.color-section")
+    .data(
+      colorGroupedData.map((d) => [
+        d[0],
+        d[1].filter((d) => d.region === regionMap[selectedRegion]),
+      ])
+    );
+
+  colorSections
+    .select(".tags")
+    .selectAll("span.tag")
+    .data(
+      (d) => d[1],
+      (d) => `${d.name}`
     )
-    .attr(
-      "class",
-      (d) =>
-        `tag ${d.mainColor} ${isInSeason(d) ? "in-season" : "out-of-season"}`
-    )
-    .text((d) => d.name);
+    .join(
+      (enter) =>
+        enter
+          .append("span")
+          .attr("aria-label", (d) =>
+            isInSeason(d) ? undefined : `${d.name} (out of season)`
+          )
+          .attr(
+            "class",
+            (d) =>
+              `tag ${d.mainColor} ${
+                isInSeason(d) ? "in-season" : "out-of-season"
+              }`
+          )
+          .text((d) => d.name),
+      (update) =>
+        update
+          .attr("aria-label", (d) =>
+            isInSeason(d) ? undefined : `${d.name} (out of season)`
+          )
+          .attr(
+            "class",
+            (d) =>
+              `tag ${d.mainColor} ${
+                isInSeason(d) ? "in-season" : "out-of-season"
+              }`
+          ),
+      (exit) => exit.remove()
+    );
 }
 
 function makeInteractive() {
+  makeRegionInteractive();
   makeHideOutOfSeasonCheckboxInteractive();
   makeNextPreviousMonthButtonsInteractive();
 }
@@ -118,6 +179,15 @@ function makeHideOutOfSeasonCheckboxInteractive() {
 
   d3.select("#hide-out-of-season-checkbox").on("click", (e) => {
     d3.select(".viz").classed("hide-out-of-season", e.target.checked);
+  });
+}
+
+function makeRegionInteractive() {
+  const regionRadio = d3.selectAll('input[name="region"]');
+  regionRadio.on("change", (e) => {
+    const region = e.target.id;
+    selectedRegion = region;
+    updateDataWithRegionSelection();
   });
 }
 
@@ -306,7 +376,7 @@ function loadData() {
 
   d3.tsv("./data/seasonal-food-data.tsv", rowConversionFunction)
     .then((data) => {
-      seasonalFoodData = data.filter((d) => d.region === "AU");
+      seasonalFoodData = data;
     })
     .then(() => {
       setTimeout(init(), 0);
