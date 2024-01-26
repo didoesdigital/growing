@@ -138,6 +138,8 @@ function fillNoMonths(d) {
 function loadData() {
   const rowConversionFunction = (d) => ({
     name: d.name,
+    variety: d.variety,
+    region: d.region,
     Jan: fillNoMonths(d.Jan),
     Feb: fillNoMonths(d.Feb),
     Mar: fillNoMonths(d.Mar),
@@ -172,7 +174,7 @@ function loadData() {
 
   d3.tsv("./data/seasonal-food-data.tsv", rowConversionFunction)
     .then((data) => {
-      seasonalFoodData = data;
+      seasonalFoodData = data.filter((d) => d.region === "AU");
     })
     .then(() => {
       setTimeout(init(), 0);
