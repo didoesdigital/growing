@@ -256,6 +256,7 @@ text {
 
 .out-of-season {
   text-decoration: line-through;
+  text-decoration-thickness: 0.1em;
 }
 
 .hide-out-of-season #out-of-season-chart-note,
