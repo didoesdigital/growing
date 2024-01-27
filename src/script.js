@@ -13,9 +13,18 @@ const months = [
   "December",
 ];
 
+const regionMap = {
+  "Australia": "AU",
+  "Queensland": "Qld",
+  // "New South Wales": "NSW",
+};
+
+const localStoragePrefix = "ddd-seasonality-";
+
 const defaultSelectedRegion = "Australia";
 const monthParam = "month";
 const regionParam = "region";
+const regionStorage = `${regionParam}`;
 let seasonalFoodData;
 let selectedMonthIndex = 0; // 0 is January in JavaScript
 let selectedRegion = `${defaultSelectedRegion}`;
@@ -23,11 +32,6 @@ let colorGroupedData;
 let colorSections;
 let tagsDiv;
 let tagsSpans;
-
-const regionMap = {
-  "Australia": "AU",
-  "Queensland": "Qld",
-};
 
 const width = window.innerWidth;
 
@@ -42,35 +46,55 @@ function init() {
 
 function setInitialSelectedMonth() {
   const params = new URLSearchParams(document.location.search);
-  const month = params.get(monthParam);
-  selectedMonthIndex = months.includes(month)
-    ? months.indexOf(month)
-    : new Date().getMonth();
+  const urlMonth = params.get(monthParam);
+  if (months.includes(urlMonth)) {
+    selectedMonthIndex = months.indexOf(urlMonth);
+    return;
+  }
+
+  selectedMonthIndex = new Date().getMonth();
 }
 
 function setInitialSelectedRegion() {
+  // 1. Try to get region from URL params
   const params = new URLSearchParams(document.location.search);
   const region = params.get(regionParam);
   if (region && regionMap[region]) {
     selectedRegion = region;
+    setLocalStorageItem(regionStorage, selectedRegion);
     const selectedRegionRadio = d3.select(
       `input[name="region"]#${selectedRegion}`
     );
     selectedRegionRadio.property("checked", true);
-  } else {
-    const browserCheckedRegionRadio = d3.selectAll(
-      'input[name="region"]:checked'
-    );
-    if (!browserCheckedRegionRadio.empty()) {
-      selectedRegion = browserCheckedRegionRadio.attr("id");
-    } else {
-      selectedRegion = `${defaultSelectedRegion}`;
-      const selectedRegionRadio = d3.select(
-        `input[name="region"]#${selectedRegion}`
-      );
-      selectedRegionRadio.property("checked", true);
-    }
+    return;
   }
+
+  // 2. Try to get region from local storage
+  const localStorageRegion = getLocalStorageItem(regionStorage);
+  if (localStorageRegion && regionMap[localStorageRegion]) {
+    selectedRegion = localStorageRegion;
+    const selectedRegionRadio = d3.select(
+      `input[name="region"]#${selectedRegion}`
+    );
+    selectedRegionRadio.property("checked", true);
+    return;
+  }
+
+  // 3. Try to get region from browser saved form data
+  const browserCheckedRegionRadio = d3.selectAll(
+    'input[name="region"]:checked'
+  );
+  if (!browserCheckedRegionRadio.empty()) {
+    selectedRegion = browserCheckedRegionRadio.attr("id");
+    return;
+  }
+
+  // 4. Set region to default
+  selectedRegion = `${defaultSelectedRegion}`;
+  const selectedRegionRadio = d3.select(
+    `input[name="region"]#${selectedRegion}`
+  );
+  selectedRegionRadio.property("checked", true);
 }
 
 function setUpFoodsByColorTags() {
@@ -208,7 +232,8 @@ function makeRegionInteractive() {
   regionRadio.on("change", (e) => {
     const region = e.target.id;
     selectedRegion = region;
-    pushRegionParam(selectedRegion);
+    pushRegionParam(selectedRegion); // TODO: test with "New South Wales"
+    setLocalStorageItem(regionStorage, selectedRegion);
     updateDataWithRegionSelection();
   });
 }
@@ -225,6 +250,22 @@ function pushURLParam(param, value) {
   const url = new URL(location);
   url.searchParams.set(param, value);
   history.pushState({}, "", url);
+}
+
+function setLocalStorageItem(key, value) {
+  try {
+    window.localStorage.setItem(`${localStoragePrefix}${key}`, value);
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+function getLocalStorageItem(key) {
+  try {
+    return window.localStorage.getItem(`${localStoragePrefix}${key}`);
+  } catch (e) {
+    console.error(e);
+  }
 }
 
 function isInSeason(d) {
