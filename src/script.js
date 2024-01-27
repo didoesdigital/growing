@@ -13,9 +13,10 @@ const months = [
   "December",
 ];
 
+const defaultSelectedRegion = "Australia";
 let seasonalFoodData;
 let selectedMonthIndex = 0; // 0 is January in JavaScript
-let selectedRegion = "Australia";
+let selectedRegion = `${defaultSelectedRegion}`;
 let colorGroupedData;
 let colorSections;
 let tagsDiv;
@@ -46,10 +47,28 @@ function setInitialSelectedMonth() {
 }
 
 function setInitialSelectedRegion() {
-  const browserCheckedRegionRadio = d3.selectAll(
-    'input[name="region"]:checked'
-  );
-  selectedRegion = browserCheckedRegionRadio.attr("id");
+  const params = new URLSearchParams(document.location.search);
+  const region = params.get("region");
+  if (region && regionMap[region]) {
+    selectedRegion = region;
+    const selectedRegionRadio = d3.select(
+      `input[name="region"]#${selectedRegion}`
+    );
+    selectedRegionRadio.property("checked", true);
+  } else {
+    const browserCheckedRegionRadio = d3.selectAll(
+      'input[name="region"]:checked'
+    );
+    if (!browserCheckedRegionRadio.empty()) {
+      selectedRegion = browserCheckedRegionRadio.attr("id");
+    } else {
+      selectedRegion = `${defaultSelectedRegion}`;
+      const selectedRegionRadio = d3.select(
+        `input[name="region"]#${selectedRegion}`
+      );
+      selectedRegionRadio.property("checked", true);
+    }
+  }
 }
 
 function setUpFoodsByColorTags() {
