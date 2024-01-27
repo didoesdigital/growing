@@ -31,7 +31,7 @@ const width = window.innerWidth;
 function init() {
   setInitialSelectedMonth();
   setInitialSelectedRegion();
-  setUpFoodsByColor();
+  setUpFoodsByColorTags();
   makeInteractive();
   updateDataWithNewMonthSelection();
   updateDataWithRegionSelection();
@@ -52,28 +52,7 @@ function setInitialSelectedRegion() {
   selectedRegion = browserCheckedRegionRadio.attr("id");
 }
 
-function updateDataWithNewMonthSelection() {
-  d3.select("#in-season-this-month").text(months[selectedMonthIndex]);
-  d3.select("#selected-month").text(months[selectedMonthIndex]);
-
-  const exampleOutOfSeasonFood = seasonalFoodData.find(
-    (d) => d.allMonths[selectedMonthIndex] === "no"
-  );
-  d3.select("#example-out-of-season").text(exampleOutOfSeasonFood.name);
-
-  tagsDiv
-    .selectAll("span.tag")
-    .attr("aria-label", (d) =>
-      isInSeason(d) ? undefined : `${d.name} (out of season)`
-    )
-    .attr(
-      "class",
-      (d) =>
-        `tag ${d.mainColor} ${isInSeason(d) ? "in-season" : "out-of-season"}`
-    );
-}
-
-function setUpFoodsByColor() {
+function setUpFoodsByColorTags() {
   colorGroupedData = d3
     .groups(seasonalFoodData, (d) => d.mainColor)
     .sort((a, b) => b[1].length - a[1].length);
@@ -100,6 +79,27 @@ function setUpFoodsByColor() {
     .append("div")
     .attr("class", "tags")
     .attr("id", (d) => `${d[0]}-tags`);
+}
+
+function updateDataWithNewMonthSelection() {
+  d3.select("#in-season-this-month").text(months[selectedMonthIndex]);
+  d3.select("#selected-month").text(months[selectedMonthIndex]);
+
+  const exampleOutOfSeasonFood = seasonalFoodData.find(
+    (d) => d.allMonths[selectedMonthIndex] === "no"
+  );
+  d3.select("#example-out-of-season").text(exampleOutOfSeasonFood.name);
+
+  tagsDiv
+    .selectAll("span.tag")
+    .attr("aria-label", (d) =>
+      isInSeason(d) ? undefined : `${d.name} (out of season)`
+    )
+    .attr(
+      "class",
+      (d) =>
+        `tag ${d.mainColor} ${isInSeason(d) ? "in-season" : "out-of-season"}`
+    );
 }
 
 function updateDataWithRegionSelection() {
