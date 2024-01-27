@@ -295,8 +295,8 @@ function fillNoMonths(d) {
 
 const colorMap = {
   "Apples": "red, green",
-  "Apples (Green)": "green",
-  "Apples (Red)": "red",
+  "Apples (green)": "green",
+  "Apples (red)": "red",
   "Apricots": "orange",
   "Artichoke": "green",
   "Asian greens": "green",
