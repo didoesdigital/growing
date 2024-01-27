@@ -206,13 +206,22 @@ function makeRegionInteractive() {
   regionRadio.on("change", (e) => {
     const region = e.target.id;
     selectedRegion = region;
+    setRegionParam(selectedRegion);
     updateDataWithRegionSelection();
   });
 }
 
 function setMonthParam(newMonth) {
+  setURLParam("month", newMonth);
+}
+
+function setRegionParam(newRegion) {
+  setURLParam("region", newRegion);
+}
+
+function setURLParam(param, value) {
   const url = new URL(location);
-  url.searchParams.set("month", newMonth);
+  url.searchParams.set(param, value);
   history.pushState({}, "", url);
 }
 
