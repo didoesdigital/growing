@@ -73,6 +73,7 @@ function setInitialSelectedRegion() {
   const localStorageRegion = getLocalStorageItem(regionStorage);
   if (localStorageRegion && regionMap[localStorageRegion]) {
     selectedRegion = localStorageRegion;
+    replaceURLParam(regionParam, selectedRegion);
     const selectedRegionRadio = d3.select(
       `input[name="region"]#${selectedRegion}`
     );
@@ -250,6 +251,12 @@ function pushURLParam(param, value) {
   const url = new URL(location);
   url.searchParams.set(param, value);
   history.pushState({}, "", url);
+}
+
+function replaceURLParam(param, value) {
+  const url = new URL(location);
+  url.searchParams.set(param, value);
+  history.replaceState({}, "", url);
 }
 
 function setLocalStorageItem(key, value) {
