@@ -56,7 +56,13 @@ function setInitialSelectedMonth() {
 }
 
 function setInitialSelectedRegion() {
-  // 1. Try to get region from URL params
+  getSelectedRegionFromURLParams() ||
+    getSelectedRegionFromLocalStorage() ||
+    getSelectedRegionFromBrowser() ||
+    setRegionToDefault();
+}
+
+function getSelectedRegionFromURLParams() {
   const params = new URLSearchParams(document.location.search);
   const region = params.get(regionParam);
   if (region && regionMap[region]) {
@@ -66,10 +72,11 @@ function setInitialSelectedRegion() {
       `input[name="region"]#${selectedRegion}`
     );
     selectedRegionRadio.property("checked", true);
-    return;
+    return true;
   }
+}
 
-  // 2. Try to get region from local storage
+function getSelectedRegionFromLocalStorage() {
   const localStorageRegion = getLocalStorageItem(regionStorage);
   if (localStorageRegion && regionMap[localStorageRegion]) {
     selectedRegion = localStorageRegion;
@@ -78,24 +85,27 @@ function setInitialSelectedRegion() {
       `input[name="region"]#${selectedRegion}`
     );
     selectedRegionRadio.property("checked", true);
-    return;
+    return true;
   }
+}
 
-  // 3. Try to get region from browser saved form data
+function getSelectedRegionFromBrowser() {
   const browserCheckedRegionRadio = d3.selectAll(
     'input[name="region"]:checked'
   );
   if (!browserCheckedRegionRadio.empty()) {
     selectedRegion = browserCheckedRegionRadio.attr("id");
-    return;
+    return true;
   }
+}
 
-  // 4. Set region to default
+function setRegionToDefault() {
   selectedRegion = `${defaultSelectedRegion}`;
   const selectedRegionRadio = d3.select(
     `input[name="region"]#${selectedRegion}`
   );
   selectedRegionRadio.property("checked", true);
+  return true;
 }
 
 function setUpFoodsByColorTags() {
