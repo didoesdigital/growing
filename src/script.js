@@ -14,6 +14,8 @@ const months = [
 ];
 
 const defaultSelectedRegion = "Australia";
+const monthParam = "month";
+const regionParam = "region";
 let seasonalFoodData;
 let selectedMonthIndex = 0; // 0 is January in JavaScript
 let selectedRegion = `${defaultSelectedRegion}`;
@@ -40,7 +42,7 @@ function init() {
 
 function setInitialSelectedMonth() {
   const params = new URLSearchParams(document.location.search);
-  const month = params.get("month");
+  const month = params.get(monthParam);
   selectedMonthIndex = months.includes(month)
     ? months.indexOf(month)
     : new Date().getMonth();
@@ -48,7 +50,7 @@ function setInitialSelectedMonth() {
 
 function setInitialSelectedRegion() {
   const params = new URLSearchParams(document.location.search);
-  const region = params.get("region");
+  const region = params.get(regionParam);
   if (region && regionMap[region]) {
     selectedRegion = region;
     const selectedRegionRadio = d3.select(
@@ -179,13 +181,13 @@ function makeInteractive() {
 function makeNextPreviousMonthButtonsInteractive() {
   d3.select("#next").on("click", () => {
     selectedMonthIndex = selectedMonthIndex === 11 ? 0 : selectedMonthIndex + 1;
-    setMonthParam(months[selectedMonthIndex]);
+    pushMonthParam(months[selectedMonthIndex]);
     updateDataWithNewMonthSelection();
   });
 
   d3.select("#previous").on("click", () => {
     selectedMonthIndex = selectedMonthIndex === 0 ? 11 : selectedMonthIndex - 1;
-    setMonthParam(months[selectedMonthIndex]);
+    pushMonthParam(months[selectedMonthIndex]);
     updateDataWithNewMonthSelection();
   });
 }
@@ -206,20 +208,20 @@ function makeRegionInteractive() {
   regionRadio.on("change", (e) => {
     const region = e.target.id;
     selectedRegion = region;
-    setRegionParam(selectedRegion);
+    pushRegionParam(selectedRegion);
     updateDataWithRegionSelection();
   });
 }
 
-function setMonthParam(newMonth) {
-  setURLParam("month", newMonth);
+function pushMonthParam(newMonth) {
+  pushURLParam(monthParam, newMonth);
 }
 
-function setRegionParam(newRegion) {
-  setURLParam("region", newRegion);
+function pushRegionParam(newRegion) {
+  pushURLParam(regionParam, newRegion);
 }
 
-function setURLParam(param, value) {
+function pushURLParam(param, value) {
   const url = new URL(location);
   url.searchParams.set(param, value);
   history.pushState({}, "", url);
