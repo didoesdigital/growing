@@ -154,6 +154,7 @@ button#next {
 #seasonality,
 #outro {
   max-width: 38rem;
+  width: 38rem; /* so that where there are no tags this container still fills the available space */
   padding-left: 24px;
   padding-right: 24px;
 }
