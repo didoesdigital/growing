@@ -12,8 +12,10 @@
   --coolgrey-700: #676170;
   --coolgrey-900: #3c3941;
   --truegrey-400: #e3e3e3;
+  --gold-300: #faead1;
   --gold-400: #f5d6a3;
   --green-400: #84dcc0;
+  --green-500: #24bc8c;
   --peach-400: #f2c4b0;
   --red-500: #ed9798;
   --violet-500: #b19cd3;
@@ -26,6 +28,24 @@
     "Helvetica Neue", Helvetica, Arial, sans-serif;
   --display-stack: "Quicksand", "Gluten", "Grandstander", "Times New Roman",
     Times, serif;
+  --outOfSeasonStrokeOpacity: 0.1;
+  --outOfSeasonFillOpacity: 0.1;
+  --food-red-fill: var(--red-500);
+  --food-red-stroke: var(--red-500);
+  --food-brown-fill: var(--peach-400);
+  --food-brown-stroke: var(--peach-400);
+  --food-purple-fill: var(--violet-500);
+  --food-purple-stroke: var(--violet-500);
+  --food-yellow-fill: var(--yellow-400);
+  --food-yellow-stroke: var(--yellow-400);
+  --food-green-fill: var(--green-500);
+  --food-green-stroke: var(--green-500);
+  --food-orange-fill: var(--gold-300);
+  --food-orange-stroke: var(--gold-300);
+  --food-white-fill: #fff;
+  --food-white-stroke: var(--truegrey-400);
+  --food-unknown-fill: #949494;
+  --food-unknown-stroke: #949494;
 }
 @media (prefers-color-scheme: dark) {
   :root {
@@ -34,8 +54,10 @@
     --coolgrey-400: #868091;
     --coolgrey-700: #eae8ed;
     --coolgrey-900: #faf9fb;
+    --gold-300: #faead1;
     --gold-400: #ecb255;
     --green-400: #09a573;
+    --green-500: #24bc8c;
     --peach-400: #e17547;
     --red-500: #ed9798;
     --violet-500: #9880c2;
@@ -43,6 +65,8 @@
     --violet-700: #d5cbe6;
     --violet-900: #e4ddee;
     --yellow-400: #f6d43c;
+    --outOfSeasonStrokeOpacity: 0.8;
+    --outOfSeasonFillOpacity: 0.8;
   }
 }
 
@@ -259,7 +283,28 @@ text {
   text-decoration-thickness: 0.1em;
 }
 
+@media (prefers-color-scheme: dark) {
+  .food-arc-group textPath.out-of-season {
+    fill: #fff;
+  }
+}
+
 .hide-out-of-season #out-of-season-chart-note,
 .hide-out-of-season .out-of-season {
   display: none;
+}
+
+.radial-viz-overview__svg {
+  width: 100;
+  height: auto;
+  font-family: var(--sans-serif-stack);
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+.food-arc-group textPath {
+  font-family: var(--sans-serif-stack);
+  font-size: 1.5em; /* compensate for viewbox */
+  fill: var(--coolgrey-200);
 }

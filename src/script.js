@@ -19,6 +19,44 @@ const regionMap = {
   // "New South Wales": "NSW",
 };
 
+const selectedFoods = {
+  "AU": [
+    // "Daikons", // White food to test
+    "Lettuces",
+    "Peas",
+    "Zucchini",
+    "Capsicums",
+    "Chillies",
+    "Radishes",
+    "Strawberries",
+    "Tomatoes",
+    "Oranges",
+    "Bananas",
+    "Pineapples",
+    "Eggplants",
+    "Ginger",
+    "Cauliflower",
+  ],
+  "Qld": [
+    "Lettuces",
+    "Peas",
+    "Zucchini",
+    "Capsicums",
+    "Chillies",
+    "Radishes",
+    "Strawberries",
+    "Tomatoes",
+    "Oranges",
+    "Pineapples",
+    "Blueberries",
+    "Eggplants",
+    "Ginger",
+    "Cauliflower",
+    "Olives", // Testing some out of season foods in January
+    "Mandarins", // Testing some out of season foods in January
+  ],
+};
+
 const localStoragePrefix = "ddd-seasonality-";
 
 const defaultSelectedRegion = "Australia";
@@ -27,7 +65,7 @@ const regionParam = "region";
 const regionStorage = `${regionParam}`;
 let seasonalFoodData;
 let selectedMonthIndex = 0; // 0 is January in JavaScript
-let selectedRegion = `${defaultSelectedRegion}`;
+let selectedRegionName = `${defaultSelectedRegion}`;
 let colorGroupedData;
 let colorSections;
 let tagsDiv;
@@ -39,6 +77,7 @@ function init() {
   setInitialSelectedMonth();
   setInitialSelectedRegion();
   setUpFoodsByColorTags();
+  // setUpRadialViz(); // so far we handle everything in updateData… functions
   makeInteractive();
   updateDataWithNewMonthSelection();
   updateDataWithRegionSelection();
@@ -66,10 +105,10 @@ function getSelectedRegionFromURLParams() {
   const params = new URLSearchParams(document.location.search);
   const region = params.get(regionParam);
   if (region && regionMap[region]) {
-    selectedRegion = region;
-    setLocalStorageItem(regionStorage, selectedRegion);
+    selectedRegionName = region;
+    setLocalStorageItem(regionStorage, selectedRegionName);
     const selectedRegionRadio = d3.select(
-      `input[name="region"]#${selectedRegion}`
+      `input[name="region"]#${selectedRegionName}`
     );
     selectedRegionRadio.property("checked", true);
     return true;
@@ -79,10 +118,10 @@ function getSelectedRegionFromURLParams() {
 function getSelectedRegionFromLocalStorage() {
   const localStorageRegion = getLocalStorageItem(regionStorage);
   if (localStorageRegion && regionMap[localStorageRegion]) {
-    selectedRegion = localStorageRegion;
-    replaceURLParam(regionParam, selectedRegion);
+    selectedRegionName = localStorageRegion;
+    replaceURLParam(regionParam, selectedRegionName);
     const selectedRegionRadio = d3.select(
-      `input[name="region"]#${selectedRegion}`
+      `input[name="region"]#${selectedRegionName}`
     );
     selectedRegionRadio.property("checked", true);
     return true;
@@ -94,15 +133,15 @@ function getSelectedRegionFromBrowser() {
     'input[name="region"]:checked'
   );
   if (!browserCheckedRegionRadio.empty()) {
-    selectedRegion = browserCheckedRegionRadio.attr("id");
+    selectedRegionName = browserCheckedRegionRadio.attr("id");
     return true;
   }
 }
 
 function setRegionToDefault() {
-  selectedRegion = `${defaultSelectedRegion}`;
+  selectedRegionName = `${defaultSelectedRegion}`;
   const selectedRegionRadio = d3.select(
-    `input[name="region"]#${selectedRegion}`
+    `input[name="region"]#${selectedRegionName}`
   );
   selectedRegionRadio.property("checked", true);
   return true;
@@ -119,7 +158,7 @@ function setUpFoodsByColorTags() {
     .data(
       colorGroupedData.map((d) => [
         d[0],
-        d[1].filter((d) => d.region === regionMap[selectedRegion]),
+        d[1].filter((d) => d.region === regionMap[selectedRegionName]),
       ])
     )
     .join("div")
@@ -139,6 +178,16 @@ function setUpFoodsByColorTags() {
 
 function updateDataWithNewMonthSelection() {
   d3.select("#in-season-this-month").text(months[selectedMonthIndex]);
+
+  updateTagsWithMonthSelection();
+  updateRadialVizWithMonthSelection();
+}
+
+function updateRadialVizWithMonthSelection() {
+  updateRadialVizWithRegionSelection();
+}
+
+function updateTagsWithMonthSelection() {
   d3.select("#selected-month").text(months[selectedMonthIndex]);
 
   const exampleOutOfSeasonFood = seasonalFoodData.find(
@@ -159,13 +208,190 @@ function updateDataWithNewMonthSelection() {
 }
 
 function updateDataWithRegionSelection() {
+  updateTagsWithRegionSelection();
+  updateRadialVizWithRegionSelection();
+}
+
+function updateRadialVizWithRegionSelection() {
+  const longFoodMonthsData = getRadialVizFoodMonthsData(
+    seasonalFoodData,
+    months
+  );
+
+  const width = 972;
+  const height = 600 * 2;
+  const innerRadius = 640;
+  const outerRadius = height - 30;
+  const viewBox = [-width / 2, -height, width, height / 2];
+
+  // TODO: for overview chart, should show January first
+  // TODO: for detail chart, should show selected month first
+  const cycledMonths = cycleMonths(months[selectedMonthIndex]);
+
+  const halfMonthAngle = Math.PI / 12;
+  const firstStartAngleRotation = -halfMonthAngle;
+  const angleAccessorMonths = (d) => d.month;
+  const angleScaleMonths = d3
+    .scaleBand()
+    .domain(cycledMonths)
+    .range([firstStartAngleRotation, 2 * Math.PI + firstStartAngleRotation]);
+
+  // TODO better way for getting names sorted by color?
+  const colorSortedFoodNames = Array.from(
+    new Set(
+      longFoodMonthsData
+        .slice()
+        .sort((a, b) => d3.ascending(a.mainColor, b.mainColor)) // TODO: consider order of colours? e.g. yellow on the outside, red on the inside?
+        .map((d) => d.name)
+    )
+  );
+
+  const radiusAccessorFoods = (d) => colorSortedFoodNames.indexOf(d.name);
+  const radiusScaleFoods = d3
+    .scaleLinear()
+    .domain([0, colorSortedFoodNames.length])
+    .range([innerRadius, outerRadius]);
+
+  const arcGenerator = d3
+    .arc()
+    .innerRadius((d) => radiusScaleFoods(radiusAccessorFoods(d)))
+    .outerRadius((d) => radiusScaleFoods(radiusAccessorFoods(d) + 1))
+    .startAngle((d) => angleScaleMonths(angleAccessorMonths(d)))
+    .endAngle(
+      (d) =>
+        angleScaleMonths(angleAccessorMonths(d)) + angleScaleMonths.bandwidth()
+    )
+    .padRadius(innerRadius);
+
+  const svg = d3.select(".radial-viz-overview__svg");
+  svg.attr("viewBox", viewBox);
+  const foodArcs = svg.select(".food-arcs");
+
+  const countMonthsInSeasonThreshold = 1;
+  const specialCondition = (d) =>
+    longFoodMonthsData.filter(
+      (item) => item.name === d.name && item.inSeason === true
+    ).length < countMonthsInSeasonThreshold;
+
+  const foodMonthArc = foodArcs
+    .selectAll("g.food-arc-group")
+    .data(longFoodMonthsData, (d) => `arc-${d.name}-${d.month}`)
+    .join(
+      (enter) =>
+        enter
+          .append("g")
+          .attr("class", "food-arc-group")
+          .call((g) =>
+            g
+              .append("path")
+              .attr("id", (d) => `arc-${d.name}-${d.month}`)
+              .attr("d", arcGenerator)
+              .style("stroke", "#000")
+              .style("stroke", (d) =>
+                d.mainColor
+                  ? getCSSColorFromFoodColor(d.mainColor)[1]
+                  : "var(--food-unknown-fill)"
+              )
+              .style("fill", (d) =>
+                d.mainColor
+                  ? getCSSColorFromFoodColor(d.mainColor)[0]
+                  : "#949494"
+              )
+              .style("stroke-opacity", (d) =>
+                d.inSeason ? 1 : "var(--outOfSeasonStrokeOpacity)"
+              )
+              .style("fill-opacity", (d) =>
+                d.inSeason ? 1 : "var(--outOfSeasonFillOpacity)"
+              )
+          )
+          .call((g) =>
+            g
+              .append("title")
+              .text(
+                (d) =>
+                  `${d.name} are ${d.inSeason ? "" : "not "}in season in ${
+                    d.month
+                  }`
+              )
+          )
+          .call((g) => {
+            g.append("text")
+              .attr("dy", "1.75em")
+              .append("textPath")
+              .attr("class", (d) => (d.inSeason ? "" : "out-of-season"))
+              .style("opacity", (d) =>
+                d.month === months[selectedMonthIndex] ? 1 : 0.1
+              )
+              .attr("stroke", (d) =>
+                specialCondition(d) ? "#E26F99" : "transparent"
+              )
+              .attr("paint-order", "stroke")
+              .attr("startOffset", "24.75%")
+              .attr("text-anchor", "middle")
+              .attr("href", (d) => `#arc-${d.name}-${d.month}`)
+              .text((d) => d.name + (specialCondition(d) ? "*" : ""));
+          }),
+      (update) => {
+        update
+          .select("path")
+          .attr("d", arcGenerator)
+          // .style("stroke", "#000")
+          .style("stroke", (d) =>
+            d.mainColor
+              ? getCSSColorFromFoodColor(d.mainColor)[1]
+              : "var(--food-unknown-fill)"
+          )
+          .style("fill", (d) =>
+            d.mainColor
+              ? getCSSColorFromFoodColor(d.mainColor)[0]
+              : "var(--food-unknown-fill)"
+          )
+          .style("stroke-opacity", (d) =>
+            d.inSeason ? 1 : "var(--outOfSeasonStrokeOpacity)"
+          )
+          .style("fill-opacity", (d) =>
+            d.inSeason ? 1 : "var(--outOfSeasonFillOpacity)"
+          );
+
+        update
+          .select("title")
+          .text(
+            (d) =>
+              `${d.name} are ${d.inSeason ? "" : "not "}in season in ${d.month}`
+          );
+
+        update
+          .select("text textPath")
+          .attr("class", (d) => (d.inSeason ? "" : "out-of-season"))
+          .attr("opacity", "1")
+          .attr("stroke", (d) =>
+            specialCondition(d) ? "#E26F99" : "transparent"
+          )
+          .attr("paint-order", "stroke")
+          .attr("startOffset", "24.75%")
+          .attr("text-anchor", "middle")
+          .attr("href", (d) => `#arc-${d.name}-${d.month}`)
+          .style("opacity", (d) =>
+            d.month === months[selectedMonthIndex] ? 1 : 0.1
+          )
+          .text((d) => d.name + (specialCondition(d) ? "*" : ""));
+        return update;
+      },
+      (exit) => {
+        exit.remove();
+        return exit;
+      }
+    );
+}
+
+function updateTagsWithRegionSelection() {
   colorSections = d3
     .select("#foods-by-color")
     .selectAll("div.color-section")
     .data(
       colorGroupedData.map((d) => [
         d[0],
-        d[1].filter((d) => d.region === regionMap[selectedRegion]),
+        d[1].filter((d) => d.region === regionMap[selectedRegionName]),
       ])
     );
 
@@ -231,10 +457,10 @@ function makeHideOutOfSeasonCheckboxInteractive() {
   const browserCheckedState = d3
     .select("#hide-out-of-season-checkbox")
     .property("checked");
-  d3.select(".viz").classed("hide-out-of-season", browserCheckedState);
+  d3.select(".tags-viz").classed("hide-out-of-season", browserCheckedState);
 
   d3.select("#hide-out-of-season-checkbox").on("click", (e) => {
-    d3.select(".viz").classed("hide-out-of-season", e.target.checked);
+    d3.select(".tags-viz").classed("hide-out-of-season", e.target.checked);
   });
 }
 
@@ -242,9 +468,9 @@ function makeRegionInteractive() {
   const regionRadio = d3.selectAll('input[name="region"]');
   regionRadio.on("change", (e) => {
     const region = e.target.id;
-    selectedRegion = region;
-    pushRegionParam(selectedRegion); // TODO: test with "New South Wales"
-    setLocalStorageItem(regionStorage, selectedRegion);
+    selectedRegionName = region;
+    pushRegionParam(selectedRegionName); // TODO: test with "New South Wales"
+    setLocalStorageItem(regionStorage, selectedRegionName);
     updateDataWithRegionSelection();
   });
 }
@@ -423,6 +649,54 @@ function getColors(name) {
 function getMainColor(name) {
   const colors = getColors(name);
   return colors.split(", ")[0];
+}
+
+function getCSSColorFromFoodColor(colorName) {
+  switch (colorName) {
+    case "red":
+      return ["var(--food-red-fill)", "var(--food-red-stroke)"];
+    case "brown":
+      return ["var(--food-brown-fill)", "var(--food-brown-stroke)"];
+    case "purple":
+      return ["var(--food-purple-fill)", "var(--food-purple-stroke)"];
+    case "yellow":
+      return ["var(--food-yellow-fill)", "var(--food-yellow-stroke)"];
+    case "green":
+      return ["var(--food-green-fill)", "var(--food-green-stroke)"];
+    case "orange":
+      return ["var(--food-orange-fill)", "var(--food-orange-stroke)"];
+    case "white":
+      return ["var(--food-white-fill)", "var(--food-white-stroke)"];
+    default:
+      return ["#949494", "#fff"];
+  }
+}
+
+function getRadialVizFoodMonthsData(seasonalFoodData, months) {
+  const selectedRegionAbbr = regionMap[selectedRegionName];
+  const longFoodMonthsData = seasonalFoodData
+    .filter((d) => d.region === selectedRegionAbbr)
+    .filter((d) => selectedFoods[selectedRegionAbbr].includes(d.name))
+    .flatMap((row) => {
+      return months.map((month) => {
+        return {
+          name: row.name,
+          month,
+          inSeason: row[month.slice(0, 3)] === "yes",
+          mainColor: row.mainColor,
+          // tags: row.tags,
+          // source: row.source,
+        };
+      });
+    });
+
+  return longFoodMonthsData;
+}
+
+function cycleMonths(selectedMonthName) {
+  const arr = [...months];
+  const i = arr.findIndex((monthName) => monthName === selectedMonthName);
+  return arr.slice(i).concat(arr.slice(0, i));
 }
 
 function loadData() {
