@@ -22,6 +22,7 @@ const regionMap = {
 const selectedFoods = {
   "AU": [
     // "Daikons", // White food to test
+    // "Passion fruits", // multi-word food to test
     "Lettuces",
     "Peas",
     "Zucchini",
@@ -275,7 +276,7 @@ function updateRadialVizWithRegionSelection() {
 
   const foodMonthArc = foodArcs
     .selectAll("g.food-arc-group")
-    .data(longFoodMonthsData, (d) => `arc-${d.name}-${d.month}`)
+    .data(longFoodMonthsData, getArcID)
     .join(
       (enter) =>
         enter
@@ -284,7 +285,7 @@ function updateRadialVizWithRegionSelection() {
           .call((g) =>
             g
               .append("path")
-              .attr("id", (d) => `arc-${d.name}-${d.month}`)
+              .attr("id", getArcID)
               .attr("d", arcGenerator)
               .style("stroke", "#000")
               .style("stroke", (d) =>
@@ -328,7 +329,7 @@ function updateRadialVizWithRegionSelection() {
               .attr("paint-order", "stroke")
               .attr("startOffset", "24.75%")
               .attr("text-anchor", "middle")
-              .attr("href", (d) => `#arc-${d.name}-${d.month}`)
+              .attr("href", (d) => `#${getArcID(d)}`)
               .text((d) => d.name + (specialCondition(d) ? "*" : ""));
           }),
       (update) => {
@@ -370,7 +371,7 @@ function updateRadialVizWithRegionSelection() {
           .attr("paint-order", "stroke")
           .attr("startOffset", "24.75%")
           .attr("text-anchor", "middle")
-          .attr("href", (d) => `#arc-${d.name}-${d.month}`)
+          .attr("href", (d) => `#${getArcID(d)}`)
           .style("opacity", (d) =>
             d.month === months[selectedMonthIndex] ? 1 : 0.1
           )
@@ -509,6 +510,10 @@ function getLocalStorageItem(key) {
   } catch (e) {
     console.error(e);
   }
+}
+
+function getArcID(d) {
+  return `arc-${d.name.replaceAll(" ", "-")}-${d.month}`;
 }
 
 function isInSeason(d) {
