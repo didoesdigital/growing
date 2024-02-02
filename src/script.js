@@ -214,11 +214,6 @@ function updateDataWithRegionSelection() {
 }
 
 function updateRadialVizWithRegionSelection() {
-  const longFoodMonthsData = getRadialVizFoodMonthsData(
-    seasonalFoodData,
-    months
-  );
-
   const width = 972;
   const height = 600 * 2;
   const innerRadius = 640;
@@ -228,6 +223,16 @@ function updateRadialVizWithRegionSelection() {
   // TODO: for overview chart, should show January first
   // TODO: for detail chart, should show selected month first
   const cycledMonths = cycleMonths(months[selectedMonthIndex]);
+
+  const longFoodMonthsData = getRadialVizFoodMonthsData(
+    seasonalFoodData,
+    months
+  ).sort(
+    // Sort it so that the reading order makes sense: selected month first and all its foods by color, then next calendar month and so on
+    (a, b) =>
+      cycledMonths.indexOf(a.month) - cycledMonths.indexOf(b.month) ||
+      d3.descending(a.mainColor, b.mainColor)
+  );
 
   const halfMonthAngle = Math.PI / 12;
   const firstStartAngleRotation = -halfMonthAngle;
@@ -266,7 +271,11 @@ function updateRadialVizWithRegionSelection() {
 
   const svg = d3.select(".radial-viz-overview__svg");
   svg.attr("viewBox", viewBox);
-  const foodArcs = svg.select(".food-arcs");
+  const foodArcs = svg
+    .select(".food-arcs")
+    .attr("tabindex", "0")
+    .attr("role", "list")
+    .attr("aria-label", "Foods in season by month");
 
   const countMonthsInSeasonThreshold = 1;
   const specialCondition = (d) =>
@@ -281,10 +290,18 @@ function updateRadialVizWithRegionSelection() {
       (enter) =>
         enter
           .append("g")
+          .attr("tabindex", "0")
+          .attr("role", "listitem")
           .attr("class", "food-arc-group")
+          .attr(
+            "aria-label",
+            (d) =>
+              `${d.name} are ${d.inSeason ? "" : "not "}in season in ${d.month}`
+          )
           .call((g) =>
             g
               .append("path")
+              .attr("role", "presentation")
               .attr("id", getArcID)
               .attr("d", arcGenerator)
               .style("stroke", "#000")
@@ -317,6 +334,8 @@ function updateRadialVizWithRegionSelection() {
           )
           .call((g) => {
             g.append("text")
+              .attr("role", "presentation")
+              .attr("aria-hidden", true)
               .attr("dy", "1.75em")
               .append("textPath")
               .attr("class", (d) => (d.inSeason ? "" : "out-of-season"))
