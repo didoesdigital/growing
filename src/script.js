@@ -54,8 +54,8 @@ const selectedFoods = {
     "Eggplants",
     "Ginger",
     "Cauliflower",
-    "Olives", // Testing some out of season foods in January
-    "Mandarins", // Testing some out of season foods in January
+    // "Olives", // Testing some out of season foods in January
+    // "Mandarins", // Testing some out of season foods in January
   ],
   "NSW": [
     "Lettuces",
