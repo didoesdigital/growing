@@ -642,7 +642,7 @@ const colorMap = {
   "Rhubarbs": "red",
   "Rockmelons": "orange",
   "Rosella": "red",
-  "Silverbeets": "green",
+  "Silverbeet": "green",
   "Snow peas": "green",
   "Spinach": "green",
   "Spring onions": "green",
