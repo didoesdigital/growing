@@ -17,6 +17,7 @@ const regionMap = {
   "Australia": "AU",
   "Queensland": "Qld",
   // "New South Wales": "NSW",
+  "NewSouthWales": "NSW",
 };
 
 const selectedFoods = {
@@ -55,6 +56,24 @@ const selectedFoods = {
     "Cauliflower",
     "Olives", // Testing some out of season foods in January
     "Mandarins", // Testing some out of season foods in January
+  ],
+  "NSW": [
+    "Lettuces",
+    "Peas",
+    "Zucchini",
+    "Capsicums",
+    "Chillies",
+    "Radishes",
+    "Strawberries",
+    "Tomatoes",
+    "Oranges",
+    "Pineapples",
+    "Blueberries",
+    "Eggplants",
+    "Ginger",
+    "Cauliflower",
+    "Olives",
+    "Mandarins",
   ],
 };
 
