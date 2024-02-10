@@ -82,7 +82,7 @@ const defaultSelectedRegion = "Australia";
 const monthParam = "month";
 const regionParam = "region";
 const regionStorage = `${regionParam}`;
-let seasonalFoodData;
+let seasonalFoodData = [];
 let selectedMonthIndex = 0; // 0 is January in JavaScript
 /** This is a spaced region name e.g. "New South Wales" */
 let selectedRegionName = `${defaultSelectedRegion}`;
@@ -572,11 +572,11 @@ function getArcID(d) {
 }
 
 function isInSeason(d) {
-  return d.allMonths[selectedMonthIndex] === "yes";
+  return d.allMonths[selectedMonthIndex] !== "no";
 }
 
 function fillNoMonths(d) {
-  return d === "yes" ? "yes" : "no";
+  return d !== "yes" ? "no" : "yes";
 }
 
 const colorMap = {
@@ -760,7 +760,7 @@ function getRadialVizFoodMonthsData(seasonalFoodData, months) {
         return {
           name: row.name,
           month,
-          inSeason: row[month.slice(0, 3)] === "yes",
+          inSeason: row[month.slice(0, 3)] !== "no",
           mainColor: row.mainColor,
           // tags: row.tags,
           // source: row.source,
