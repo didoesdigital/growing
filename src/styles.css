@@ -9,7 +9,9 @@
   --coolgrey-100: #faf9fb;
   --coolgrey-200: #f2f1f4;
   --coolgrey-400: #e2e0e5;
+  --coolgrey-600: #868091;
   --coolgrey-700: #676170;
+  --coolgrey-800: #504C57;
   --coolgrey-900: #3c3941;
   --truegrey-400: #e3e3e3;
   --gold-300: #faead1;
@@ -29,7 +31,7 @@
   --display-stack: "Quicksand", "Gluten", "Grandstander", "Times New Roman",
     Times, serif;
   --outOfSeasonStrokeOpacity: 0.1;
-  --outOfSeasonFillOpacity: 0.1;
+  --outOfSeasonFillOpacity: 0.5;
   --food-red-fill: var(--red-500);
   --food-red-stroke: var(--red-500);
   --food-brown-fill: var(--peach-400);
@@ -40,8 +42,8 @@
   --food-yellow-stroke: var(--yellow-400);
   --food-green-fill: var(--green-500);
   --food-green-stroke: var(--green-500);
-  --food-orange-fill: var(--gold-300);
-  --food-orange-stroke: var(--gold-300);
+  --food-orange-fill: var(--gold-400);
+  --food-orange-stroke: var(--gold-400);
   --food-white-fill: #fff;
   --food-white-stroke: var(--truegrey-400);
   --food-unknown-fill: #949494;
@@ -300,11 +302,16 @@ text {
 .food-arc-group textPath {
   font-family: var(--sans-serif-stack);
   font-size: 1.5em; /* compensate for viewbox */
-  fill: var(--coolgrey-200);
+  fill: var(--coolgrey-900);
+}
+
+textPath.out-of-season {
+  fill: var(--coolgrey-600);
+  text-decoration-thickness: 0.05em;
 }
 
 @media (prefers-color-scheme: dark) {
-  .food-arc-group textPath.out-of-season:not(.orange) {
-    fill: #fff;
+  .food-arc-group textPath {
+    fill: var(--coolgrey-100);
   }
 }
