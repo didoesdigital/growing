@@ -228,7 +228,7 @@ function updateTagsWithMonthSelection() {
   d3.select("#selected-month").text(months[selectedMonthIndex]);
 
   const exampleOutOfSeasonFood = seasonalFoodData.find(
-    (d) => d.allMonths[selectedMonthIndex] === "no"
+    (d) => d.allMonthsSeasonality[selectedMonthIndex] === "no"
   );
   d3.select("#example-out-of-season").text(exampleOutOfSeasonFood.name);
 
@@ -572,7 +572,7 @@ function getArcID(d) {
 }
 
 function isInSeason(d) {
-  return d.allMonths[selectedMonthIndex] !== "no";
+  return d.allMonthsSeasonality[selectedMonthIndex] !== "no";
 }
 
 function fillNoMonths(d) {
@@ -794,7 +794,7 @@ function loadData() {
     Oct: fillNoMonths(d.Oct),
     Nov: fillNoMonths(d.Nov),
     Dec: fillNoMonths(d.Dec),
-    allMonths: [
+    allMonthsSeasonality: [
       fillNoMonths(d.Jan),
       fillNoMonths(d.Feb),
       fillNoMonths(d.Mar),
