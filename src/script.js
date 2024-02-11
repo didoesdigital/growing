@@ -319,6 +319,25 @@ function updateRadialVizWithRegionSelection() {
       (item) => item.name === d.name && item.inSeason === true
     ).length < countMonthsInSeasonThreshold;
 
+  function getPlainEnglishInSeasonText(d) {
+    return `${d.name}${getVarietiesText(d.varieties)} are ${
+      d.inSeason ? "" : "not "
+    }in season in ${d.month}`;
+  }
+
+  function getVarietiesText(varieties) {
+    if (!varieties) return "";
+
+    const varietiesArray = varieties.split(",").map((v) => v || "various");
+    if (varietiesArray.length === 1) return ` (${varieties})`;
+    if (varietiesArray.length === 2)
+      return ` (${varietiesArray.join(" and ")})`;
+    if (varietiesArray.length > 2) {
+      const lastVariety = varietiesArray.pop();
+      return ` (${varietiesArray.join(", ")}, and ${lastVariety})`;
+    }
+  }
+
   const foodMonthArc = foodArcs
     .selectAll("g.food-arc-group")
     .data(longFoodMonthsData, getArcID)
@@ -329,11 +348,7 @@ function updateRadialVizWithRegionSelection() {
           .attr("tabindex", "0")
           .attr("role", "listitem")
           .attr("class", "food-arc-group")
-          .attr(
-            "aria-label",
-            (d) =>
-              `${d.name} are ${d.inSeason ? "" : "not "}in season in ${d.month}`
-          )
+          .attr("aria-label", (d) => getPlainEnglishInSeasonText(d))
           .call((g) =>
             g
               .append("path")
@@ -359,14 +374,7 @@ function updateRadialVizWithRegionSelection() {
               )
           )
           .call((g) =>
-            g
-              .append("title")
-              .text(
-                (d) =>
-                  `${d.name} are ${d.inSeason ? "" : "not "}in season in ${
-                    d.month
-                  }`
-              )
+            g.append("title").text((d) => getPlainEnglishInSeasonText(d))
           )
           .call((g) => {
             g.append("text")
@@ -409,12 +417,7 @@ function updateRadialVizWithRegionSelection() {
             d.inSeason ? 1 : "var(--outOfSeasonFillOpacity)"
           );
 
-        update
-          .select("title")
-          .text(
-            (d) =>
-              `${d.name} are ${d.inSeason ? "" : "not "}in season in ${d.month}`
-          );
+        update.select("title").text((d) => getPlainEnglishInSeasonText(d));
 
         update
           .select("text textPath")
@@ -761,6 +764,7 @@ function getRadialVizFoodMonthsData(seasonalFoodData, months) {
           name: row.name,
           month,
           inSeason: row[month.slice(0, 3)] !== "no",
+          varieties: row.allMonthsVarieties[months.indexOf(month)],
           mainColor: row.mainColor,
           // tags: row.tags,
           // sources: row.sources,
@@ -808,6 +812,7 @@ function loadData() {
       fillNoMonths(d.Nov),
       fillNoMonths(d.Dec),
     ],
+    allMonthsVarieties: ["", "", "", "", "", "", "", "", "", "", "", ""],
     tags: d.tags,
     colors: getColors(d.name),
     mainColor: getMainColor(d.name),
@@ -816,11 +821,83 @@ function loadData() {
 
   d3.tsv("./data/seasonal-food-data.tsv", rowConversionFunction)
     .then((data) => {
-      seasonalFoodData = data;
+      const foodRows = {};
+      for (const foodRow of data) {
+        const key = `${foodRow.name}-${foodRow.region}`; // -${foodRow.sources}`;
+
+        if (!foodRows[key]) {
+          foodRows[key] = foodRow;
+
+          foodRows[key].allMonthsVarieties = foodRow.allMonthsSeasonality.map(
+            (seasonality) => (seasonality === "yes" ? foodRow.variety : "")
+          );
+        } else {
+          foodRows[key].allMonthsSeasonality = combineSeasonalityArrays(
+            foodRows[key].allMonthsSeasonality,
+            foodRow.allMonthsSeasonality
+          );
+
+          foodRows[key].allMonthsVarieties = combineVarietiesArrays(
+            foodRows[key].allMonthsVarieties,
+            foodRow.allMonthsSeasonality,
+            foodRow.variety
+          );
+
+          for (const month of months) {
+            if (foodRow[month.slice(0, 3)] === "yes") {
+              foodRows[key][month.slice(0, 3)] = "yes";
+            }
+          }
+        }
+      }
+
+      seasonalFoodData = Object.values(foodRows);
     })
     .then(() => {
       setTimeout(init(), 0);
     });
+}
+
+/**
+ *
+ * @param {("yes" | "no")[]} previousMonthsSeasonality
+ * @param {("yes" | "no")[]} currentMonthsSeasonality
+ * @returns {("yes" | "no")[]}
+ */
+function combineSeasonalityArrays(
+  previousMonthsSeasonality,
+  currentMonthsSeasonality
+) {
+  return previousMonthsSeasonality.map((month, i) => {
+    return month === "yes" || currentMonthsSeasonality[i] === "yes"
+      ? "yes"
+      : "no";
+  });
+}
+
+/**
+ *
+ * @param {string[]} previousMonthsVarieties - e.g. ["", "Granny Smith", "Granny Smith", ""]
+ * @param {string[]} currentMonthsSeasonality - e.g. ["no", "yes", "no", "yes"]
+ * @param {string} currentVariety - e.g. "Pink Lady"
+ * @returns {string[]} - e.g. ["", "Granny Smith,Pink Lady", "Granny Smith", "Pink Lady"]
+ */
+function combineVarietiesArrays(
+  previousMonthsVarieties,
+  currentMonthsSeasonality,
+  currentVariety
+) {
+  return previousMonthsVarieties.map((previousVarieties, i) => {
+    if (currentMonthsSeasonality[i] === "no") {
+      return previousVarieties;
+    }
+
+    if (previousVarieties === "") {
+      return currentVariety;
+    }
+
+    return previousVarieties + `,${currentVariety}`;
+  });
 }
 
 function updateCopyright() {
