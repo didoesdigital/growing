@@ -283,12 +283,6 @@ text {
   text-decoration-thickness: 0.1em;
 }
 
-@media (prefers-color-scheme: dark) {
-  .food-arc-group textPath.out-of-season:not(.orange) {
-    fill: #fff;
-  }
-}
-
 .hide-out-of-season #out-of-season-chart-note,
 .hide-out-of-season .out-of-season {
   display: none;
@@ -307,4 +301,10 @@ text {
   font-family: var(--sans-serif-stack);
   font-size: 1.5em; /* compensate for viewbox */
   fill: var(--coolgrey-200);
+}
+
+@media (prefers-color-scheme: dark) {
+  .food-arc-group textPath.out-of-season:not(.orange) {
+    fill: #fff;
+  }
 }
