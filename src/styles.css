@@ -315,3 +315,7 @@ textPath.out-of-season {
     fill: var(--coolgrey-100);
   }
 }
+
+.prevent-double-tap-zoom {
+  touch-action: manipulation;
+}
