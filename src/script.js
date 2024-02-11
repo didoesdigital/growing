@@ -62,7 +62,6 @@ const selectedFoods = {
     "Zucchini",
     "Capsicums",
     "Chillies",
-    "Radishes",
     "Strawberries",
     "Tomatoes",
     "Oranges",
@@ -71,7 +70,6 @@ const selectedFoods = {
     "Eggplants",
     "Ginger",
     "Cauliflower",
-    "Olives",
     "Mandarins",
   ],
 };
