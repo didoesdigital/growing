@@ -291,7 +291,7 @@ text {
 }
 
 .radial-viz-overview__svg {
-  width: 100;
+  width: 100%;
   height: auto;
   font-family: var(--sans-serif-stack);
   font-size: 1rem;
