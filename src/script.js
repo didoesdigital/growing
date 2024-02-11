@@ -320,7 +320,7 @@ function updateRadialVizWithRegionSelection() {
     )
     .padRadius(innerRadius);
 
-  const svg = d3.select(".radial-viz-overview__svg");
+  const svg = d3.select(".radial-viz-detail__svg");
   svg.attr("viewBox", viewBox);
   const foodArcs = svg
     .select(".food-arcs")
@@ -397,7 +397,9 @@ function updateRadialVizWithRegionSelection() {
               .attr("aria-hidden", true)
               .attr("dy", "1.75em")
               .append("textPath")
-              .attr("class", (d) => (d.inSeason ? "" : `out-of-season ${d.mainColor}`))
+              .attr("class", (d) =>
+                d.inSeason ? "" : `out-of-season ${d.mainColor}`
+              )
               .style("opacity", (d) =>
                 d.month === months[selectedMonthIndex] ? 1 : 0.1
               )
@@ -436,7 +438,9 @@ function updateRadialVizWithRegionSelection() {
 
         update
           .select("text textPath")
-          .attr("class", (d) => (d.inSeason ? "" : `out-of-season ${d.mainColor}`))
+          .attr("class", (d) =>
+            d.inSeason ? "" : `out-of-season ${d.mainColor}`
+          )
           .attr("opacity", "1")
           .attr("stroke", (d) =>
             specialCondition(d) ? "#E26F99" : "transparent"

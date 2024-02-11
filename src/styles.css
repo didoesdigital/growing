@@ -296,14 +296,14 @@ text {
   overflow: hidden;
 }
 
-#radial-viz-overview {
+#radial-viz-detail {
   width: 560px;
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
 }
 
-.radial-viz-overview__svg {
+.radial-viz-detail__svg {
   width: 100%;
   height: auto;
   font-family: var(--sans-serif-stack);
