@@ -763,7 +763,7 @@ function getRadialVizFoodMonthsData(seasonalFoodData, months) {
           inSeason: row[month.slice(0, 3)] !== "no",
           mainColor: row.mainColor,
           // tags: row.tags,
-          // source: row.source,
+          // sources: row.sources,
         };
       });
     });
@@ -811,7 +811,7 @@ function loadData() {
     tags: d.tags,
     colors: getColors(d.name),
     mainColor: getMainColor(d.name),
-    source: d.source,
+    sources: d.sources,
   });
 
   d3.tsv("./data/seasonal-food-data.tsv", rowConversionFunction)
