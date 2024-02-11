@@ -16,6 +16,7 @@ const months = [
 const regionMap = {
   "Australia": "AU",
   "Queensland": "Qld",
+  "Victoria": "Vic",
   "New South Wales": "NSW",
 };
 
@@ -34,6 +35,22 @@ const selectedFoods = {
     "Oranges",
     "Bananas",
     "Pineapples",
+    "Eggplants",
+    "Ginger",
+    "Cauliflower",
+  ],
+  "Vic": [
+    "Lettuces",
+    "Peas",
+    "Zucchini",
+    "Capsicums",
+    "Chillies",
+    "Radishes",
+    "Strawberries",
+    "Tomatoes",
+    "Oranges",
+    "Pineapples",
+    "Blueberries",
     "Eggplants",
     "Ginger",
     "Cauliflower",
