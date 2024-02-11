@@ -290,6 +290,19 @@ text {
   display: none;
 }
 
+#radial-viz {
+  position: relative;
+  min-height: 360px;
+  overflow: hidden;
+}
+
+#radial-viz-overview {
+  width: 560px;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
 .radial-viz-overview__svg {
   width: 100%;
   height: auto;
