@@ -1,4 +1,5 @@
 name	variety	region	Jan	Feb	Mar	Apr	May	Jun	Jul	Aug	Sep	Oct	Nov	Dec	tags	sources
+Almonds		Vic				yes									nut	https://vfma.org.au/site/Site/For-market-shoppers.aspx
 Apples		AU			yes	yes	yes	yes	yes	yes	yes				fruit	https://www.frugalandthriving.com.au/seasonal-eating/
 Apples	Lady Williams	NSW									yes				fruit	https://www.sydneymarkets.com.au/markets/produce-market/whats-in-season/spring-2020.html
 Apples		NSW			yes	yes	yes	yes	yes	yes					fruit	https://www.sydneymarkets.com.au/markets/produce-market/whats-in-season/spring-2020.html
@@ -91,6 +92,7 @@ Cherries		NSW	yes										yes	yes	fruit	https://www.sydneymarkets.com.au/market
 Cherries		Qld	yes	yes				yes	yes	yes				yes	fruit	http://seasonalfoodguide.com/brisbane-queensland-seasonal-fresh-produce-guide-fruits-vegetables-in-season-availability-australia.html
 Cherries		Vic	yes	yes									yes	yes	fruit	https://vfma.org.au/site/Site/For-market-shoppers.aspx
 Chestnuts		NSW			yes	yes	yes								nut	https://www.sydneymarkets.com.au/markets/produce-market/whats-in-season/spring-2020.html
+Chestnuts		Vic			yes	yes	yes		yes	yes					nut	https://vfma.org.au/site/Site/For-market-shoppers.aspx
 Chillies		AU		yes	yes										vegetable	https://www.frugalandthriving.com.au/seasonal-eating/
 Chillies		NSW									yes	yes	yes		vegetable	https://www.sydneymarkets.com.au/markets/produce-market/whats-in-season/spring-2020.html
 Chillies		Qld	yes	yes	yes	yes	yes	yes	yes	yes	yes	yes	yes	yes	vegetable	http://seasonalfoodguide.com/brisbane-queensland-seasonal-fresh-produce-guide-fruits-vegetables-in-season-availability-australia.html
@@ -159,6 +161,7 @@ Grapes (red)		Qld	yes	yes										yes	fruit	http://seasonalfoodguide.com/brisba
 Guavas		AU		yes											fruit	https://www.frugalandthriving.com.au/seasonal-eating/
 Guavas		NSW			yes	yes									fruit	https://www.sydneymarkets.com.au/markets/produce-market/whats-in-season/spring-2020.html
 Guavas		Qld	yes	yes	yes	yes	yes	yes	yes	yes	yes	yes	yes	yes	fruit	http://seasonalfoodguide.com/brisbane-queensland-seasonal-fresh-produce-guide-fruits-vegetables-in-season-availability-australia.html
+Hazelnuts		Vic			yes	yes	yes		yes	yes					nut	https://vfma.org.au/site/Site/For-market-shoppers.aspx
 Honeydew melons		Qld	yes	yes	yes	yes	yes	yes	yes	yes	yes	yes	yes	yes	fruit	http://seasonalfoodguide.com/brisbane-queensland-seasonal-fresh-produce-guide-fruits-vegetables-in-season-availability-australia.html
 Jerusalem artichokes		NSW						yes	yes	yes					vegetable	https://www.sydneymarkets.com.au/markets/produce-market/whats-in-season/spring-2020.html
 Jerusalem artichokes		Vic						yes							vegetable	https://vfma.org.au/site/Site/For-market-shoppers.aspx
@@ -278,6 +281,7 @@ Persimmons		Vic					yes								fruit	https://vfma.org.au/site/Site/For-market-sh
 Pineapples		AU	yes					yes	yes	yes	yes	yes	yes	yes	fruit	https://www.frugalandthriving.com.au/seasonal-eating/
 Pineapples		NSW	yes	yes							yes	yes	yes	yes	fruit	https://www.sydneymarkets.com.au/markets/produce-market/whats-in-season/spring-2020.html
 Pineapples		Qld	yes	yes	yes	yes	yes	yes	yes	yes	yes	yes	yes	yes	fruit	http://seasonalfoodguide.com/brisbane-queensland-seasonal-fresh-produce-guide-fruits-vegetables-in-season-availability-australia.html
+Pistachios		Vic			yes	yes									nut	https://vfma.org.au/site/Site/For-market-shoppers.aspx
 Plums		AU		yes	yes	yes									fruit	https://www.frugalandthriving.com.au/seasonal-eating/
 Plums		NSW	yes	yes	yes										fruit	https://www.sydneymarkets.com.au/markets/produce-market/whats-in-season/spring-2020.html
 Plums		Qld	yes	yes	yes	yes	yes							yes	fruit	http://seasonalfoodguide.com/brisbane-queensland-seasonal-fresh-produce-guide-fruits-vegetables-in-season-availability-australia.html
@@ -371,6 +375,7 @@ Tomatoes		Qld	yes	yes	yes	yes	yes	yes	yes	yes	yes	yes	yes	yes	vegetable	http://s
 Tomatoes		Vic	yes	yes	yes	yes	yes		yes	yes	yes	yes		yes	vegetable	https://vfma.org.au/site/Site/For-market-shoppers.aspx
 Turnips		NSW				yes	yes	yes	yes	yes					vegetable	https://www.sydneymarkets.com.au/markets/produce-market/whats-in-season/spring-2020.html
 Turnips		Vic						yes	yes	yes	yes	yes			vegetable	https://vfma.org.au/site/Site/For-market-shoppers.aspx
+Walnuts		Vic			yes		yes		yes	yes					nut	https://vfma.org.au/site/Site/For-market-shoppers.aspx
 Watercress		AU												yes	vegetable	https://www.frugalandthriving.com.au/seasonal-eating/
 Watercress		NSW				yes						yes	yes	yes	vegetable	https://www.sydneymarkets.com.au/markets/produce-market/whats-in-season/spring-2020.html
 Watercress		Qld	yes	yes	yes	yes	yes	yes	yes	yes	yes	yes	yes	yes	vegetable	http://seasonalfoodguide.com/brisbane-queensland-seasonal-fresh-produce-guide-fruits-vegetables-in-season-availability-australia.html
