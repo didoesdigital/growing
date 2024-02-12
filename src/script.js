@@ -740,6 +740,12 @@ const colorMap = {
   "Youngberries": "purple, black, red",
   "Zucchini": "green",
   "Zucchini flowers": "yellow",
+
+  "Almonds": "brown, white",
+  "Chestnuts": "brown, white",
+  "Hazelnuts": "brown",
+  "Pistachios": "green, brown",
+  "Walnuts": "brown",
 };
 
 function getColors(name) {
@@ -874,7 +880,9 @@ function loadData() {
         }
       }
 
-      seasonalFoodData = Object.values(foodRows);
+      seasonalFoodData = Object.values(foodRows).filter((food) =>
+        ["fruit", "vegetable"].includes(food.tags)
+      );
     })
     .then(() => {
       setTimeout(init(), 0);
