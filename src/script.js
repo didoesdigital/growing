@@ -334,25 +334,6 @@ function updateRadialVizWithRegionSelection() {
       (item) => item.name === d.name && item.inSeason === true
     ).length < countMonthsInSeasonThreshold;
 
-  function getPlainEnglishInSeasonText(d) {
-    return `${d.name}${getVarietiesText(d.varieties)} are ${
-      d.inSeason ? "" : "not "
-    }in season in ${d.month}`;
-  }
-
-  function getVarietiesText(varieties) {
-    if (!varieties) return "";
-
-    const varietiesArray = varieties.split(",").map((v) => v || "various");
-    if (varietiesArray.length === 1) return ` (${varieties})`;
-    if (varietiesArray.length === 2)
-      return ` (${varietiesArray.join(" and ")})`;
-    if (varietiesArray.length > 2) {
-      const lastVariety = varietiesArray.pop();
-      return ` (${varietiesArray.join(", ")}, and ${lastVariety})`;
-    }
-  }
-
   const foodMonthArc = foodArcs
     .selectAll("g.food-arc-group")
     .data(longFoodMonthsData, getArcID)
@@ -551,6 +532,24 @@ function makeRegionInteractive() {
     setLocalStorageItem(regionStorage, selectedRegionName);
     updateDataWithRegionSelection();
   });
+}
+
+function getPlainEnglishInSeasonText(d) {
+  return `${d.name}${getVarietiesText(d.varieties)} are ${
+    d.inSeason ? "" : "not "
+  }in season in ${d.month}`;
+}
+
+function getVarietiesText(varieties) {
+  if (!varieties) return "";
+
+  const varietiesArray = varieties.split(",").map((v) => v || "various");
+  if (varietiesArray.length === 1) return ` (${varieties})`;
+  if (varietiesArray.length === 2) return ` (${varietiesArray.join(" and ")})`;
+  if (varietiesArray.length > 2) {
+    const lastVariety = varietiesArray.pop();
+    return ` (${varietiesArray.join(", ")}, and ${lastVariety})`;
+  }
 }
 
 function pushMonthParam(newMonth) {
