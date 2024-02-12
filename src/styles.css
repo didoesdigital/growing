@@ -303,7 +303,7 @@ text {
   transform: translateX(-50%);
 }
 
-.radial-viz-detail__svg {
+.radial-viz__svg {
   width: 100%;
   height: auto;
   font-family: var(--sans-serif-stack);

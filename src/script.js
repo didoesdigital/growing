@@ -320,7 +320,7 @@ function updateRadialVizWithRegionSelection() {
     )
     .padRadius(innerRadius);
 
-  const svg = d3.select(".radial-viz-detail__svg");
+  const svg = d3.select(".radial-viz__svg");
   svg.attr("viewBox", viewBox);
   const foodArcs = svg
     .select(".food-arcs")
