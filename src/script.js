@@ -18,6 +18,7 @@ const regionMap = {
   "Queensland": "Qld",
   "Victoria": "Vic",
   "New South Wales": "NSW",
+  "Western Australia": "WA",
 };
 
 const selectedFoods = {
@@ -72,6 +73,22 @@ const selectedFoods = {
     "Cauliflower",
     // "Olives", // Testing some out of season foods in January
     // "Mandarins", // Testing some out of season foods in January
+  ],
+  "WA": [
+    "Lettuces",
+    "Peas",
+    "Zucchini",
+    "Capsicums",
+    "Cherries",
+    "Radishes",
+    "Strawberries",
+    "Tomatoes",
+    "Oranges",
+    "Bananas",
+    "Mangoes",
+    "Eggplants",
+    "Mushrooms",
+    "Potatoes",
   ],
   "NSW": [
     "Lettuces",
