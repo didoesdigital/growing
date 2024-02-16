@@ -20,6 +20,7 @@ const regionMap = {
   "Victoria": "Vic",
   "New South Wales": "NSW",
   "Western Australia": "WA",
+  "South Australia": "SA",
 };
 
 const regionClimateZoneMap = {
@@ -29,6 +30,7 @@ const regionClimateZoneMap = {
   "Victoria": "2",
   "New South Wales": "2",
   "Western Australia": "2",
+  "South Australia": "2",
 };
 
 const selectedFoods = {
@@ -83,6 +85,22 @@ const selectedFoods = {
     "Cauliflower",
     // "Olives", // Testing some out of season foods in January
     // "Mandarins", // Testing some out of season foods in January
+  ],
+  "SA": [
+    "Lettuces",
+    "Peas",
+    "Zucchini",
+    "Fejoas",
+    "Loquats",
+    "Radishes",
+    "Strawberries",
+    "Tomatoes",
+    "Oranges",
+    "Grapefruit",
+    "Lemons",
+    "Eggplants",
+    "Quinces",
+    "Horseradish",
   ],
   "WA": [
     "Lettuces",
