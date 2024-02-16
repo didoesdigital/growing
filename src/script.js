@@ -16,7 +16,7 @@ const months = [
 const regionMap = {
   "Australia": "AU",
   "Queensland": "Qld",
-  "Darwin": "Darwin",
+  "Northern Territory": "NT",
   "Victoria": "Vic",
   "New South Wales": "NSW",
   "Western Australia": "WA",
@@ -107,7 +107,7 @@ const selectedFoods = {
     "Cauliflower",
     "Mandarins",
   ],
-  "Darwin": [
+  "NT": [
     "Capsicums",
     "Star fruit",
     "Durian",
