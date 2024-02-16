@@ -22,6 +22,15 @@ const regionMap = {
   "Western Australia": "WA",
 };
 
+const regionClimateZoneMap = {
+  "Australia": "2",
+  "Queensland": "3",
+  "Northern Territory": "4",
+  "Victoria": "2",
+  "New South Wales": "2",
+  "Western Australia": "2",
+};
+
 const selectedFoods = {
   "AU": [
     // "Daikons", // White food to test
@@ -264,6 +273,11 @@ function setUpFoodsByColorTags() {
 
 function updateDataWithNewMonthSelection() {
   d3.select("#in-season-this-month").text(months[selectedMonthIndex]);
+  d3.select("#planting-month").text(`in ${months[selectedMonthIndex]}`);
+  d3.select("#gardenate-link").attr(
+    "href",
+    getGardenateLink(selectedMonthIndex, selectedRegionName)
+  );
 
   updateTagsWithMonthSelection();
   updateRadialVizWithMonthSelection();
@@ -294,6 +308,10 @@ function updateTagsWithMonthSelection() {
 }
 
 function updateDataWithRegionSelection() {
+  d3.select("#gardenate-link").attr(
+    "href",
+    getGardenateLink(selectedMonthIndex, selectedRegionName)
+  );
   updateTagsWithRegionSelection();
   updateRadialVizWithRegionSelection();
 }
@@ -632,6 +650,13 @@ function isInSeason(d) {
 
 function fillNoMonths(d) {
   return d !== "yes" ? "no" : "yes";
+}
+
+function getGardenateLink(selectedMonthIndex, selectedRegionName) {
+  const url = new URL("https://www.gardenate.com/");
+  url.searchParams.set("month", `${selectedMonthIndex + 1}`);
+  url.searchParams.set("zone", regionClimateZoneMap[selectedRegionName] ?? "2");
+  return url.href;
 }
 
 const colorMap = {
