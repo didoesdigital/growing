@@ -50,7 +50,7 @@ const selectedFoods = {
     "Pineapples",
     "Eggplants",
     "Ginger",
-    "Cauliflower",
+    "Cauliflowers",
   ],
   "Vic": [
     "Lettuces",
@@ -62,11 +62,11 @@ const selectedFoods = {
     "Strawberries",
     "Tomatoes",
     "Oranges",
-    "Pineapples",
+    "Mangoes",
     "Blueberries",
     "Eggplants",
-    "Ginger",
-    "Cauliflower",
+    "Shallots",
+    "Cauliflowers",
   ],
   "Qld": [
     "Lettuces",
@@ -82,7 +82,7 @@ const selectedFoods = {
     "Blueberries",
     "Eggplants",
     "Ginger",
-    "Cauliflower",
+    "Cauliflowers",
     // "Olives", // Testing some out of season foods in January
     // "Mandarins", // Testing some out of season foods in January
   ],
@@ -131,7 +131,7 @@ const selectedFoods = {
     "Blueberries",
     "Eggplants",
     "Ginger",
-    "Cauliflower",
+    "Cauliflowers",
     "Mandarins",
   ],
   "NT": [
