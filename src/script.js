@@ -875,22 +875,33 @@ function getCSSColorFromFoodColor(colorName) {
 
 function getRadialVizFoodMonthsData(seasonalFoodData, months) {
   const selectedRegionAbbr = regionMap[selectedRegionName];
-  const longFoodMonthsData = seasonalFoodData
+  const selectedFoodsInRegion = seasonalFoodData
     .filter((d) => d.region === selectedRegionAbbr)
-    .filter((d) => selectedFoods[selectedRegionAbbr].includes(d.name))
-    .flatMap((row) => {
-      return months.map((month) => {
-        return {
-          name: row.name,
-          month,
-          inSeason: row[month.slice(0, 3)] !== "no",
-          varieties: row.allMonthsVarieties[months.indexOf(month)],
-          mainColor: row.mainColor,
-          // tags: row.tags,
-          // sources: row.sources,
-        };
-      });
+    .filter((d) => selectedFoods[selectedRegionAbbr].includes(d.name));
+
+  if (selectedFoodsInRegion.length < selectedFoods[selectedRegionAbbr].length) {
+    const missingFoods = selectedFoods[selectedRegionAbbr].filter(
+      (food) => !selectedFoodsInRegion.map((d) => d.name).includes(food)
+    );
+    console.error({ missingFoods });
+    throw new Error(
+      "Some foods are missing from the selected region's list of foods. Check selectedFoods."
+    );
+  }
+
+  const longFoodMonthsData = selectedFoodsInRegion.flatMap((row) => {
+    return months.map((month) => {
+      return {
+        name: row.name,
+        month,
+        inSeason: row[month.slice(0, 3)] !== "no",
+        varieties: row.allMonthsVarieties[months.indexOf(month)],
+        mainColor: row.mainColor,
+        // tags: row.tags,
+        // sources: row.sources,
+      };
     });
+  });
 
   return longFoodMonthsData;
 }
