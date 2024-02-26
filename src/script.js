@@ -170,6 +170,12 @@ const selectedFoods = {
   ],
 };
 
+const radialTextDurationInSec = 0.5;
+const radialTextDurationInMs = radialTextDurationInSec * 1000;
+const oneMonthRotationInDegrees = 360 / 12;
+const halfMonthAngleInRadians = Math.PI / 12;
+const firstStartAngleRotationInRadians = -halfMonthAngleInRadians;
+
 const localStoragePrefix = "ddd-seasonality-";
 
 const defaultSelectedRegion = "Australia";
@@ -177,6 +183,7 @@ const monthParam = "month";
 const regionParam = "region";
 const regionStorage = `${regionParam}`;
 let seasonalFoodData = [];
+let previousSelectedMonthIndex = 0; // 0 is January in JavaScript
 let selectedMonthIndex = 0; // 0 is January in JavaScript
 /** This is a spaced region name e.g. "New South Wales" */
 let selectedRegionName = `${defaultSelectedRegion}`;
@@ -184,8 +191,7 @@ let colorGroupedData;
 let colorSections;
 let tagsDiv;
 let tagsSpans;
-
-const width = window.innerWidth;
+let radialVizRotation = 0;
 
 function init() {
   setInitialSelectedMonth();
@@ -195,17 +201,30 @@ function init() {
   makeInteractive();
   updateDataWithNewMonthSelection();
   updateDataWithRegionSelection();
+  preventTabFocusMovingRadialViz();
+}
+
+function preventTabFocusMovingRadialViz() {
+  const radialVizSelection = d3.select("#radial-viz");
+  const radialVizElement = document.querySelector("#radial-viz");
+  radialVizSelection.on("scroll", function () {
+    radialVizElement.scrollTo({ top: 0 });
+  });
 }
 
 function setInitialSelectedMonth() {
   const params = new URLSearchParams(document.location.search);
   const urlMonth = params.get(monthParam);
   if (months.includes(urlMonth)) {
+    previousSelectedMonthIndex = months.indexOf(urlMonth);
     selectedMonthIndex = months.indexOf(urlMonth);
+    radialVizRotation = -oneMonthRotationInDegrees * selectedMonthIndex;
     return;
   }
 
+  previousSelectedMonthIndex = new Date().getMonth();
   selectedMonthIndex = new Date().getMonth();
+  radialVizRotation = -oneMonthRotationInDegrees * selectedMonthIndex;
 }
 
 function setInitialSelectedRegion() {
@@ -353,49 +372,52 @@ function updateDataWithRegionSelection() {
 }
 
 function updateRadialVizWithRegionSelection() {
-  const width = 972;
-  const height = 600 * 2;
-  const innerRadius = 640;
-  const outerRadius = height - 30;
-  const viewBox = [-width / 2, -height, width, height / 2];
+  const width = 1200;
+  const height = width;
+  const innerRadius = 260;
+  const outerRadius = height * 0.5 - 30;
 
   // TODO: for overview chart, should show January first
   // TODO: for detail chart, should show selected month first
-  const cycledMonths = cycleMonths(months[selectedMonthIndex]);
+  const sortedColors = [
+    "green",
+    "red",
+    "orange",
+    "purple",
+    "yellow",
+    "brown",
+    "white",
+  ]; // determined by colorGroupedData.map(d => d[0]);
 
   const longFoodMonthsData = getRadialVizFoodMonthsData(
     seasonalFoodData,
     months
   ).sort(
-    // Sort it so that the reading order makes sense: selected month first and all its foods by color, then next calendar month and so on
+    // Sort it so that the reading order makes sense: first, starting from the outside arc and the selected month at the top, read all its foods by color and by name alphabetically, then next calendar month and so on
     (a, b) =>
-      cycledMonths.indexOf(a.month) - cycledMonths.indexOf(b.month) ||
-      d3.descending(a.mainColor, b.mainColor)
+      months.indexOf(a.month) - months.indexOf(b.month) ||
+      sortedColors.indexOf(a.mainColor) - sortedColors.indexOf(b.mainColor) ||
+      a.name.localeCompare(b.name)
   );
 
-  const halfMonthAngle = Math.PI / 12;
-  const firstStartAngleRotation = -halfMonthAngle;
   const angleAccessorMonths = (d) => d.month;
   const angleScaleMonths = d3
     .scaleBand()
-    .domain(cycledMonths)
-    .range([firstStartAngleRotation, 2 * Math.PI + firstStartAngleRotation]);
+    .domain(months)
+    .range([
+      firstStartAngleRotationInRadians,
+      2 * Math.PI + firstStartAngleRotationInRadians,
+    ]);
 
-  // TODO better way for getting names sorted by color?
   const colorSortedFoodNames = Array.from(
-    new Set(
-      longFoodMonthsData
-        .slice()
-        .sort((a, b) => d3.ascending(a.mainColor, b.mainColor)) // TODO: consider order of colours? e.g. yellow on the outside, red on the inside?
-        .map((d) => d.name)
-    )
+    new Set(longFoodMonthsData.map((d) => d.name))
   );
 
   const radiusAccessorFoods = (d) => colorSortedFoodNames.indexOf(d.name);
   const radiusScaleFoods = d3
     .scaleLinear()
     .domain([0, colorSortedFoodNames.length])
-    .range([innerRadius, outerRadius]);
+    .range([outerRadius, innerRadius]);
 
   const arcGenerator = d3
     .arc()
@@ -408,12 +430,20 @@ function updateRadialVizWithRegionSelection() {
     )
     .padRadius(innerRadius);
 
+  const relativeWrapper = d3.select(".radial-viz-relative-wrapper");
+  relativeWrapper.attr("width", width).attr("height", width);
+  relativeWrapper.style("width", `${width}px`).style("height", `${width}px`);
+
+  const rotateWrapper = d3.select(".radial-viz__svg-rotate-wrapper");
+  rotateWrapper.style("transform", `rotate(${getRotation()}deg)`);
+
   const svg = d3.select(".radial-viz__svg");
-  svg.attr("viewBox", viewBox);
+  svg.attr("width", width).attr("height", width);
   const foodArcs = svg
     .select(".food-arcs")
     .attr("tabindex", "0")
     .attr("role", "list")
+    .attr("transform", `translate(${width * 0.5}, ${height * 0.5})`)
     .attr("aria-label", "Foods in season by month");
 
   const countMonthsInSeasonThreshold = 1;
@@ -429,10 +459,15 @@ function updateRadialVizWithRegionSelection() {
       (enter) =>
         enter
           .append("g")
-          .attr("tabindex", "0")
-          .attr("role", "listitem")
           .attr("class", "food-arc-group")
-          .attr("aria-label", (d) => getPlainEnglishInSeasonText(d))
+          .attr("tabindex", (d) => (isMonthInView(d.month) ? "0" : null))
+          .attr("role", (d) =>
+            isMonthInView(d.month) ? "listitem" : "presentation"
+          )
+          .attr("aria-hidden", (d) => (isMonthInView(d.month) ? null : true))
+          .attr("aria-label", (d) =>
+            isMonthInView(d.month) ? getPlainEnglishInSeasonText(d) : null
+          )
           .call((g) =>
             g
               .append("path")
@@ -464,13 +499,13 @@ function updateRadialVizWithRegionSelection() {
             g.append("text")
               .attr("role", "presentation")
               .attr("aria-hidden", true)
-              .attr("dy", "1.75em")
+              .attr("dy", "1em")
+              .style("opacity", (d) =>
+                d.month === months[selectedMonthIndex] ? 1 : 0.1
+              )
               .append("textPath")
               .attr("class", (d) =>
                 d.inSeason ? "" : `out-of-season ${d.mainColor}`
-              )
-              .style("opacity", (d) =>
-                d.month === months[selectedMonthIndex] ? 1 : 0.1
               )
               .attr("stroke", (d) =>
                 specialCondition(d) ? "#E26F99" : "transparent"
@@ -482,6 +517,16 @@ function updateRadialVizWithRegionSelection() {
               .text((d) => d.name + (specialCondition(d) ? "*" : ""));
           }),
       (update) => {
+        update
+          .attr("tabindex", (d) => (isMonthInView(d.month) ? "0" : null))
+          .attr("role", (d) =>
+            isMonthInView(d.month) ? "listitem" : "presentation"
+          )
+          .attr("aria-hidden", (d) => (isMonthInView(d.month) ? null : true))
+          .attr("aria-label", (d) =>
+            isMonthInView(d.month) ? getPlainEnglishInSeasonText(d) : null
+          );
+
         update
           .select("path")
           .attr("d", arcGenerator)
@@ -506,11 +551,24 @@ function updateRadialVizWithRegionSelection() {
         update.select("title").text((d) => getPlainEnglishInSeasonText(d));
 
         update
+          .select("text")
+          .transition()
+          .ease(d3.easeLinear)
+          .duration(radialTextDurationInMs)
+          .delay((d) =>
+            d.month === months[selectedMonthIndex]
+              ? radialTextDurationInMs * 0.25
+              : 0
+          )
+          .style("opacity", (d) =>
+            d.month === months[selectedMonthIndex] ? 1 : 0
+          );
+
+        update
           .select("text textPath")
           .attr("class", (d) =>
             d.inSeason ? "" : `out-of-season ${d.mainColor}`
           )
-          .attr("opacity", "1")
           .attr("stroke", (d) =>
             specialCondition(d) ? "#E26F99" : "transparent"
           )
@@ -518,9 +576,6 @@ function updateRadialVizWithRegionSelection() {
           .attr("startOffset", "24.75%")
           .attr("text-anchor", "middle")
           .attr("href", (d) => `#${getArcID(d)}`)
-          .style("opacity", (d) =>
-            d.month === months[selectedMonthIndex] ? 1 : 0.1
-          )
           .text((d) => d.name + (specialCondition(d) ? "*" : ""));
         return update;
       },
@@ -529,6 +584,25 @@ function updateRadialVizWithRegionSelection() {
         return exit;
       }
     );
+}
+
+function getRotation() {
+  let monthIndexDelta = previousSelectedMonthIndex - selectedMonthIndex;
+  const isDecToJanRotation = monthIndexDelta > 1;
+  const isJanToDecRotation = monthIndexDelta < -1;
+
+  if (isDecToJanRotation) {
+    monthIndexDelta = monthIndexDelta - 12;
+  }
+
+  if (isJanToDecRotation) {
+    monthIndexDelta = monthIndexDelta + 12;
+  }
+
+  radialVizRotation =
+    radialVizRotation + monthIndexDelta * oneMonthRotationInDegrees;
+
+  return radialVizRotation;
 }
 
 function updateTagsWithRegionSelection() {
@@ -588,12 +662,14 @@ function makeInteractive() {
 
 function makeNextPreviousMonthButtonsInteractive() {
   d3.select("#next").on("click", () => {
+    previousSelectedMonthIndex = selectedMonthIndex;
     selectedMonthIndex = selectedMonthIndex === 11 ? 0 : selectedMonthIndex + 1;
     pushMonthParam(months[selectedMonthIndex]);
     updateDataWithNewMonthSelection();
   });
 
   d3.select("#previous").on("click", () => {
+    previousSelectedMonthIndex = selectedMonthIndex;
     selectedMonthIndex = selectedMonthIndex === 0 ? 11 : selectedMonthIndex - 1;
     pushMonthParam(months[selectedMonthIndex]);
     updateDataWithNewMonthSelection();
@@ -614,6 +690,7 @@ function makeHideOutOfSeasonCheckboxInteractive() {
 function makeRegionInteractive() {
   const regionRadio = d3.selectAll('input[name="region"]');
   regionRadio.on("change", (e) => {
+    previousSelectedMonthIndex = selectedMonthIndex;
     const dashifiedRegion = e.target.id;
     selectedRegionName = mapDashifiedRegionToSpacedRegion(dashifiedRegion);
     pushRegionParam(dashifiedRegion);
@@ -998,11 +1075,25 @@ function getRadialVizFoodMonthsData(seasonalFoodData, months) {
   return longFoodMonthsData;
 }
 
-function cycleMonths(selectedMonthName) {
-  const arr = [...months];
-  const i = arr.findIndex((monthName) => monthName === selectedMonthName);
-  return arr.slice(i).concat(arr.slice(0, i));
-}
+const isMonthInView = (datumMonth) => {
+  const datumMonthIndex = months.indexOf(datumMonth);
+  const isPreviousMonth =
+    selectedMonthIndex !== 0
+      ? datumMonthIndex === selectedMonthIndex - 1
+      : datumMonthIndex === 11;
+  if (isPreviousMonth) return true;
+
+  const isCurrentMonth = datumMonthIndex === selectedMonthIndex;
+  if (isCurrentMonth) return true;
+
+  const isNextMonth =
+    selectedMonthIndex !== 11
+      ? datumMonthIndex === selectedMonthIndex + 1
+      : datumMonthIndex === 0;
+  if (isNextMonth) return true;
+
+  return false;
+};
 
 function loadData() {
   const rowConversionFunction = (d) => ({
