@@ -728,7 +728,7 @@ const colorMap = {
   "Chillies": "red",
   "Chinese cabbage": "green",
   "Chicory": "green, red, white",
-  "Chinese spinach ": "green",
+  "Chinese spinach": "green",
   "Chives": "green",
   "Chokos": "green",
   "Choy sum": "green",
