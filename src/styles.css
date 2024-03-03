@@ -48,7 +48,7 @@
   --food-white-stroke: var(--truegrey-400);
   --food-unknown-fill: #949494;
   --food-unknown-stroke: #949494;
-  --transition-radial-viz-rotation: transform 0.5s ease-in-out 0s;
+  --transition-radial-viz-rotation: transform 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55) 0s;
 }
 
 @media (prefers-color-scheme: dark) {
