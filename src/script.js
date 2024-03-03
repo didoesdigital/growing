@@ -501,7 +501,7 @@ function updateRadialVizWithRegionSelection() {
               .attr("aria-hidden", true)
               .attr("dy", "1em")
               .style("opacity", (d) =>
-                d.month === months[selectedMonthIndex] ? 1 : 0.1
+                d.month === months[selectedMonthIndex] ? 1 : 0
               )
               .append("textPath")
               .attr("class", (d) =>
