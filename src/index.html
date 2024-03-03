@@ -70,7 +70,7 @@
     </svg>
     <main>
       <div class="page">
-        <section id="intro">
+        <section id="intro" class="main-column">
           <div class="content-area">
             <h1 style="font-size: 3rem; padding-top: 6rem">Growing</h1>
             <p>by <a href="https://didoesdigital.com">Diana MacDonald</a></p>
@@ -89,215 +89,232 @@
         </section>
 
         <section id="seasonality">
-          <div class="content-area">
-            <article>
-              <div>
-                <h2>What's in season?</h2>
+          <div class="main-column">
+            <h2 style="text-align: center">What's in season?</h2>
 
-                <div id="radial-viz">
-                  <div id="radial-viz-detail">
-                    <div class="radial-viz-position-wrapper">
-                      <div class="radial-viz-relative-wrapper">
-                        <div class="radial-viz-tooltip-container"></div>
-                        <div class="radial-viz__svg-rotate-wrapper">
-                          <svg class="radial-viz__svg">
-                            <g class="food-arcs"></g>
-                          </svg>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div id="radial-viz-detail"></div>
-                </div>
-
-                <div style="margin-top: 1rem">
-                  <fieldset>
-                    <legend>Region</legend>
-                    <div class="form-group">
-                      <div class="radio">
-                        <label for="Australia">
-                          <input
-                            type="radio"
-                            name="region"
-                            id="Australia"
-                            value="Australia"
-                          />
-                          Australia
-                        </label>
-                      </div>
-                      <div class="radio">
-                        <label for="New-South-Wales">
-                          <input
-                            type="radio"
-                            name="region"
-                            id="New-South-Wales"
-                            value="New South Wales"
-                          />
-                          New South Wales
-                        </label>
-                      </div>
-                      <div class="radio">
-                        <label for="Victoria">
-                          <input
-                            type="radio"
-                            name="region"
-                            id="Victoria"
-                            value="Victoria"
-                          />
-                          Victoria
-                        </label>
-                      </div>
-                      <div class="radio">
-                        <label for="Queensland">
-                          <input
-                            type="radio"
-                            name="region"
-                            id="Queensland"
-                            value="Queensland"
-                          />
-                          Queensland
-                        </label>
-                      </div>
-                      <div class="radio">
-                        <label for="Western-Australia">
-                          <input
-                            type="radio"
-                            name="region"
-                            id="Western-Australia"
-                            value="Western Australia"
-                          />
-                          Western Australia
-                        </label>
-                      </div>
-                      <div class="radio">
-                        <label for="South-Australia">
-                          <input
-                            type="radio"
-                            name="region"
-                            id="South-Australia"
-                            value="South Australia"
-                          />
-                          South Australia
-                        </label>
-                      </div>
-                      <div class="radio">
-                        <label for="Tasmania">
-                          <input
-                            type="radio"
-                            name="region"
-                            id="Tasmania"
-                            value="Tasmania"
-                          />
-                          Tasmania
-                        </label>
-                      </div>
-                      <div class="radio">
-                        <label for="Northern-Territory">
-                          <input
-                            type="radio"
-                            name="region"
-                            id="Northern-Territory"
-                            value="Northern Territory"
-                          />
-                          Northern Territory
-                        </label>
-                      </div>
-                    </div>
-                  </fieldset>
-                </div>
-
-                <div
-                  style="
-                    display: flex;
-                    align-items: center;
-                    flex-wrap: wrap;
-                    gap: 8px;
-                    margin-top: 1rem;
-                    margin-bottom: 1rem;
-                  "
-                >
-                  <div
-                    style="
-                      align-items: center;
-                      display: flex;
-                      flex: 1;
-                      gap: 0.5rem;
-                      margin-left: -0.5rem;
-                    "
-                  >
-                    <button
-                      id="previous"
-                      type="button"
-                      class="pagination prevent-double-tap-zoom"
-                      aria-label="Previous month"
-                      title="Previous month"
-                    >
-                      <svg class="icon-arrow">
-                        <use xlink:href="#arrow"></use>
-                      </svg>
-                    </button>
-                    <div style="min-width: 6.25rem; text-align: center">
-                      <h3 class="semi-bold" id="in-season-this-month">
-                        This month
-                      </h3>
-                    </div>
-                    <button
-                      id="next"
-                      type="button"
-                      class="pagination prevent-double-tap-zoom"
-                      aria-label="Next month"
-                      title="Next month"
-                    >
-                      <svg class="icon-arrow">
-                        <use xlink:href="#arrow"></use>
-                      </svg>
-                    </button>
-                  </div>
-                  <div
-                    style="
-                      display: inline-block;
-                      min-width: 50%;
-                      white-space: nowrap;
-                    "
-                  >
-                    <label
-                      ><input
-                        type="checkbox"
-                        id="hide-out-of-season-checkbox"
+            <div
+              style="margin-top: 1rem; display: flex; justify-content: center"
+            >
+              <fieldset>
+                <legend>Region</legend>
+                <div class="form-group">
+                  <div class="radio">
+                    <label for="Australia">
+                      <input
+                        type="radio"
+                        name="region"
+                        id="Australia"
+                        value="Australia"
                       />
-                      Hide out of season foods</label
-                    >
+                      Australia
+                    </label>
+                  </div>
+                  <div class="radio">
+                    <label for="New-South-Wales">
+                      <input
+                        type="radio"
+                        name="region"
+                        id="New-South-Wales"
+                        value="New South Wales"
+                      />
+                      New South Wales
+                    </label>
+                  </div>
+                  <div class="radio">
+                    <label for="Victoria">
+                      <input
+                        type="radio"
+                        name="region"
+                        id="Victoria"
+                        value="Victoria"
+                      />
+                      Victoria
+                    </label>
+                  </div>
+                  <div class="radio">
+                    <label for="Queensland">
+                      <input
+                        type="radio"
+                        name="region"
+                        id="Queensland"
+                        value="Queensland"
+                      />
+                      Queensland
+                    </label>
+                  </div>
+                  <div class="radio">
+                    <label for="Western-Australia">
+                      <input
+                        type="radio"
+                        name="region"
+                        id="Western-Australia"
+                        value="Western Australia"
+                      />
+                      Western Australia
+                    </label>
+                  </div>
+                  <div class="radio">
+                    <label for="South-Australia">
+                      <input
+                        type="radio"
+                        name="region"
+                        id="South-Australia"
+                        value="South Australia"
+                      />
+                      South Australia
+                    </label>
+                  </div>
+                  <div class="radio">
+                    <label for="Tasmania">
+                      <input
+                        type="radio"
+                        name="region"
+                        id="Tasmania"
+                        value="Tasmania"
+                      />
+                      Tasmania
+                    </label>
+                  </div>
+                  <div class="radio">
+                    <label for="Northern-Territory">
+                      <input
+                        type="radio"
+                        name="region"
+                        id="Northern-Territory"
+                        value="Northern Territory"
+                      />
+                      Northern Territory
+                    </label>
                   </div>
                 </div>
-                <div class="tags-viz">
-                  <p id="out-of-season-chart-note">
-                    Foods that are out of season in
-                    <span id="selected-month">January</span> are crossed out
-                    e.g.
-                    <del id="example-out-of-season" class="out-of-season"
-                      >Garlic</del
-                    >
-                  </p>
-                  <div id="foods-by-color"></div>
-                  <p style="margin-top: 3rem">
-                    Want to plant your own? Check
-                    <a
-                      id="gardenate-link"
-                      href="https://www.gardenate.com/?month=3&zone=4"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      >Gardenate</a
-                    >
-                    for what to plant
-                    <span id="planting-month">this month</span>.
-                  </p>
-                </div>
-              </div>
-            </article>
+              </fieldset>
+            </div>
           </div>
         </section>
 
-        <section id="outro" style="padding-bottom: 144px">
+        <section style="width: 100%">
+          <div class="radial-viz-overview-wrapper">
+            <div class="radial-viz-overview">
+              <div class="radial-viz-overview-position-wrapper">
+                <div class="radial-viz-overview-relative-wrapper">
+                  <div class="radial-viz-tooltip-container"></div>
+                  <div class="radial-viz__svg-rotate-wrapper">
+                    <svg class="radial-viz-overview__svg">
+                      <g class="food-arcs"></g>
+                    </svg>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div id="radial-viz-detail"></div>
+          </div>
+        </section>
+
+        <section>
+          <div class="main-column">
+            <div class="radial-viz-detail-wrapper">
+              <div class="radial-viz-detail">
+                <div class="radial-viz-detail-position-wrapper">
+                  <div class="radial-viz-detail-relative-wrapper">
+                    <div class="radial-viz-tooltip-container"></div>
+                    <div class="radial-viz__svg-rotate-wrapper">
+                      <svg class="radial-viz-detail__svg">
+                        <g class="food-arcs"></g>
+                      </svg>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div id="radial-viz-detail"></div>
+            </div>
+
+            <div
+              style="
+                display: flex;
+                align-items: center;
+                flex-wrap: wrap;
+                gap: 8px;
+                margin-top: 1rem;
+                margin-bottom: 1rem;
+              "
+            >
+              <div
+                style="
+                  align-items: center;
+                  display: flex;
+                  flex: 1;
+                  gap: 0.5rem;
+                  margin-left: -0.5rem;
+                "
+              >
+                <button
+                  id="previous"
+                  type="button"
+                  class="pagination prevent-double-tap-zoom"
+                  aria-label="Previous month"
+                  title="Previous month"
+                >
+                  <svg class="icon-arrow">
+                    <use xlink:href="#arrow"></use>
+                  </svg>
+                </button>
+                <div style="min-width: 6.25rem; text-align: center">
+                  <h3 class="semi-bold in-season-this-month">
+                    This month
+                  </h3>
+                </div>
+                <button
+                  id="next"
+                  type="button"
+                  class="pagination prevent-double-tap-zoom"
+                  aria-label="Next month"
+                  title="Next month"
+                >
+                  <svg class="icon-arrow">
+                    <use xlink:href="#arrow"></use>
+                  </svg>
+                </button>
+              </div>
+              <div
+                style="
+                  display: inline-block;
+                  min-width: 50%;
+                  white-space: nowrap;
+                  text-align: right;
+                "
+              >
+                <label
+                  ><input type="checkbox" id="hide-out-of-season-checkbox" />
+                  Hide out of season foods</label
+                >
+              </div>
+            </div>
+            <div class="tags-viz">
+              <p id="out-of-season-chart-note">
+                Foods that are out of season in
+                <span id="selected-month">January</span> are crossed out e.g.
+                <del id="example-out-of-season" class="out-of-season"
+                  >Garlic</del
+                >
+              </p>
+              <div id="foods-by-color"></div>
+              <p style="margin-top: 3rem">
+                Want to plant your own? Check
+                <a
+                  id="gardenate-link"
+                  href="https://www.gardenate.com/?month=3&zone=4"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  >Gardenate</a
+                >
+                for what to plant
+                <span id="planting-month">this month</span>.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section id="outro" class="main-column" style="padding-bottom: 144px">
           <div class="content-area">
             <h3 style="margin-top: 6rem; font-size: 1.5rem; text-align: left">
               About the data

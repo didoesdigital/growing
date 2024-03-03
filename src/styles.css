@@ -164,14 +164,14 @@ button:focus {
   color: var(--violet-900);
 }
 
-#in-season-this-month,
+.in-season-this-month,
 button#previous,
 button#next {
   display: inline-flex;
   align-items: center;
 }
 
-#in-season-this-month {
+.in-season-this-month {
   margin: 0;
 }
 
@@ -191,12 +191,9 @@ button#next {
   flex-direction: column;
 }
 
-#intro,
-#seasonality,
-#outro {
-  max-width: 38rem;
-  /* Set width to 100% so that where there are no tags this container still fills the available space */
-  width: 100%;
+.main-column {
+  width: 38rem;
+  max-width: 100vw;
   padding-left: 24px;
   padding-right: 24px;
 }
@@ -254,6 +251,12 @@ text {
   font-weight: 400;
   font-size: 1rem;
   padding-bottom: 0.5rem;
+}
+
+.tags-viz {
+  /* Set width to 100% so that where there are no tags this container still fills the available space */
+  max-width: 38rem;
+  width: 100%;
 }
 
 .tag {
@@ -318,26 +321,41 @@ text {
   display: none;
 }
 
-#radial-viz {
+.radial-viz-overview-wrapper {
+  position: relative;
+}
+
+.radial-viz-detail-wrapper {
   position: relative;
   min-height: 360px;
   overflow: hidden;
 }
 
-#radial-viz-detail {
+.radial-viz-detail {
   width: 560px;
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
 }
 
-.radial-viz-position-wrapper {
+.radial-viz-overview-position-wrapper {
+  display: flex;
+  justify-content: center;
+}
+
+.radial-viz-detail-position-wrapper {
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
 }
 
-.radial-viz-relative-wrapper {
+.radial-viz-overview-relative-wrapper {
+  position: relative;
+  width: 100vw;
+  max-height: 100svh;
+}
+
+.radial-viz-detail-relative-wrapper {
   position: relative;
 }
 
@@ -360,8 +378,18 @@ text {
   height: 100%;
 }
 
-.radial-viz__svg {
-  /* width: 100%; */
+.radial-viz-overview__svg {
+  width: 100%;
+  height: auto;
+  max-width: 100vw;
+  max-height: 100svh;
+  font-family: var(--sans-serif-stack);
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+.radial-viz-detail__svg {
   height: auto;
   font-family: var(--sans-serif-stack);
   font-size: 1rem;
@@ -387,4 +415,8 @@ textPath.out-of-season {
 
 .prevent-double-tap-zoom {
   touch-action: manipulation;
+}
+
+.form-group {
+  column-count: 2;
 }

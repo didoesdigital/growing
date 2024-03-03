@@ -205,8 +205,8 @@ function init() {
 }
 
 function preventTabFocusMovingRadialViz() {
-  const radialVizSelection = d3.select("#radial-viz");
-  const radialVizElement = document.querySelector("#radial-viz");
+  const radialVizSelection = d3.select(".radial-viz-detail-wrapper");
+  const radialVizElement = document.querySelector(".radial-viz-detail-wrapper");
   radialVizSelection.on("scroll", function () {
     radialVizElement.scrollTo({ top: 0 });
   });
@@ -327,7 +327,7 @@ function setUpFoodsByColorTags() {
 }
 
 function updateDataWithNewMonthSelection() {
-  d3.select("#in-season-this-month").text(months[selectedMonthIndex]);
+  d3.selectAll(".in-season-this-month").text(months[selectedMonthIndex]);
   d3.select("#planting-month").text(`in ${months[selectedMonthIndex]}`);
   d3.select("#gardenate-link").attr(
     "href",
@@ -339,7 +339,8 @@ function updateDataWithNewMonthSelection() {
 }
 
 function updateRadialVizWithMonthSelection() {
-  updateRadialVizWithRegionSelection();
+  updateRadialDetailVizWithRegionSelection();
+  updateRadialOverviewVizWithRegionSelection();
 }
 
 function updateTagsWithMonthSelection() {
@@ -368,17 +369,16 @@ function updateDataWithRegionSelection() {
     getGardenateLink(selectedMonthIndex, selectedRegionName)
   );
   updateTagsWithRegionSelection();
-  updateRadialVizWithRegionSelection();
+  updateRadialDetailVizWithRegionSelection();
+  updateRadialOverviewVizWithRegionSelection();
 }
 
-function updateRadialVizWithRegionSelection() {
+function updateRadialOverviewVizWithRegionSelection() {
   const width = 1200;
   const height = width;
-  const innerRadius = 260;
+  const innerRadius = 60;
   const outerRadius = height * 0.5 - 30;
 
-  // TODO: for overview chart, should show January first
-  // TODO: for detail chart, should show selected month first
   const sortedColors = [
     "green",
     "red",
@@ -389,8 +389,10 @@ function updateRadialVizWithRegionSelection() {
     "white",
   ]; // determined by colorGroupedData.map(d => d[0]);
 
+  const selectedFoodData = getAllFoodDataForRegion(seasonalFoodData);
+
   const longFoodMonthsData = getRadialVizFoodMonthsData(
-    seasonalFoodData,
+    selectedFoodData,
     months
   ).sort(
     // Sort it so that the reading order makes sense: first, starting from the outside arc and the selected month at the top, read all its foods by color and by name alphabetically, then next calendar month and so on
@@ -430,15 +432,11 @@ function updateRadialVizWithRegionSelection() {
     )
     .padRadius(innerRadius);
 
-  const relativeWrapper = d3.select(".radial-viz-relative-wrapper");
-  relativeWrapper.attr("width", width).attr("height", width);
-  relativeWrapper.style("width", `${width}px`).style("height", `${width}px`);
+  const svg = d3.select(
+    ".radial-viz-overview-wrapper .radial-viz-overview__svg"
+  );
+  svg.attr("viewBox", `0 0 ${width} ${height}`);
 
-  const rotateWrapper = d3.select(".radial-viz__svg-rotate-wrapper");
-  rotateWrapper.style("transform", `rotate(${getRotation()}deg)`);
-
-  const svg = d3.select(".radial-viz__svg");
-  svg.attr("width", width).attr("height", width);
   const foodArcs = svg
     .select(".food-arcs")
     .attr("tabindex", "0")
@@ -454,7 +452,186 @@ function updateRadialVizWithRegionSelection() {
 
   const foodMonthArc = foodArcs
     .selectAll("g.food-arc-group")
-    .data(longFoodMonthsData, getArcID)
+    .data(longFoodMonthsData, (d) => getArcID(d, "overview"))
+    .join(
+      (enter) =>
+        enter
+          .append("g")
+          .attr("class", "food-arc-group")
+          .attr("tabindex", (d) =>
+            d.month === selectedMonthIndex ? "0" : null
+          )
+          .attr("role", (d) =>
+            d.month === selectedMonthIndex ? "listitem" : "presentation"
+          )
+          .attr("aria-hidden", (d) =>
+            d.month === selectedMonthIndex ? null : true
+          )
+          .attr("aria-label", (d) =>
+            d.month === selectedMonthIndex
+              ? getPlainEnglishInSeasonText(d)
+              : null
+          )
+          .call((g) =>
+            g
+              .append("path")
+              .attr("role", "presentation")
+              .attr("id", (d) => getArcID(d, "overview"))
+              .attr("d", arcGenerator)
+              .style("stroke", "#000")
+              .style("stroke", (d) =>
+                d.mainColor
+                  ? getCSSColorFromFoodColor(d.mainColor)[1]
+                  : "var(--food-unknown-fill)"
+              )
+              .style("fill", (d) =>
+                d.mainColor
+                  ? getCSSColorFromFoodColor(d.mainColor)[0]
+                  : "#949494"
+              )
+              .style("stroke-opacity", (d) =>
+                d.inSeason ? 1 : "var(--outOfSeasonStrokeOpacity)"
+              )
+              .style("fill-opacity", (d) =>
+                d.inSeason ? 1 : "var(--outOfSeasonFillOpacity)"
+              )
+          )
+          .call((g) =>
+            g.append("title").text((d) => getPlainEnglishInSeasonText(d))
+          ),
+      (update) => {
+        update
+          .attr("tabindex", (d) =>
+            months.indexOf(d.month) === selectedMonthIndex ? "0" : null
+          )
+          .attr("role", (d) =>
+            months.indexOf(d.month) === selectedMonthIndex
+              ? "listitem"
+              : "presentation"
+          )
+          .attr("aria-hidden", (d) =>
+            months.indexOf(d.month) === selectedMonthIndex ? null : true
+          )
+          .attr("aria-label", (d) =>
+            months.indexOf(d.month) === selectedMonthIndex
+              ? getPlainEnglishInSeasonText(d)
+              : null
+          );
+
+        update
+          .select("path")
+          .attr("d", arcGenerator)
+          .style("stroke", (d) =>
+            d.mainColor
+              ? getCSSColorFromFoodColor(d.mainColor)[1]
+              : "var(--food-unknown-fill)"
+          )
+          .style("fill", (d) =>
+            d.mainColor
+              ? getCSSColorFromFoodColor(d.mainColor)[0]
+              : "var(--food-unknown-fill)"
+          )
+          .style("stroke-opacity", (d) =>
+            d.inSeason ? 1 : "var(--outOfSeasonStrokeOpacity)"
+          )
+          .style("fill-opacity", (d) =>
+            d.inSeason ? 1 : "var(--outOfSeasonFillOpacity)"
+          );
+
+        update.select("title").text((d) => getPlainEnglishInSeasonText(d));
+
+        return update;
+      },
+      (exit) => {
+        exit.remove();
+        return exit;
+      }
+    );
+}
+
+function updateRadialDetailVizWithRegionSelection() {
+  const width = 1200;
+  const height = width;
+  const innerRadius = 260;
+  const outerRadius = height * 0.5 - 30;
+
+  const sortedColors = [
+    "green",
+    "red",
+    "orange",
+    "purple",
+    "yellow",
+    "brown",
+    "white",
+  ]; // determined by colorGroupedData.map(d => d[0]);
+
+  const selectedFoodData = getCuratedFoodDataForRegion(seasonalFoodData);
+
+  const longFoodMonthsData = getRadialVizFoodMonthsData(
+    selectedFoodData,
+    months
+  ).sort(
+    // Sort it so that the reading order makes sense: first, starting from the outside arc and the selected month at the top, read all its foods by color and by name alphabetically, then next calendar month and so on
+    (a, b) =>
+      months.indexOf(a.month) - months.indexOf(b.month) ||
+      sortedColors.indexOf(a.mainColor) - sortedColors.indexOf(b.mainColor) ||
+      a.name.localeCompare(b.name)
+  );
+
+  const angleAccessorMonths = (d) => d.month;
+  const angleScaleMonths = d3
+    .scaleBand()
+    .domain(months)
+    .range([
+      firstStartAngleRotationInRadians,
+      2 * Math.PI + firstStartAngleRotationInRadians,
+    ]);
+
+  const colorSortedFoodNames = Array.from(
+    new Set(longFoodMonthsData.map((d) => d.name))
+  );
+
+  const radiusAccessorFoods = (d) => colorSortedFoodNames.indexOf(d.name);
+  const radiusScaleFoods = d3
+    .scaleLinear()
+    .domain([0, colorSortedFoodNames.length])
+    .range([outerRadius, innerRadius]);
+
+  const arcGenerator = d3
+    .arc()
+    .innerRadius((d) => radiusScaleFoods(radiusAccessorFoods(d)))
+    .outerRadius((d) => radiusScaleFoods(radiusAccessorFoods(d) + 1))
+    .startAngle((d) => angleScaleMonths(angleAccessorMonths(d)))
+    .endAngle(
+      (d) =>
+        angleScaleMonths(angleAccessorMonths(d)) + angleScaleMonths.bandwidth()
+    )
+    .padRadius(innerRadius);
+
+  const rotateWrapper = d3.select(
+    ".radial-viz-detail-wrapper .radial-viz__svg-rotate-wrapper"
+  );
+  rotateWrapper.style("transform", `rotate(${getRotation()}deg)`);
+
+  const svg = d3.select(".radial-viz-detail-wrapper .radial-viz-detail__svg");
+  svg.attr("width", width).attr("height", width);
+
+  const foodArcs = svg
+    .select(".food-arcs")
+    .attr("tabindex", "0")
+    .attr("role", "list")
+    .attr("transform", `translate(${width * 0.5}, ${height * 0.5})`)
+    .attr("aria-label", "Foods in season by month");
+
+  const countMonthsInSeasonThreshold = 1;
+  const specialCondition = (d) =>
+    longFoodMonthsData.filter(
+      (item) => item.name === d.name && item.inSeason === true
+    ).length < countMonthsInSeasonThreshold;
+
+  const foodMonthArc = foodArcs
+    .selectAll("g.food-arc-group")
+    .data(longFoodMonthsData, (d) => getArcID(d, "detail"))
     .join(
       (enter) =>
         enter
@@ -472,7 +649,7 @@ function updateRadialVizWithRegionSelection() {
             g
               .append("path")
               .attr("role", "presentation")
-              .attr("id", getArcID)
+              .attr("id", (d) => getArcID(d, "detail"))
               .attr("d", arcGenerator)
               .style("stroke", "#000")
               .style("stroke", (d) =>
@@ -513,7 +690,7 @@ function updateRadialVizWithRegionSelection() {
               .attr("paint-order", "stroke")
               .attr("startOffset", "24.75%")
               .attr("text-anchor", "middle")
-              .attr("href", (d) => `#${getArcID(d)}`)
+              .attr("href", (d) => `#${getArcID(d, "detail")}`)
               .text((d) => d.name + (specialCondition(d) ? "*" : ""));
           }),
       (update) => {
@@ -575,7 +752,7 @@ function updateRadialVizWithRegionSelection() {
           .attr("paint-order", "stroke")
           .attr("startOffset", "24.75%")
           .attr("text-anchor", "middle")
-          .attr("href", (d) => `#${getArcID(d)}`)
+          .attr("href", (d) => `#${getArcID(d, "detail")}`)
           .text((d) => d.name + (specialCondition(d) ? "*" : ""));
         return update;
       },
@@ -753,8 +930,16 @@ function getLocalStorageItem(key) {
   }
 }
 
-function getArcID(d) {
-  return `arc-${d.name.replaceAll(" ", "-")}-${d.month}`;
+/**
+ * Generates an arc ID based on the provided data and overview or detail flag.
+ * @param {Object} d - The data object.
+ * @param {("overview" | "detail")} overviewOrDetailLabel - A label for "overview" or "detail" viz.
+ * @returns {string} The generated arc ID.
+ */
+function getArcID(d, overviewOrDetailLabel) {
+  return `${overviewOrDetailLabel}-arc-${d.name.replaceAll(" ", "-")}-${
+    d.month
+  }`;
 }
 
 function isInSeason(d) {
@@ -1042,7 +1227,27 @@ function getCSSColorFromFoodColor(colorName) {
   }
 }
 
-function getRadialVizFoodMonthsData(seasonalFoodData, months) {
+function getAllFoodDataForRegion(seasonalFoodData) {
+  const selectedRegionAbbr = regionMap[selectedRegionName];
+  const selectedFoodsInRegion = seasonalFoodData.filter(
+    (d) => d.region === selectedRegionAbbr
+  );
+  // .filter((d) => selectedFoods[selectedRegionAbbr].includes(d.name));
+
+  if (selectedFoodsInRegion.length < selectedFoods[selectedRegionAbbr].length) {
+    const missingFoods = selectedFoods[selectedRegionAbbr].filter(
+      (food) => !selectedFoodsInRegion.map((d) => d.name).includes(food)
+    );
+    console.error({ missingFoods });
+    throw new Error(
+      "Some foods are missing from the selected region's list of foods. Check selectedFoods."
+    );
+  }
+
+  return selectedFoodsInRegion;
+}
+
+function getCuratedFoodDataForRegion(seasonalFoodData) {
   const selectedRegionAbbr = regionMap[selectedRegionName];
   const selectedFoodsInRegion = seasonalFoodData
     .filter((d) => d.region === selectedRegionAbbr)
@@ -1058,7 +1263,11 @@ function getRadialVizFoodMonthsData(seasonalFoodData, months) {
     );
   }
 
-  const longFoodMonthsData = selectedFoodsInRegion.flatMap((row) => {
+  return selectedFoodsInRegion;
+}
+
+function getRadialVizFoodMonthsData(selectedFoodData, months) {
+  const longFoodMonthsData = selectedFoodData.flatMap((row) => {
     return months.map((month) => {
       return {
         name: row.name,
