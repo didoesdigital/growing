@@ -406,15 +406,28 @@ text {
   fill: var(--coolgrey-900);
 }
 
-textPath.out-of-season {
-  fill: var(--coolgrey-600);
-  text-decoration-thickness: 0.05em;
-}
-
 @media (prefers-color-scheme: dark) {
   .food-arc-group textPath {
     fill: var(--coolgrey-100);
   }
+}
+
+.month-label {
+  /* 
+  text-transform: uppercase;
+  letter-spacing: 0.1rem; */
+  fill: var(--coolgrey-900);
+}
+
+@media (prefers-color-scheme: dark) {
+  .month-label {
+    fill: var(--coolgrey-100);
+  }
+}
+
+textPath.out-of-season {
+  fill: var(--coolgrey-600);
+  text-decoration-thickness: 0.05em;
 }
 
 .prevent-double-tap-zoom {

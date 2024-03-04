@@ -436,6 +436,21 @@ function updateRadialOverviewVizWithRegionSelection() {
     ".radial-viz-overview-wrapper .radial-viz-overview__svg"
   );
   svg.attr("viewBox", `0 0 ${width} ${height}`);
+  const innerCircle = svg
+    .select("g.circle-group")
+    .attr("role", "presentation")
+    .selectAll("circle.inner-circle")
+    .data([null])
+    .join("circle")
+    .attr("role", "presentation")
+    .attr("id", "inner-circle")
+    .attr("class", "inner-circle")
+    .attr("cx", width * 0.5)
+    .attr("cy", height * 0.5)
+    .attr("r", innerRadius)
+    .style("fill", "#F2F1F4")
+    .style("stroke", "none")
+    .attr("role", "presentation");
 
   const foodArcs = svg
     .select(".food-arcs")
@@ -547,6 +562,31 @@ function updateRadialOverviewVizWithRegionSelection() {
         return exit;
       }
     );
+
+  const monthLabelsGroup = svg
+    .select("g.month-labels")
+    .attr("transform", `translate(${width * 0.5}, ${height * 0.5})`)
+    // .attr("tabindex", "0")
+    // .attr("role", "list");
+    .attr("role", "presentation");
+
+  const monthLabels = monthLabelsGroup
+    .selectAll("text.month-label")
+    .data(months)
+    .join("text")
+    .attr("class", "month-label")
+    .attr("role", "presentation")
+    .attr("aria-hidden", true)
+    // .attr("tabindex", "0")
+    // .attr("role", "listitem")
+    .attr("x", 0)
+    .attr("y", -outerRadius - 10)
+    .attr("text-anchor", "middle")
+    .text((d) => d)
+    .style("transform", (d, i) => {
+      const angle = angleScaleMonths(d) + halfMonthAngleInRadians;
+      return `rotate(${(angle * 180) / Math.PI}deg)`;
+    });
 }
 
 function updateRadialDetailVizWithRegionSelection() {
