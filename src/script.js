@@ -1232,7 +1232,6 @@ function getAllFoodDataForRegion(seasonalFoodData) {
   const selectedFoodsInRegion = seasonalFoodData.filter(
     (d) => d.region === selectedRegionAbbr
   );
-  // .filter((d) => selectedFoods[selectedRegionAbbr].includes(d.name));
 
   if (selectedFoodsInRegion.length < selectedFoods[selectedRegionAbbr].length) {
     const missingFoods = selectedFoods[selectedRegionAbbr].filter(
