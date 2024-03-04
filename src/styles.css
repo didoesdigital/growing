@@ -259,6 +259,10 @@ text {
   width: 100%;
 }
 
+.tags {
+  min-height: 1.5rem;
+}
+
 .tag {
   background-color: var(--coolgrey-200);
   border-radius: 0.25rem;
@@ -419,4 +423,20 @@ textPath.out-of-season {
 
 .form-group {
   column-count: 2;
+}
+
+.skip-link {
+  display: flex;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+.skip-link:not(:focus) {
+  display: inline-block;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  clip: rect(1px, 1px, 1px, 1px) !important;
+  border: 0 !important;
 }

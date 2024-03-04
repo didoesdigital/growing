@@ -192,25 +192,13 @@
           </div>
         </section>
 
-        <section style="width: 100%">
-          <div class="radial-viz-overview-wrapper">
-            <div class="radial-viz-overview">
-              <div class="radial-viz-overview-position-wrapper">
-                <div class="radial-viz-overview-relative-wrapper">
-                  <div class="radial-viz-tooltip-container"></div>
-                  <div class="radial-viz__svg-rotate-wrapper">
-                    <svg class="radial-viz-overview__svg">
-                      <g class="food-arcs"></g>
-                    </svg>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
         <section>
           <div class="main-column">
+            <div>
+              <a href="#skipped-detail" class="skip-link"
+                >Skip selected month seasonality chart</a
+              >
+            </div>
             <div class="radial-viz-detail-wrapper">
               <div class="radial-viz-detail">
                 <div class="radial-viz-detail-position-wrapper">
@@ -226,6 +214,7 @@
               </div>
             </div>
 
+            <div id="skipped-detail"></div>
             <div
               style="
                 display: flex;
@@ -294,6 +283,49 @@
                 >
               </p>
               <div id="foods-by-color"></div>
+            </div>
+          </div>
+        </section>
+
+        <section style="width: 100%">
+          <div>
+            <a href="#skipped-overview" class="skip-link"
+              >Skip annual seasonality chart</a
+            >
+          </div>
+          <div style="text-align: center">
+            <h3 class="semi-bold">Annual seasonality</h3>
+          </div>
+          <div class="radial-viz-overview-wrapper">
+            <div class="radial-viz-overview">
+              <div class="radial-viz-overview-position-wrapper">
+                <div class="radial-viz-overview-relative-wrapper">
+                  <div class="radial-viz-tooltip-container"></div>
+                  <div class="radial-viz__svg-rotate-wrapper">
+                    <svg class="radial-viz-overview__svg">
+                      <g class="food-arcs"></g>
+                    </svg>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <div class="main-column">
+            <div id="skipped-overview"></div>
+            <div
+              style="
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                flex-wrap: wrap;
+                gap: 8px;
+                margin-top: 1rem;
+                margin-bottom: 1rem;
+              "
+            >
               <p style="margin-top: 3rem">
                 Want to plant your own? Check
                 <a
@@ -315,10 +347,6 @@
             <h3 style="margin-top: 6rem; font-size: 1.5rem; text-align: left">
               About the data
             </h3>
-            <p style="margin-top: 1rem">
-              I'm gathering data from a few different sources and will update
-              this page as I learn.
-            </p>
             <p style="margin-top: 1rem">Seasonality by region data:</p>
             <ul>
               <li>
