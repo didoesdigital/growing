@@ -357,6 +357,7 @@ text {
   position: relative;
   width: 100vw;
   max-height: 100svh;
+  min-height: 80svh;
 }
 
 .radial-viz-detail-relative-wrapper {
