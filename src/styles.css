@@ -398,6 +398,8 @@ text {
 }
 
 .radial-viz-detail__svg-rotate-wrapper {
+  /* Prevent the div growing 6px taller and viz moving around month to month using display: flex; */
+  display: flex;
   transform: rotate(0deg);
   transition: var(--transition-radial-viz-rotation);
   width: 100%;
