@@ -377,7 +377,7 @@ function updateRadialOverviewVizWithRegionSelection() {
   const width = 1200;
   const height = width;
   const innerRadius = 60;
-  const outerRadius = height * 0.5 - 30;
+  const outerRadius = height * 0.5 - 45;
 
   const sortedColors = [
     "green",
@@ -465,6 +465,12 @@ function updateRadialOverviewVizWithRegionSelection() {
       (item) => item.name === d.name && item.inSeason === true
     ).length < countMonthsInSeasonThreshold;
 
+  const tooltip = d3.select(".radial-viz-overview .radial-viz-tooltip-content");
+
+  svg.on("mouseleave", () => {
+    tooltip.text("");
+  });
+
   const foodMonthArc = foodArcs
     .selectAll("g.food-arc-group")
     .data(longFoodMonthsData, (d) => getArcID(d, "overview"))
@@ -511,9 +517,10 @@ function updateRadialOverviewVizWithRegionSelection() {
                 d.inSeason ? 1 : "var(--outOfSeasonFillOpacity)"
               )
           )
-          .call((g) =>
-            g.append("title").text((d) => getPlainEnglishInSeasonText(d))
-          ),
+          .on("touchmove mousemove", (_evt, d) => {
+            const tooltipText = getPlainEnglishInSeasonText(d);
+            tooltip.text(tooltipText);
+          }),
       (update) => {
         update
           .attr("tabindex", (d) =>
@@ -553,8 +560,6 @@ function updateRadialOverviewVizWithRegionSelection() {
             d.inSeason ? 1 : "var(--outOfSeasonFillOpacity)"
           );
 
-        update.select("title").text((d) => getPlainEnglishInSeasonText(d));
-
         return update;
       },
       (exit) => {
@@ -582,7 +587,7 @@ function updateRadialOverviewVizWithRegionSelection() {
     .attr("x", 0)
     .attr("y", -outerRadius - 10)
     .attr("text-anchor", "middle")
-    .text((d) => d)
+    .text((d) => d.slice(0, 3))
     .style("transform", (d, i) => {
       const angle = angleScaleMonths(d) + halfMonthAngleInRadians;
       return `rotate(${(angle * 180) / Math.PI}deg)`;
@@ -593,7 +598,7 @@ function updateRadialDetailVizWithRegionSelection() {
   const width = 1200;
   const height = width;
   const innerRadius = 260;
-  const outerRadius = height * 0.5 - 30;
+  const outerRadius = height * 0.5 - 45;
 
   const sortedColors = [
     "green",
@@ -648,9 +653,7 @@ function updateRadialDetailVizWithRegionSelection() {
     )
     .padRadius(innerRadius);
 
-  const rotateWrapper = d3.select(
-    ".radial-viz-detail-wrapper .radial-viz__svg-rotate-wrapper"
-  );
+  const rotateWrapper = d3.select(".radial-viz-detail__svg-rotate-wrapper");
   rotateWrapper.style("transform", `rotate(${getRotation()}deg)`);
 
   const svg = d3.select(".radial-viz-detail-wrapper .radial-viz-detail__svg");
@@ -668,6 +671,12 @@ function updateRadialDetailVizWithRegionSelection() {
     longFoodMonthsData.filter(
       (item) => item.name === d.name && item.inSeason === true
     ).length < countMonthsInSeasonThreshold;
+
+  const tooltip = d3.select(".radial-viz-detail .radial-viz-tooltip-content");
+
+  svg.on("mouseleave", () => {
+    tooltip.text("");
+  });
 
   const foodMonthArc = foodArcs
     .selectAll("g.food-arc-group")
@@ -708,9 +717,14 @@ function updateRadialDetailVizWithRegionSelection() {
               .style("fill-opacity", (d) =>
                 d.inSeason ? 1 : "var(--outOfSeasonFillOpacity)"
               )
-          )
-          .call((g) =>
-            g.append("title").text((d) => getPlainEnglishInSeasonText(d))
+              .on("touchmove mousemove", (_evt, d) => {
+                const tooltipText = getPlainEnglishInSeasonText(d);
+                if (isMonthInView(d.month)) {
+                  tooltip.text(tooltipText);
+                } else {
+                  tooltip.text("");
+                }
+              })
           )
           .call((g) => {
             g.append("text")

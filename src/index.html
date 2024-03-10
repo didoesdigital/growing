@@ -76,9 +76,9 @@
             <p>by <a href="https://didoesdigital.com">Diana MacDonald</a></p>
             <p style="margin-top: 1rem">
               Australia grows lots of fruits and vegetables locally.
-              "Seasonality" alludes to the times of year when harvesting a crop
-              is at its peak. Picking food locally when it's in season usually
-              means it'll be fresh, full of flavour, nutritious, and cheaper.
+              "Seasonality" means the times of year when harvesting a crop is at
+              its peak. Picking food locally when it's in season usually means
+              it'll be fresh, full of flavour, nutritious, and cheaper.
             </p>
             <p style="margin-top: 1rem; margin-bottom: 3rem">
               Seasonality varies by climate and weather conditions. A
@@ -199,12 +199,21 @@
                 >Skip selected month seasonality chart</a
               >
             </div>
+          </div>
+        </section>
+
+        <section style="width: 100vw; max-width: 100%">
+          <div style="width: 100vw; max-width: 100%">
             <div class="radial-viz-detail-wrapper">
               <div class="radial-viz-detail">
                 <div class="radial-viz-detail-position-wrapper">
-                  <div class="radial-viz-detail-relative-wrapper">
-                    <div class="radial-viz-tooltip-container"></div>
-                    <div class="radial-viz__svg-rotate-wrapper">
+                  <div
+                    class="radial-viz-detail-relative-wrapper radial-viz-detail-gradient"
+                  >
+                    <div class="radial-viz-tooltip-container">
+                      <div class="radial-viz-tooltip-content"></div>
+                    </div>
+                    <div class="radial-viz-detail__svg-rotate-wrapper">
                       <svg class="radial-viz-detail__svg">
                         <g class="food-arcs"></g>
                       </svg>
@@ -213,7 +222,11 @@
                 </div>
               </div>
             </div>
+          </div>
+        </section>
 
+        <section>
+          <div class="main-column">
             <div id="skipped-detail"></div>
             <div
               style="
@@ -221,8 +234,7 @@
                 align-items: center;
                 flex-wrap: wrap;
                 gap: 8px;
-                margin-top: 1rem;
-                margin-bottom: 1rem;
+                margin-bottom: 3rem;
               "
             >
               <div
@@ -231,7 +243,7 @@
                   display: flex;
                   flex: 1;
                   gap: 0.5rem;
-                  margin-left: -0.5rem;
+                  justify-content: center;
                 "
               >
                 <button
@@ -260,19 +272,14 @@
                   </svg>
                 </button>
               </div>
-              <div
-                style="
-                  display: inline-block;
-                  min-width: 50%;
-                  white-space: nowrap;
-                  text-align: right;
-                "
+            </div>
+            <div
+              style="display: inline-block; min-width: 50%; white-space: nowrap"
+            >
+              <label
+                ><input type="checkbox" id="hide-out-of-season-checkbox" /> Hide
+                out of season foods</label
               >
-                <label
-                  ><input type="checkbox" id="hide-out-of-season-checkbox" />
-                  Hide out of season foods</label
-                >
-              </div>
             </div>
             <div class="tags-viz">
               <p id="out-of-season-chart-note">
@@ -287,26 +294,30 @@
           </div>
         </section>
 
-        <section style="width: 100%; margin-top: 3rem;">
+        <section class="annual-seasonality-section">
           <div>
             <a href="#skipped-overview" class="skip-link"
               >Skip annual seasonality chart</a
             >
           </div>
-          <div style="text-align: center">
+          <div class="annual-seasonality-title">
             <h3 class="semi-bold">Annual seasonality</h3>
           </div>
-          <div class="radial-viz-overview-wrapper">
-            <div class="radial-viz-overview">
-              <div class="radial-viz-overview-position-wrapper">
-                <div class="radial-viz-overview-relative-wrapper">
-                  <div class="radial-viz-tooltip-container"></div>
-                  <div class="radial-viz__svg-rotate-wrapper">
-                    <svg class="radial-viz-overview__svg">
-                      <g class="circle-group"></g>
-                      <g class="food-arcs"></g>
-                      <g class="month-labels"></g>
-                    </svg>
+          <div style="width: 100vw; max-width: 100%">
+            <div class="radial-viz-overview-wrapper">
+              <div class="radial-viz-overview">
+                <div class="radial-viz-overview-position-wrapper">
+                  <div class="radial-viz-overview-relative-wrapper">
+                    <div class="radial-viz-tooltip-container">
+                      <div class="radial-viz-tooltip-content"></div>
+                    </div>
+                    <div class="radial-viz-overview__svg-position-wrapper">
+                      <svg class="radial-viz-overview__svg">
+                        <g class="circle-group"></g>
+                        <g class="food-arcs"></g>
+                        <g class="month-labels"></g>
+                      </svg>
+                    </div>
                   </div>
                 </div>
               </div>

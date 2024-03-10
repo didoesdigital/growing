@@ -86,6 +86,7 @@ body {
   line-height: 1.5;
   margin: 0 auto;
   background-color: var(--coolgrey-100);
+  overflow-x: hidden;
 }
 
 h1,
@@ -207,11 +208,6 @@ figure {
   width: 100%;
 }
 
-/* .tick line,
-.domain {
-  stroke: var(--coolgrey-400);
-} */
-
 text {
   fill: #3c3941;
   font: 400 16px/1.4 var(--sans-serif-stack), sans-serif;
@@ -240,7 +236,6 @@ text {
 
   .copyright-para {
     margin-top: 3rem;
-    /* text-align: center; */
   }
 }
 
@@ -312,9 +307,6 @@ text {
   border-radius: 0.25rem;
 }
 
-/* .in-season {
-} */
-
 .out-of-season {
   text-decoration: line-through;
   text-decoration-thickness: 0.1em;
@@ -331,20 +323,14 @@ text {
 
 .radial-viz-detail-wrapper {
   position: relative;
-  min-height: 360px;
+  min-height: 400px;
   overflow: hidden;
 }
 
 .radial-viz-detail {
-  width: 560px;
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
-}
-
-.radial-viz-overview-position-wrapper {
-  display: flex;
-  justify-content: center;
 }
 
 .radial-viz-detail-position-wrapper {
@@ -356,12 +342,17 @@ text {
 .radial-viz-overview-relative-wrapper {
   position: relative;
   width: 100vw;
+  max-width: 100%;
   max-height: 100svh;
-  min-height: 80svh;
+  min-height: 50svh;
 }
 
 .radial-viz-detail-relative-wrapper {
   position: relative;
+}
+
+.radial-viz-detail-gradient {
+  mask-image: conic-gradient(from 0.5turn at 50% 600px, rgb(0, 0, 0, 0) 0%, rgb(0, 0, 0, 0) 38%, rgb(0, 0, 0, 1) 42%, rgb(0, 0, 0, 1) 58%, rgb(0, 0, 0, 0) 62%, rgb(0, 0, 0, 0) 100%);
 }
 
 .radial-viz-tooltip-container {
@@ -370,24 +361,61 @@ text {
   left: 0;
   pointer-events: none;
   z-index: 1;
-  /* display: none; */
+  width: 100%;
 }
 
-/* .radial-viz__svg-crop-wrapper {
-  overflow: hidden;
-} */
-.radial-viz__svg-rotate-wrapper {
+.radial-viz-tooltip-content {
+  max-width: 300px;
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: 1.2;
+  text-wrap: balance;
+  text-wrap: pretty;
+}
+
+@media (min-width: 375px) {
+  .radial-viz-tooltip-content {
+    max-width: 90vw;
+  }
+}
+
+.annual-seasonality-section {
+  --spaceForTooltip: 2.5rem;
+
+  margin-top: 3rem;
+  width: 100vw;
+  max-width: 100%;
+}
+
+.annual-seasonality-title {
+  text-align: center;
+  margin-bottom: calc(1rem + var(--spaceForTooltip));
+}
+
+.radial-viz-overview-wrapper .radial-viz-tooltip-content {
+  transform: translateY(calc(-0.5rem - var(--spaceForTooltip)))
+}
+
+.radial-viz-detail__svg-rotate-wrapper {
   transform: rotate(0deg);
   transition: var(--transition-radial-viz-rotation);
   width: 100%;
   height: 100%;
 }
 
+.radial-viz-overview__svg-position-wrapper {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+}
+
 .radial-viz-overview__svg {
   width: 100%;
   height: auto;
-  max-width: 100vw;
-  max-height: 100svh;
+  max-width: 80vw;
+  max-height: 80svh;
   font-family: var(--sans-serif-stack);
   font-size: 1rem;
   font-weight: 400;
@@ -405,6 +433,7 @@ text {
 .food-arc-group textPath {
   font-family: var(--sans-serif-stack);
   fill: var(--coolgrey-900);
+  pointer-events: none;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -414,10 +443,27 @@ text {
 }
 
 .month-label {
-  /* 
-  text-transform: uppercase;
-  letter-spacing: 0.1rem; */
   fill: var(--coolgrey-900);
+  font-size: 3rem;
+}
+
+/* TODO: make this smoother */
+@media (min-width: 375px) {
+  .month-label {
+    font-size: 2.5rem;
+  }
+}
+
+@media (min-width: 450px) {
+  .month-label {
+    font-size: 2rem;
+  }
+}
+
+@media (min-width: 600px) {
+  .month-label {
+    font-size: 1.5rem;
+  }
 }
 
 @media (prefers-color-scheme: dark) {
