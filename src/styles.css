@@ -131,11 +131,13 @@ fieldset {
 }
 
 legend {
-  font-size: 1rem;
+  color: var(--coolgrey-700);
   font-weight: 600;
+  letter-spacing: 0.1rem;
   line-height: 1.2;
   margin-bottom: 0.5rem;
   padding: 0;
+  text-transform: uppercase;
 }
 
 button {
@@ -485,6 +487,15 @@ textPath.out-of-season {
 
 .form-group {
   column-count: 2;
+}
+
+.radio {
+  display: flex;
+  gap: 4px;
+}
+
+.radio label {
+  order: 2;
 }
 
 .skip-link {
