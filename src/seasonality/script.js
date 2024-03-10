@@ -889,6 +889,17 @@ function makeInteractive() {
   makeRegionInteractive();
   makeHideOutOfSeasonCheckboxInteractive();
   makeNextPreviousMonthButtonsInteractive();
+
+  window.addEventListener(
+    "popstate",
+    function (event) {
+      setInitialSelectedMonth();
+      setInitialSelectedRegion();
+      updateDataWithRegionSelection();
+      updateDataWithNewMonthSelection();
+    },
+    false
+  );
 }
 
 function makeNextPreviousMonthButtonsInteractive() {
