@@ -213,7 +213,7 @@ figure {
 
 text {
   fill: #3c3941;
-  font: 400 16px/1.4 var(--sans-serif-stack), sans-serif;
+  font: 400 1rem/1.4 var(--sans-serif-stack), sans-serif;
 }
 
 .footer-links {
