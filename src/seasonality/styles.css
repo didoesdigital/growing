@@ -496,6 +496,7 @@ textPath.out-of-season {
 }
 
 .radio {
+  align-items: center;
   display: flex;
   gap: 4px;
 }
