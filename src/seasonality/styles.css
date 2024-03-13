@@ -140,7 +140,18 @@ legend {
   text-transform: uppercase;
 }
 
-button {
+button.close-dialog {
+  background-color: var(--coolgrey-100);
+  border: 1px solid var(--coolgrey-700);
+  color: var(--coolgrey-700);
+  cursor: pointer;
+  font-size: 1rem;
+  line-height: 1;
+  padding: 0.5rem;
+}
+
+button.next-button,
+button.previous-button {
   background-color: transparent;
   border: 1px solid transparent;
   border-radius: 50%;
@@ -162,8 +173,8 @@ button.previous-button:hover {
   color: var(--violet-600);
 }
 
-button:active,
-button:focus {
+button.next-button:active,
+button.previous-button:focus {
   transition: color 0.15s ease-in-out;
   color: var(--violet-900);
 }
@@ -232,6 +243,33 @@ text {
   text-align: left;
 }
 
+dialog {
+  margin: auto;
+  padding: 0;
+}
+
+/* This inner content div prevents clicking the `dialog` element from closing the dialog */
+.dialog-content {
+  align-items: center;
+  display: flex;
+  flex-direction: row-reverse;
+  gap: 1rem;
+  max-width: calc(100% - 16px);
+  padding: 1rem;
+  text-wrap: balance;
+  text-wrap: pretty;
+  width: 375px;
+}
+
+::backdrop {
+  background-image: linear-gradient(-14deg,
+      var(--violet-500),
+      var(--red-500),
+      var(--peach-400),
+      var(--gold-400));
+  opacity: 0.8;
+}
+
 @media only screen and (min-width: 500px) {
   .footer-links {
     columns: 3;
@@ -276,7 +314,7 @@ text {
 }
 
 .tag.favourite {
-  border: 2px solid #000;
+  border: 2px solid var(--coolgrey-900);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -309,10 +347,20 @@ text {
   background-color: var(--peach-400);
 }
 
-.tag.white:not(.favourite) {
+.tag.white {
   background-color: #fff;
   border: 2px solid var(--truegrey-400);
-  border-radius: 0.25rem;
+}
+
+.tag.white.favourite {
+  border-color: var(--coolgrey-900);
+}
+
+@media (prefers-color-scheme: dark) {
+  .tag.white.favourite {
+    border-color: var(--coolgrey-100);
+    border-style: dotted;
+  }
 }
 
 .out-of-season {
@@ -485,6 +533,12 @@ text {
 textPath.out-of-season {
   fill: var(--coolgrey-600);
   text-decoration-thickness: 0.05em;
+}
+
+@media (prefers-color-scheme: dark) {
+  textPath.out-of-season {
+    fill: var(--coolgrey-800);
+  }
 }
 
 .prevent-double-tap-zoom {

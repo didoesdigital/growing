@@ -177,6 +177,9 @@ const favouriteFoods = {
   "NT": new Set(defaultSelectedFoods["NT"]),
 };
 
+const minimumFavouriteFoods = 3;
+const maximumFavouriteFoods = 20;
+
 const radialTextDurationInSec = 0.5;
 const radialTextDurationInMs = radialTextDurationInSec * 1000;
 const oneMonthRotationInDegrees = 360 / 12;
@@ -200,6 +203,8 @@ let colorSections;
 let tagsDiv;
 let tagsSpans;
 let radialVizRotation = 0;
+
+const dialog = document.querySelector("dialog");
 
 function init() {
   setInitialSelectedMonth();
@@ -338,7 +343,19 @@ function getFavouritesFromLocalStorage() {
       }
 
       for (const region in parsedLocalStorageFavourites) {
-        favouriteFoods[region] = new Set(parsedLocalStorageFavourites[region]);
+        if (
+          parsedLocalStorageFavourites[region].length >=
+            minimumFavouriteFoods &&
+          parsedLocalStorageFavourites[region].length <= maximumFavouriteFoods
+        ) {
+          favouriteFoods[region] = new Set(
+            parsedLocalStorageFavourites[region]
+          );
+        } else {
+          console.error(
+            `Weird number of favourite foods in localStorage for "${region}". Probably too many.`
+          );
+        }
       }
     } catch (err) {
       console.error(err);
@@ -549,7 +566,6 @@ function updateRadialOverviewVizWithRegionSelection() {
               .attr("role", "presentation")
               .attr("id", (d) => getArcID(d, "overview"))
               .attr("d", arcGenerator)
-              .style("stroke", "#000")
               .style("stroke", (d) =>
                 d.mainColor
                   ? getCSSColorFromFoodColor(d.mainColor)[1]
@@ -967,10 +983,13 @@ function updateTagsWithFavouritesSelection() {
 
 function toggleFoodSelection(_foodButtonClickEvent, foodData) {
   previousSelectedMonthIndex = selectedMonthIndex;
-  updateFavouriteFoodsSelection(foodData);
-  updateSelectedFoodsInLocalStorage();
-  updateTagsWithFavouritesSelection();
-  updateRadialDetailVizWithRegionSelection();
+  const didUpdateFavouriteFoodsSelection =
+    maybeUpdateFavouriteFoodsSelection(foodData);
+  if (didUpdateFavouriteFoodsSelection) {
+    updateSelectedFoodsInLocalStorage();
+    updateTagsWithFavouritesSelection();
+    updateRadialDetailVizWithRegionSelection();
+  }
 }
 
 function getFoodTagClasses(d) {
@@ -979,12 +998,36 @@ function getFoodTagClasses(d) {
   }`;
 }
 
-function updateFavouriteFoodsSelection(food) {
+function maybeUpdateFavouriteFoodsSelection(food) {
   if (favouriteFoods[regionMap[selectedRegionName]].has(food.name)) {
+    if (
+      favouriteFoods[regionMap[selectedRegionName]].size <=
+      minimumFavouriteFoods
+    ) {
+      dialog.showModal();
+      d3.select(".dialog-text").text(
+        `You need at least ${minimumFavouriteFoods} favourite food${
+          minimumFavouriteFoods === 1 ? "" : "s"
+        } or the visualisation will look funny.`
+      );
+      return false;
+    }
     favouriteFoods[regionMap[selectedRegionName]].delete(food.name);
   } else {
+    if (
+      favouriteFoods[regionMap[selectedRegionName]].size >=
+      maximumFavouriteFoods
+    ) {
+      dialog.showModal();
+      d3.select(".dialog-text").text(
+        `You can't pick more than ${maximumFavouriteFoods} favourite foods or the visualisation will get too crowded.`
+      );
+      return false;
+    }
     favouriteFoods[regionMap[selectedRegionName]].add(food.name);
   }
+
+  return true;
 }
 
 function updateSelectedFoodsInLocalStorage() {
@@ -1000,6 +1043,7 @@ function makeInteractive() {
   makeRegionInteractive();
   makeHideOutOfSeasonCheckboxInteractive();
   makeNextPreviousMonthButtonsInteractive();
+  makeDialogInteractive();
 
   window.addEventListener(
     "popstate",
@@ -1011,6 +1055,20 @@ function makeInteractive() {
     },
     false
   );
+}
+
+function makeDialogInteractive() {
+  const handleDialogClick = (event) => {
+    if (event.target === dialog) {
+      dialog.close();
+    }
+  }
+  dialog.addEventListener("click", handleDialogClick);
+
+  const closeButton = d3.select("dialog button");
+  closeButton.on("click", () => {
+    dialog.close();
+  });
 }
 
 function makeNextPreviousMonthButtonsInteractive() {
