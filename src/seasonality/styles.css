@@ -156,7 +156,8 @@ button {
   transition: color 0.15s ease-in-out;
 }
 
-button:hover {
+button.next-button:hover,
+button.previous-button:hover {
   transition: color 0.15s ease-in-out;
   color: var(--violet-600);
 }
@@ -168,8 +169,8 @@ button:focus {
 }
 
 .in-season-this-month,
-button#previous,
-button#next {
+button.previous-button,
+button.next-button {
   display: inline-flex;
   align-items: center;
 }
@@ -184,7 +185,7 @@ button#next {
   width: 1rem;
 }
 
-#previous .icon-arrow {
+.previous-button .icon-arrow {
   transform: rotate(180deg);
 }
 
@@ -263,6 +264,7 @@ text {
 .tag {
   background-color: var(--coolgrey-200);
   border-radius: 0.25rem;
+  border: 2px solid transparent;
   color: var(--coolgrey-900);
   display: inline-block;
   font-size: 1rem;
@@ -271,6 +273,10 @@ text {
   margin-bottom: 0.25rem;
   margin-right: 0.25rem;
   padding: 0.25rem 0.5rem;
+}
+
+.tag.favourite {
+  border: 2px solid #000;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -303,9 +309,9 @@ text {
   background-color: var(--peach-400);
 }
 
-.tag.white {
+.tag.white:not(.favourite) {
   background-color: #fff;
-  border: 1px solid var(--truegrey-400);
+  border: 2px solid var(--truegrey-400);
   border-radius: 0.25rem;
 }
 

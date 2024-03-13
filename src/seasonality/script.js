@@ -35,10 +35,8 @@ const regionClimateZoneMap = {
   "South Australia": "2",
 };
 
-const selectedFoods = {
+const defaultSelectedFoods = {
   "AU": [
-    // "Daikons", // White food to test
-    // "Passion fruits", // multi-word food to test
     "Lettuces",
     "Peas",
     "Zucchini",
@@ -85,8 +83,6 @@ const selectedFoods = {
     "Eggplants",
     "Ginger",
     "Cauliflowers",
-    // "Olives", // Testing some out of season foods in January
-    // "Mandarins", // Testing some out of season foods in January
   ],
   "SA": [
     "Lettuces",
@@ -170,6 +166,17 @@ const selectedFoods = {
   ],
 };
 
+const favouriteFoods = {
+  "AU": new Set(defaultSelectedFoods["AU"]),
+  "Vic": new Set(defaultSelectedFoods["Vic"]),
+  "Qld": new Set(defaultSelectedFoods["Qld"]),
+  "SA": new Set(defaultSelectedFoods["SA"]),
+  "WA": new Set(defaultSelectedFoods["WA"]),
+  "NSW": new Set(defaultSelectedFoods["NSW"]),
+  "Tas": new Set(defaultSelectedFoods["Tas"]),
+  "NT": new Set(defaultSelectedFoods["NT"]),
+};
+
 const radialTextDurationInSec = 0.5;
 const radialTextDurationInMs = radialTextDurationInSec * 1000;
 const oneMonthRotationInDegrees = 360 / 12;
@@ -177,6 +184,7 @@ const halfMonthAngleInRadians = Math.PI / 12;
 const firstStartAngleRotationInRadians = -halfMonthAngleInRadians;
 
 const localStoragePrefix = "ddd-seasonality-";
+const favouritesStorage = "favourites";
 
 const defaultSelectedRegion = "Australia";
 const monthParam = "month";
@@ -199,6 +207,7 @@ function init() {
   setUpFoodsByColorTags();
   // setUpRadialViz(); // so far we handle everything in updateData… functions
   makeInteractive();
+  getFavouritesFromLocalStorage();
   updateDataWithNewMonthSelection();
   updateDataWithRegionSelection();
   preventTabFocusMovingRadialViz();
@@ -297,6 +306,46 @@ function mapSpacedRegionToDashifiedRegion(spacedRegion) {
   return spacedRegion.replaceAll(" ", "-");
 }
 
+function getFavouritesFromLocalStorage() {
+  const localStorageFavourites = getLocalStorageItem(favouritesStorage);
+  if (localStorageFavourites !== null) {
+    try {
+      const parsedLocalStorageFavourites = JSON.parse(localStorageFavourites);
+      const defaultRegionKeys = Object.keys(defaultSelectedFoods);
+
+      const containsValidRegions = Object.keys(
+        parsedLocalStorageFavourites
+      ).every((region) => defaultRegionKeys.includes(region));
+
+      if (!containsValidRegions) {
+        throw new Error("Invalid regions in localStorage");
+      }
+
+      for (const region in parsedLocalStorageFavourites) {
+        const parsedRegionFavourites = parsedLocalStorageFavourites[region];
+
+        // Check if all the local storage food names are legit food names:
+        for (let i = 0; i < parsedRegionFavourites.length; i++) {
+          const food = parsedRegionFavourites[i];
+          const foundFood = seasonalFoodData.findIndex((d) => d.name === food);
+          if (foundFood === -1) {
+            throw new Error(
+              `Invalid food in localStorage: "${food}" in "${region}"`
+            );
+          }
+        }
+        // Note: I'm going to take my chances that local storage food names for a specific region exist in the seasonalFoodData *for that region*
+      }
+
+      for (const region in parsedLocalStorageFavourites) {
+        favouriteFoods[region] = new Set(parsedLocalStorageFavourites[region]);
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  }
+}
+
 function setUpFoodsByColorTags() {
   colorGroupedData = d3
     .groups(seasonalFoodData, (d) => d.mainColor)
@@ -324,6 +373,8 @@ function setUpFoodsByColorTags() {
     .append("div")
     .attr("class", "tags")
     .attr("id", (d) => `${d[0]}-tags`);
+
+  updateTagsWithFavouritesSelection();
 }
 
 function updateDataWithNewMonthSelection() {
@@ -352,15 +403,14 @@ function updateTagsWithMonthSelection() {
   d3.select("#example-out-of-season").text(exampleOutOfSeasonFood.name);
 
   tagsDiv
-    .selectAll("span.tag")
+    .selectAll(".tag")
     .attr("aria-label", (d) =>
       isInSeason(d) ? undefined : `${d.name} (out of season)`
     )
-    .attr(
-      "class",
-      (d) =>
-        `tag ${d.mainColor} ${isInSeason(d) ? "in-season" : "out-of-season"}`
-    );
+    .attr("aria-pressed", (d) =>
+      favouriteFoods[regionMap[selectedRegionName]].has(d.name)
+    )
+    .attr("class", getFoodTagClasses);
 }
 
 function updateDataWithRegionSelection() {
@@ -761,7 +811,6 @@ function updateRadialDetailVizWithRegionSelection() {
         update
           .select("path")
           .attr("d", arcGenerator)
-          // .style("stroke", "#000")
           .style("stroke", (d) =>
             d.mainColor
               ? getCSSColorFromFoodColor(d.mainColor)[1]
@@ -849,7 +898,7 @@ function updateTagsWithRegionSelection() {
 
   colorSections
     .select(".tags")
-    .selectAll("span.tag")
+    .selectAll(".tag")
     .data(
       (d) => d[1],
       (d) => `${d.name}`
@@ -857,32 +906,94 @@ function updateTagsWithRegionSelection() {
     .join(
       (enter) =>
         enter
-          .append("span")
+          .append("button")
+          .attr("type", "button")
           .attr("aria-label", (d) =>
             isInSeason(d) ? undefined : `${d.name} (out of season)`
           )
-          .attr(
-            "class",
-            (d) =>
-              `tag ${d.mainColor} ${
-                isInSeason(d) ? "in-season" : "out-of-season"
-              }`
+          .attr("aria-pressed", (d) =>
+            favouriteFoods[regionMap[selectedRegionName]].has(d.name)
           )
-          .text((d) => d.name),
+          .attr("class", getFoodTagClasses)
+          .text((d) => d.name)
+          .on("click", toggleFoodSelection),
       (update) =>
         update
           .attr("aria-label", (d) =>
             isInSeason(d) ? undefined : `${d.name} (out of season)`
           )
-          .attr(
-            "class",
-            (d) =>
-              `tag ${d.mainColor} ${
-                isInSeason(d) ? "in-season" : "out-of-season"
-              }`
-          ),
+          .attr("aria-pressed", (d) =>
+            favouriteFoods[regionMap[selectedRegionName]].has(d.name)
+          )
+          .attr("class", getFoodTagClasses),
       (exit) => exit.remove()
     );
+}
+
+function updateTagsWithFavouritesSelection() {
+  colorSections
+    .select(".tags")
+    .selectAll(".tag")
+    .data(
+      (d) => d[1],
+      (d) => `${d.name}`
+    )
+    .join(
+      (enter) =>
+        enter
+          .append("button")
+          .attr("type", "button")
+          .attr("aria-label", (d) =>
+            isInSeason(d) ? undefined : `${d.name} (out of season)`
+          )
+          .attr("aria-pressed", (d) =>
+            favouriteFoods[regionMap[selectedRegionName]].has(d.name)
+          )
+          .attr("class", getFoodTagClasses)
+          .text((d) => d.name)
+          .on("click", toggleFoodSelection),
+      (update) =>
+        update
+          .attr("aria-label", (d) =>
+            isInSeason(d) ? undefined : `${d.name} (out of season)`
+          )
+          .attr("aria-pressed", (d) =>
+            favouriteFoods[regionMap[selectedRegionName]].has(d.name)
+          )
+          .attr("class", getFoodTagClasses),
+      (exit) => exit.remove()
+    );
+}
+
+function toggleFoodSelection(_foodButtonClickEvent, foodData) {
+  previousSelectedMonthIndex = selectedMonthIndex;
+  updateFavouriteFoodsSelection(foodData);
+  updateSelectedFoodsInLocalStorage();
+  updateTagsWithFavouritesSelection();
+  updateRadialDetailVizWithRegionSelection();
+}
+
+function getFoodTagClasses(d) {
+  return `tag ${d.mainColor} ${isInSeason(d) ? "in-season" : "out-of-season"} ${
+    favouriteFoods[regionMap[selectedRegionName]].has(d.name) ? "favourite" : ""
+  }`;
+}
+
+function updateFavouriteFoodsSelection(food) {
+  if (favouriteFoods[regionMap[selectedRegionName]].has(food.name)) {
+    favouriteFoods[regionMap[selectedRegionName]].delete(food.name);
+  } else {
+    favouriteFoods[regionMap[selectedRegionName]].add(food.name);
+  }
+}
+
+function updateSelectedFoodsInLocalStorage() {
+  setLocalStorageItem(
+    favouritesStorage,
+    JSON.stringify(favouriteFoods, (_key, value) =>
+      value instanceof Set ? [...value] : value
+    )
+  );
 }
 
 function makeInteractive() {
@@ -903,14 +1014,14 @@ function makeInteractive() {
 }
 
 function makeNextPreviousMonthButtonsInteractive() {
-  d3.select("#next").on("click", () => {
+  d3.select(".next-button").on("click", () => {
     previousSelectedMonthIndex = selectedMonthIndex;
     selectedMonthIndex = selectedMonthIndex === 11 ? 0 : selectedMonthIndex + 1;
     pushMonthParam(months[selectedMonthIndex]);
     updateDataWithNewMonthSelection();
   });
 
-  d3.select("#previous").on("click", () => {
+  d3.select(".previous-button").on("click", () => {
     previousSelectedMonthIndex = selectedMonthIndex;
     selectedMonthIndex = selectedMonthIndex === 0 ? 11 : selectedMonthIndex - 1;
     pushMonthParam(months[selectedMonthIndex]);
@@ -1298,13 +1409,13 @@ function getAllFoodDataForRegion(seasonalFoodData) {
     (d) => d.region === selectedRegionAbbr
   );
 
-  if (selectedFoodsInRegion.length < selectedFoods[selectedRegionAbbr].length) {
-    const missingFoods = selectedFoods[selectedRegionAbbr].filter(
+  if (selectedFoodsInRegion.length < favouriteFoods[selectedRegionAbbr].size) {
+    const missingFoods = [...favouriteFoods[selectedRegionAbbr]].filter(
       (food) => !selectedFoodsInRegion.map((d) => d.name).includes(food)
     );
     console.error({ missingFoods });
     throw new Error(
-      "Some foods are missing from the selected region's list of foods. Check selectedFoods."
+      "Some foods are missing from the selected region's list of foods. Check favouriteFoods."
     );
   }
 
@@ -1315,15 +1426,15 @@ function getCuratedFoodDataForRegion(seasonalFoodData) {
   const selectedRegionAbbr = regionMap[selectedRegionName];
   const selectedFoodsInRegion = seasonalFoodData
     .filter((d) => d.region === selectedRegionAbbr)
-    .filter((d) => selectedFoods[selectedRegionAbbr].includes(d.name));
+    .filter((d) => favouriteFoods[selectedRegionAbbr].has(d.name));
 
-  if (selectedFoodsInRegion.length < selectedFoods[selectedRegionAbbr].length) {
-    const missingFoods = selectedFoods[selectedRegionAbbr].filter(
+  if (selectedFoodsInRegion.length < favouriteFoods[selectedRegionAbbr].size) {
+    const missingFoods = [...favouriteFoods[selectedRegionAbbr]].filter(
       (food) => !selectedFoodsInRegion.map((d) => d.name).includes(food)
     );
     console.error({ missingFoods });
     throw new Error(
-      "Some foods are missing from the selected region's list of foods. Check selectedFoods."
+      "Some foods are missing from the selected region's list of foods. Check favouriteFoods."
     );
   }
 
