@@ -8,6 +8,7 @@
   accent-color: #5f428f;
   --coolgrey-100: #faf9fb;
   --coolgrey-200: #f2f1f4;
+  --coolgrey-300: #eae8ed;
   --coolgrey-400: #e2e0e5;
   --coolgrey-600: #868091;
   --coolgrey-700: #676170;
@@ -55,6 +56,7 @@
   :root {
     --coolgrey-100: #232027;
     --coolgrey-200: #504c57;
+    --coolgrey-300: #676170;
     --coolgrey-400: #868091;
     --coolgrey-700: #eae8ed;
     --coolgrey-900: #faf9fb;
@@ -148,6 +150,21 @@ button.close-dialog {
   font-size: 1rem;
   line-height: 1;
   padding: 0.5rem;
+}
+
+button.close-dialog:hover {
+  transition: background-color 0.15s ease-in-out;
+  background-color: var(--coolgrey-300);
+}
+
+button.close-dialog:active {
+  transition: background-color 0.15s ease-in-out;
+  background-color: var(--coolgrey-400);
+}
+
+button.close-dialog:focus {
+  transition: border-color 0.15s ease-in-out;
+  border-color: var(--coolgrey-900)
 }
 
 button.next-button,
@@ -256,9 +273,12 @@ dialog {
   gap: 1rem;
   max-width: calc(100% - 16px);
   padding: 1rem;
+  width: 375px;
+}
+
+.dialog-content p {
   text-wrap: balance;
   text-wrap: pretty;
-  width: 375px;
 }
 
 ::backdrop {
@@ -521,12 +541,6 @@ dialog {
 @media (min-width: 600px) {
   .month-label {
     font-size: 1.5rem;
-  }
-}
-
-@media (prefers-color-scheme: dark) {
-  .month-label {
-    fill: var(--coolgrey-100);
   }
 }
 
