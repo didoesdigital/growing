@@ -526,12 +526,6 @@ function updateRadialOverviewVizWithRegionSelection() {
     .attr("transform", `translate(${width * 0.5}, ${height * 0.5})`)
     .attr("aria-label", "Foods in season by month");
 
-  const countMonthsInSeasonThreshold = 1;
-  const specialCondition = (d) =>
-    longFoodMonthsData.filter(
-      (item) => item.name === d.name && item.inSeason === true
-    ).length < countMonthsInSeasonThreshold;
-
   const tooltip = d3.select(".radial-viz-overview .radial-viz-tooltip-content");
 
   svg.on("mouseleave", () => {
@@ -728,7 +722,7 @@ function updateRadialDetailVizWithRegionSelection() {
     .attr("transform", `translate(${width * 0.5}, ${height * 0.5})`)
     .attr("aria-label", "Foods in season by month");
 
-  const countMonthsInSeasonThreshold = 1;
+  const countMonthsInSeasonThreshold = 4;
   const specialCondition = (d) =>
     longFoodMonthsData.filter(
       (item) => item.name === d.name && item.inSeason === true
@@ -754,7 +748,9 @@ function updateRadialDetailVizWithRegionSelection() {
           )
           .attr("aria-hidden", (d) => (isMonthInView(d.month) ? null : true))
           .attr("aria-label", (d) =>
-            isMonthInView(d.month) ? getPlainEnglishInSeasonText(d) : null
+            isMonthInView(d.month)
+              ? getPlainEnglishDetailRadialVizInSeasonText(d, specialCondition)
+              : null
           )
           .call((g) =>
             g
@@ -779,7 +775,10 @@ function updateRadialDetailVizWithRegionSelection() {
                 d.inSeason ? 1 : "var(--outOfSeasonFillOpacity)"
               )
               .on("touchmove mousemove", (_evt, d) => {
-                const tooltipText = getPlainEnglishInSeasonText(d);
+                const tooltipText = getPlainEnglishDetailRadialVizInSeasonText(
+                  d,
+                  specialCondition
+                );
                 if (isMonthInView(d.month)) {
                   tooltip.text(tooltipText);
                 } else {
@@ -799,16 +798,15 @@ function updateRadialDetailVizWithRegionSelection() {
               .attr("class", (d) =>
                 d.inSeason ? "" : `out-of-season ${d.mainColor}`
               )
-              .attr("stroke", (d) =>
-                specialCondition(d) ? "#E26F99" : "transparent"
-              )
               .attr("paint-order", "stroke")
               .attr("startOffset", (d) =>
                 getStartOffset(d, radiusScaleFoods, radiusAccessorFoods)
               )
               .attr("text-anchor", "middle")
               .attr("href", (d) => `#${getArcID(d, "detail")}`)
-              .text((d) => d.name + (specialCondition(d) ? "*" : ""));
+              .text(
+                (d) => d.name + (specialCondition(d) && d.inSeason ? "*" : "")
+              );
           }),
       (update) => {
         update
@@ -818,7 +816,9 @@ function updateRadialDetailVizWithRegionSelection() {
           )
           .attr("aria-hidden", (d) => (isMonthInView(d.month) ? null : true))
           .attr("aria-label", (d) =>
-            isMonthInView(d.month) ? getPlainEnglishInSeasonText(d) : null
+            isMonthInView(d.month)
+              ? getPlainEnglishDetailRadialVizInSeasonText(d, specialCondition)
+              : null
           );
 
         update
@@ -862,16 +862,13 @@ function updateRadialDetailVizWithRegionSelection() {
           .attr("class", (d) =>
             d.inSeason ? "" : `out-of-season ${d.mainColor}`
           )
-          .attr("stroke", (d) =>
-            specialCondition(d) ? "#E26F99" : "transparent"
-          )
           .attr("paint-order", "stroke")
           .attr("startOffset", (d) =>
             getStartOffset(d, radiusScaleFoods, radiusAccessorFoods)
           )
           .attr("text-anchor", "middle")
           .attr("href", (d) => `#${getArcID(d, "detail")}`)
-          .text((d) => d.name + (specialCondition(d) ? "*" : ""));
+          .text((d) => d.name + (specialCondition(d) && d.inSeason ? "*" : ""));
         return update;
       },
       (exit) => {
@@ -1132,6 +1129,14 @@ function getPlainEnglishInSeasonText(d) {
   return `${d.name}${getVarietiesText(d.varieties)} are ${
     d.inSeason ? "" : "not "
   }in season in ${d.month}`;
+}
+
+function getPlainEnglishDetailRadialVizInSeasonText(d, specialCondition) {
+  return `${d.name}${getVarietiesText(d.varieties)} are ${
+    d.inSeason ? "" : "not "
+  }in season in ${d.month}${
+    specialCondition(d) && d.inSeason ? " (be quick!)" : ""
+  }`;
 }
 
 function getVarietiesText(varieties) {
