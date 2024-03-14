@@ -379,7 +379,7 @@ dialog {
 
 .radial-viz-detail-wrapper {
   position: relative;
-  min-height: 400px;
+  min-height: 500px;
   overflow: hidden;
 }
 
@@ -408,7 +408,7 @@ dialog {
 }
 
 .radial-viz-detail-gradient {
-  mask-image: conic-gradient(from 0.5turn at 50% 600px, rgb(0, 0, 0, 0) 0%, rgb(0, 0, 0, 0) 38%, rgb(0, 0, 0, 1) 42%, rgb(0, 0, 0, 1) 58%, rgb(0, 0, 0, 0) 62%, rgb(0, 0, 0, 0) 100%);
+  mask-image: conic-gradient(from 0.5turn at 50% 50%, rgb(0, 0, 0, 0) 0%, rgb(0, 0, 0, 0) 38%, rgb(0, 0, 0, 1) 42%, rgb(0, 0, 0, 1) 58%, rgb(0, 0, 0, 0) 62%, rgb(0, 0, 0, 0) 100%);
 }
 
 .radial-viz-tooltip-container {

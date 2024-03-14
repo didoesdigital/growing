@@ -490,8 +490,8 @@ function updateRadialOverviewVizWithRegionSelection() {
 
   const arcGenerator = d3
     .arc()
-    .innerRadius((d) => radiusScaleFoods(radiusAccessorFoods(d)))
-    .outerRadius((d) => radiusScaleFoods(radiusAccessorFoods(d) + 1))
+    .innerRadius((d) => radiusScaleFoods(radiusAccessorFoods(d) + 1))
+    .outerRadius((d) => radiusScaleFoods(radiusAccessorFoods(d)))
     .startAngle((d) => angleScaleMonths(angleAccessorMonths(d)))
     .endAngle(
       (d) =>
@@ -637,8 +637,6 @@ function updateRadialOverviewVizWithRegionSelection() {
   const monthLabelsGroup = svg
     .select("g.month-labels")
     .attr("transform", `translate(${width * 0.5}, ${height * 0.5})`)
-    // .attr("tabindex", "0")
-    // .attr("role", "list");
     .attr("role", "presentation");
 
   const monthLabels = monthLabelsGroup
@@ -648,8 +646,6 @@ function updateRadialOverviewVizWithRegionSelection() {
     .attr("class", "month-label")
     .attr("role", "presentation")
     .attr("aria-hidden", true)
-    // .attr("tabindex", "0")
-    // .attr("role", "listitem")
     .attr("x", 0)
     .attr("y", -outerRadius - 10)
     .attr("text-anchor", "middle")
@@ -661,7 +657,7 @@ function updateRadialOverviewVizWithRegionSelection() {
 }
 
 function updateRadialDetailVizWithRegionSelection() {
-  const width = 1200;
+  const width = 1400;
   const height = width;
   const innerRadius = 260;
   const outerRadius = height * 0.5 - 45;
@@ -766,7 +762,6 @@ function updateRadialDetailVizWithRegionSelection() {
               .attr("role", "presentation")
               .attr("id", (d) => getArcID(d, "detail"))
               .attr("d", arcGenerator)
-              .style("stroke", "#000")
               .style("stroke", (d) =>
                 d.mainColor
                   ? getCSSColorFromFoodColor(d.mainColor)[1]
@@ -808,7 +803,9 @@ function updateRadialDetailVizWithRegionSelection() {
                 specialCondition(d) ? "#E26F99" : "transparent"
               )
               .attr("paint-order", "stroke")
-              .attr("startOffset", "24.75%")
+              .attr("startOffset", (d) =>
+                getStartOffset(d, radiusScaleFoods, radiusAccessorFoods)
+              )
               .attr("text-anchor", "middle")
               .attr("href", (d) => `#${getArcID(d, "detail")}`)
               .text((d) => d.name + (specialCondition(d) ? "*" : ""));
@@ -869,7 +866,9 @@ function updateRadialDetailVizWithRegionSelection() {
             specialCondition(d) ? "#E26F99" : "transparent"
           )
           .attr("paint-order", "stroke")
-          .attr("startOffset", "24.75%")
+          .attr("startOffset", (d) =>
+            getStartOffset(d, radiusScaleFoods, radiusAccessorFoods)
+          )
           .attr("text-anchor", "middle")
           .attr("href", (d) => `#${getArcID(d, "detail")}`)
           .text((d) => d.name + (specialCondition(d) ? "*" : ""));
@@ -880,6 +879,25 @@ function updateRadialDetailVizWithRegionSelection() {
         return exit;
       }
     );
+}
+
+function getStartOffset(d, radiusScaleFoods, radiusAccessorFoods) {
+  const thisArcInnerRadius = radiusScaleFoods(radiusAccessorFoods(d) + 1);
+  const thisArcOuterRadius = radiusScaleFoods(radiusAccessorFoods(d));
+  const oneMonthOuterCircumference = (2 * Math.PI * thisArcOuterRadius) / 12;
+  const oneMonthInnerCircumference = (2 * Math.PI * thisArcInnerRadius) / 12;
+  const leftEdge = thisArcOuterRadius - thisArcInnerRadius;
+  const rightEdge = leftEdge;
+
+  const startPoint = oneMonthOuterCircumference / 2;
+  const totalLength =
+    oneMonthOuterCircumference +
+    rightEdge +
+    oneMonthInnerCircumference +
+    leftEdge;
+
+  const startOffset = (startPoint / totalLength) * 100;
+  return `${startOffset.toFixed(2)}%`;
 }
 
 function getRotation() {
@@ -1062,7 +1080,7 @@ function makeDialogInteractive() {
     if (event.target === dialog) {
       dialog.close();
     }
-  }
+  };
   dialog.addEventListener("click", handleDialogClick);
 
   const closeButton = d3.select("dialog button");
@@ -1171,9 +1189,10 @@ function getLocalStorageItem(key) {
  * @returns {string} The generated arc ID.
  */
 function getArcID(d, overviewOrDetailLabel) {
-  return `${overviewOrDetailLabel}-arc-${d.name.replaceAll(" ", "-")}-${
-    d.month
-  }`;
+  return `${overviewOrDetailLabel}-arc-${d.name
+    .replaceAll(")", "-")
+    .replaceAll("(", "-")
+    .replaceAll(" ", "-")}-${d.month}`;
 }
 
 function isInSeason(d) {
