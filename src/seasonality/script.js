@@ -993,7 +993,9 @@ function toggleFoodSelection(_foodButtonClickEvent, foodData) {
 }
 
 function getFoodTagClasses(d) {
-  return `tag ${d.mainColor} ${isInSeason(d) ? "in-season" : "out-of-season"} ${
+  return `tag prevent-double-tap-zoom ${d.mainColor} ${
+    isInSeason(d) ? "in-season" : "out-of-season"
+  } ${
     favouriteFoods[regionMap[selectedRegionName]].has(d.name) ? "favourite" : ""
   }`;
 }
