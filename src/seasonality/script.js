@@ -722,12 +722,6 @@ function updateRadialDetailVizWithRegionSelection() {
     .attr("transform", `translate(${width * 0.5}, ${height * 0.5})`)
     .attr("aria-label", "Foods in season by month");
 
-  const countMonthsInSeasonThreshold = 4;
-  const specialCondition = (d) =>
-    longFoodMonthsData.filter(
-      (item) => item.name === d.name && item.inSeason === true
-    ).length < countMonthsInSeasonThreshold;
-
   const tooltip = d3.select(".radial-viz-detail .radial-viz-tooltip-content");
 
   svg.on("mouseleave", () => {
@@ -748,9 +742,7 @@ function updateRadialDetailVizWithRegionSelection() {
           )
           .attr("aria-hidden", (d) => (isMonthInView(d.month) ? null : true))
           .attr("aria-label", (d) =>
-            isMonthInView(d.month)
-              ? getPlainEnglishDetailRadialVizInSeasonText(d, specialCondition)
-              : null
+            isMonthInView(d.month) ? getPlainEnglishInSeasonText(d) : null
           )
           .call((g) =>
             g
@@ -775,10 +767,7 @@ function updateRadialDetailVizWithRegionSelection() {
                 d.inSeason ? 1 : "var(--outOfSeasonFillOpacity)"
               )
               .on("touchmove mousemove", (_evt, d) => {
-                const tooltipText = getPlainEnglishDetailRadialVizInSeasonText(
-                  d,
-                  specialCondition
-                );
+                const tooltipText = getPlainEnglishInSeasonText(d);
                 if (isMonthInView(d.month)) {
                   tooltip.text(tooltipText);
                 } else {
@@ -804,9 +793,7 @@ function updateRadialDetailVizWithRegionSelection() {
               )
               .attr("text-anchor", "middle")
               .attr("href", (d) => `#${getArcID(d, "detail")}`)
-              .text(
-                (d) => d.name + (specialCondition(d) && d.inSeason ? "*" : "")
-              );
+              .text((d) => d.name);
           }),
       (update) => {
         update
@@ -816,9 +803,7 @@ function updateRadialDetailVizWithRegionSelection() {
           )
           .attr("aria-hidden", (d) => (isMonthInView(d.month) ? null : true))
           .attr("aria-label", (d) =>
-            isMonthInView(d.month)
-              ? getPlainEnglishDetailRadialVizInSeasonText(d, specialCondition)
-              : null
+            isMonthInView(d.month) ? getPlainEnglishInSeasonText(d) : null
           );
 
         update
@@ -868,7 +853,7 @@ function updateRadialDetailVizWithRegionSelection() {
           )
           .attr("text-anchor", "middle")
           .attr("href", (d) => `#${getArcID(d, "detail")}`)
-          .text((d) => d.name + (specialCondition(d) && d.inSeason ? "*" : ""));
+          .text((d) => d.name);
         return update;
       },
       (exit) => {
@@ -1129,14 +1114,6 @@ function getPlainEnglishInSeasonText(d) {
   return `${d.name}${getVarietiesText(d.varieties)} are ${
     d.inSeason ? "" : "not "
   }in season in ${d.month}`;
-}
-
-function getPlainEnglishDetailRadialVizInSeasonText(d, specialCondition) {
-  return `${d.name}${getVarietiesText(d.varieties)} are ${
-    d.inSeason ? "" : "not "
-  }in season in ${d.month}${
-    specialCondition(d) && d.inSeason ? " (be quick!)" : ""
-  }`;
 }
 
 function getVarietiesText(varieties) {
