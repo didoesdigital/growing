@@ -533,7 +533,7 @@ function updateRadialOverviewVizWithRegionSelection() {
 
   const tooltip = d3.select(".radial-viz-overview .radial-viz-tooltip-content");
 
-  svg.on("mouseleave", () => {
+  svg.on("mouseleave focusout", () => {
     tooltip.text("");
   });
 
@@ -582,7 +582,7 @@ function updateRadialOverviewVizWithRegionSelection() {
                 d.inSeason ? 1 : "var(--outOfSeasonFillOpacity)"
               )
           )
-          .on("touchmove mousemove", (_evt, d) => {
+          .on("touchmove mousemove focus", (_evt, d) => {
             const tooltipText = getPlainEnglishInSeasonText(d);
             tooltip.text(tooltipText);
           }),
@@ -729,7 +729,7 @@ function updateRadialDetailVizWithRegionSelection() {
 
   const tooltip = d3.select(".radial-viz-detail .radial-viz-tooltip-content");
 
-  svg.on("mouseleave", () => {
+  svg.on("mouseleave focusout", () => {
     tooltip.text("");
   });
 
@@ -749,6 +749,14 @@ function updateRadialDetailVizWithRegionSelection() {
           .attr("aria-label", (d) =>
             isMonthInView(d.month) ? getPlainEnglishInSeasonText(d) : null
           )
+          .on("focus", (_evt, d) => {
+            const tooltipText = getPlainEnglishInSeasonText(d);
+            if (isMonthInView(d.month)) {
+              tooltip.text(tooltipText);
+            } else {
+              tooltip.text("");
+            }
+          })
           .call((g) =>
             g
               .append("path")
