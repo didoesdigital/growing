@@ -546,7 +546,7 @@ function updateRadialOverviewVizWithRegionSelection() {
           .append("g")
           .attr("class", "food-arc-group")
           .attr("tabindex", (d) =>
-            d.month === selectedMonthIndex ? "0" : null
+            months.indexOf(d.month) === selectedMonthIndex ? "0" : null
           )
           .attr("role", (d) =>
             d.month === selectedMonthIndex ? "listitem" : "presentation"
