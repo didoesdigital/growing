@@ -798,7 +798,9 @@ function updateRadialDetailVizWithRegionSelection() {
               )
               .attr("text-anchor", "middle")
               .attr("href", (d) => `#${getArcID(d, "detail")}`)
-              .text((d) => d.name);
+              .text((d) =>
+                getShortName(d, radiusScaleFoods, radiusAccessorFoods)
+              );
           }),
       (update) => {
         update
@@ -858,7 +860,7 @@ function updateRadialDetailVizWithRegionSelection() {
           )
           .attr("text-anchor", "middle")
           .attr("href", (d) => `#${getArcID(d, "detail")}`)
-          .text((d) => d.name);
+          .text((d) => getShortName(d, radiusScaleFoods, radiusAccessorFoods));
         return update;
       },
       (exit) => {
@@ -904,6 +906,17 @@ function getRotation() {
     radialVizRotation + monthIndexDelta * oneMonthRotationInDegrees;
 
   return radialVizRotation;
+}
+
+function getShortName(d, radiusScaleFoods, radiusAccessorFoods) {
+  const thisArcOuterRadius = radiusScaleFoods(radiusAccessorFoods(d));
+  const oneMonthOuterCircumference = (2 * Math.PI * thisArcOuterRadius) / 12;
+  if (oneMonthOuterCircumference > 200) {
+    return d.name;
+  }
+
+  const charLimit = 18;
+  return `${d.name.slice(0, charLimit)}${d.name.length > charLimit ? "…" : ""}`;
 }
 
 function updateTagsWithRegionSelection() {
