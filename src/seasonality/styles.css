@@ -319,6 +319,7 @@ dialog {
   min-height: 1.5rem;
 }
 
+.example-selected,
 .tag {
   background-color: var(--coolgrey-200);
   border-radius: 0.25rem;
@@ -333,6 +334,7 @@ dialog {
   padding: 0.25rem 0.5rem;
 }
 
+.example-selected,
 .tag.favourite {
   border: 2px solid var(--coolgrey-900);
 }
@@ -381,6 +383,13 @@ dialog {
     border-color: var(--coolgrey-100);
     border-style: dotted;
   }
+}
+
+.selected-favourites-chart-note {
+  background: var(--coolgrey-100);
+  padding: 1rem 0 0.5rem 0;
+  position: sticky;
+  top: 0;
 }
 
 .out-of-season {

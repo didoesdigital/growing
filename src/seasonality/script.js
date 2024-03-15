@@ -362,6 +362,10 @@ function getFavouritesFromLocalStorage() {
       console.error(err);
     }
   }
+
+  d3.selectAll(".js-favourites-selected-counter").text(
+    favouriteFoods[regionMap[selectedRegionName]].size
+  );
 }
 
 function setUpFoodsByColorTags() {
@@ -983,6 +987,9 @@ function toggleFoodSelection(_foodButtonClickEvent, foodData) {
     updateTagsWithFavouritesSelection();
     updateRadialDetailVizWithRegionSelection();
     updateRadialOverviewVizWithRegionSelection();
+    d3.selectAll(".js-favourites-selected-counter").text(
+      favouriteFoods[regionMap[selectedRegionName]].size
+    );
   }
 }
 
@@ -1101,6 +1108,8 @@ function makeShowOnlyFavouritesCheckboxInteractive() {
   const browserCheckedState = d3
     .select("#show-only-favourites-checkbox")
     .property("checked");
+
+  d3.selectAll(".js-maximum-favourite-foods").text(maximumFavouriteFoods);
 
   showOnlyFavourites = browserCheckedState;
 
