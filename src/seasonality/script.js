@@ -462,11 +462,11 @@ function updateRadialOverviewVizWithRegionSelection() {
     selectedFoodData,
     months
   ).sort(
-    // Sort it so that the reading order makes sense: first, starting from the outside arc and the selected month at the top, read all its foods by color and by name alphabetically, then next calendar month and so on
+    // Sort aesthetically so that January shows the most in-season foods together
     (a, b) =>
-      months.indexOf(a.month) - months.indexOf(b.month) ||
       sortedColors.indexOf(a.mainColor) - sortedColors.indexOf(b.mainColor) ||
-      a.name.localeCompare(b.name)
+      d3.descending(a.inSeason, b.inSeason) ||
+      months.indexOf(a.month) - months.indexOf(b.month)
   );
 
   const angleAccessorMonths = (d) => d.month;
