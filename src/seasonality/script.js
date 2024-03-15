@@ -203,6 +203,7 @@ let colorSections;
 let tagsDiv;
 let tagsSpans;
 let radialVizRotation = 0;
+let showOnlyFavourites = false;
 
 const dialog = document.querySelector("dialog");
 
@@ -424,9 +425,7 @@ function updateTagsWithMonthSelection() {
     .attr("aria-label", (d) =>
       isInSeason(d) ? undefined : `${d.name} (out of season)`
     )
-    .attr("aria-pressed", (d) =>
-      favouriteFoods[regionMap[selectedRegionName]].has(d.name)
-    )
+    .attr("aria-pressed", (d) => isFavourite(d))
     .attr("class", getFoodTagClasses);
 }
 
@@ -456,7 +455,9 @@ function updateRadialOverviewVizWithRegionSelection() {
     "white",
   ]; // determined by colorGroupedData.map(d => d[0]);
 
-  const selectedFoodData = getAllFoodDataForRegion(seasonalFoodData);
+  const selectedFoodData = showOnlyFavourites
+    ? getCuratedFoodDataForRegion(seasonalFoodData)
+    : getAllFoodDataForRegion(seasonalFoodData);
 
   const longFoodMonthsData = getRadialVizFoodMonthsData(
     selectedFoodData,
@@ -927,9 +928,7 @@ function updateTagsWithRegionSelection() {
           .attr("aria-label", (d) =>
             isInSeason(d) ? undefined : `${d.name} (out of season)`
           )
-          .attr("aria-pressed", (d) =>
-            favouriteFoods[regionMap[selectedRegionName]].has(d.name)
-          )
+          .attr("aria-pressed", (d) => isFavourite(d))
           .attr("class", getFoodTagClasses)
           .text((d) => d.name)
           .on("click", toggleFoodSelection),
@@ -938,9 +937,7 @@ function updateTagsWithRegionSelection() {
           .attr("aria-label", (d) =>
             isInSeason(d) ? undefined : `${d.name} (out of season)`
           )
-          .attr("aria-pressed", (d) =>
-            favouriteFoods[regionMap[selectedRegionName]].has(d.name)
-          )
+          .attr("aria-pressed", (d) => isFavourite(d))
           .attr("class", getFoodTagClasses),
       (exit) => exit.remove()
     );
@@ -962,9 +959,7 @@ function updateTagsWithFavouritesSelection() {
           .attr("aria-label", (d) =>
             isInSeason(d) ? undefined : `${d.name} (out of season)`
           )
-          .attr("aria-pressed", (d) =>
-            favouriteFoods[regionMap[selectedRegionName]].has(d.name)
-          )
+          .attr("aria-pressed", (d) => isFavourite(d))
           .attr("class", getFoodTagClasses)
           .text((d) => d.name)
           .on("click", toggleFoodSelection),
@@ -973,9 +968,7 @@ function updateTagsWithFavouritesSelection() {
           .attr("aria-label", (d) =>
             isInSeason(d) ? undefined : `${d.name} (out of season)`
           )
-          .attr("aria-pressed", (d) =>
-            favouriteFoods[regionMap[selectedRegionName]].has(d.name)
-          )
+          .attr("aria-pressed", (d) => isFavourite(d))
           .attr("class", getFoodTagClasses),
       (exit) => exit.remove()
     );
@@ -989,19 +982,22 @@ function toggleFoodSelection(_foodButtonClickEvent, foodData) {
     updateSelectedFoodsInLocalStorage();
     updateTagsWithFavouritesSelection();
     updateRadialDetailVizWithRegionSelection();
+    updateRadialOverviewVizWithRegionSelection();
   }
 }
 
 function getFoodTagClasses(d) {
   return `tag prevent-double-tap-zoom ${d.mainColor} ${
     isInSeason(d) ? "in-season" : "out-of-season"
-  } ${
-    favouriteFoods[regionMap[selectedRegionName]].has(d.name) ? "favourite" : ""
-  }`;
+  } ${isFavourite(d) ? "favourite" : ""}`;
+}
+
+function isFavourite(d) {
+  return favouriteFoods[regionMap[selectedRegionName]].has(d.name);
 }
 
 function maybeUpdateFavouriteFoodsSelection(food) {
-  if (favouriteFoods[regionMap[selectedRegionName]].has(food.name)) {
+  if (isFavourite(food)) {
     if (
       favouriteFoods[regionMap[selectedRegionName]].size <=
       minimumFavouriteFoods
@@ -1044,6 +1040,7 @@ function updateSelectedFoodsInLocalStorage() {
 function makeInteractive() {
   makeRegionInteractive();
   makeHideOutOfSeasonCheckboxInteractive();
+  makeShowOnlyFavouritesCheckboxInteractive();
   makeNextPreviousMonthButtonsInteractive();
   makeDialogInteractive();
 
@@ -1097,6 +1094,19 @@ function makeHideOutOfSeasonCheckboxInteractive() {
 
   d3.select("#hide-out-of-season-checkbox").on("click", (e) => {
     d3.select(".tags-viz").classed("hide-out-of-season", e.target.checked);
+  });
+}
+
+function makeShowOnlyFavouritesCheckboxInteractive() {
+  const browserCheckedState = d3
+    .select("#show-only-favourites-checkbox")
+    .property("checked");
+
+  showOnlyFavourites = browserCheckedState;
+
+  d3.select("#show-only-favourites-checkbox").on("click", (e) => {
+    showOnlyFavourites = e.target.checked;
+    updateRadialOverviewVizWithRegionSelection();
   });
 }
 
@@ -1487,7 +1497,7 @@ function getCuratedFoodDataForRegion(seasonalFoodData) {
   const selectedRegionAbbr = regionMap[selectedRegionName];
   const selectedFoodsInRegion = seasonalFoodData
     .filter((d) => d.region === selectedRegionAbbr)
-    .filter((d) => favouriteFoods[selectedRegionAbbr].has(d.name));
+    .filter((d) => isFavourite(d));
 
   if (selectedFoodsInRegion.length < favouriteFoods[selectedRegionAbbr].size) {
     const missingFoods = [...favouriteFoods[selectedRegionAbbr]].filter(
