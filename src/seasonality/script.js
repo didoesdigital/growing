@@ -659,7 +659,7 @@ function updateRadialDetailVizWithRegionSelection() {
   const width = 1400;
   const height = width;
   const innerRadius = 260;
-  const outerRadius = height * 0.5 - 45;
+  const outerRadius = height * 0.5 - 15;
 
   const sortedColors = [
     "green",
