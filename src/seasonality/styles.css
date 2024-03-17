@@ -142,6 +142,7 @@ legend {
   text-transform: uppercase;
 }
 
+summary,
 button:hover {
   cursor: pointer;
 }
