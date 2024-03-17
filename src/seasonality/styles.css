@@ -142,12 +142,15 @@ legend {
   text-transform: uppercase;
 }
 
+button:hover {
+  cursor: pointer;
+}
+
 button.close-dialog {
   background-color: var(--coolgrey-100);
   border: 1px solid var(--coolgrey-700);
   border-radius: 2px;
   color: var(--coolgrey-700);
-  cursor: pointer;
   font-size: 1rem;
   line-height: 1;
   padding: 0.5rem;
@@ -174,7 +177,6 @@ button.previous-button {
   border: 1px solid transparent;
   border-radius: 50%;
   color: var(--violet-700);
-  cursor: pointer;
   font-family: var(--sans-serif-stack);
   font-size: 1rem;
   font-weight: 400;
