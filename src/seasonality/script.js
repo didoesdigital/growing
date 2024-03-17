@@ -1274,6 +1274,7 @@ const colorMap = {
   "Broccolini": "green",
   "Brussels sprouts": "green",
   "Cabbages": "green",
+  "Calamansi": "orange",
   "Capsicums": "red, green, yellow",
   "Carrots": "orange",
   "Cauliflowers": "white",
