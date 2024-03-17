@@ -1224,7 +1224,7 @@ function isInSeason(d) {
 }
 
 function fillNoMonths(foodMonthSeasonalityLabel) {
-  const inSeasonLabels = ["yes", "be quick"];
+  const inSeasonLabels = ["yes", "be quick", "peak"];
   // const outOfSeasonLabels = ["no", "maybe", "frozen", "frozen and be quick", ""];
   return inSeasonLabels.includes(foodMonthSeasonalityLabel) ? "yes" : "no";
 }
