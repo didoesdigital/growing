@@ -732,11 +732,9 @@ textPath.out-of-season {
   width: 38rem;
 }
 
-.background-img {
+.pineapple-photo {
   aspect-ratio: 3024/4032;
-  background-image: url('./images/flowering-pineapple.jpeg');
-  background-size: contain;
-  background-repeat: no-repeat;
+  object-fit: contain;
   width: 100%;
 }
 
@@ -756,12 +754,15 @@ textPath.out-of-season {
     width: 50%;
   }
 
-  .background-img {
+  .left-section {
+    width: 50%;
+  }
+
+  .pineapple-photo {
     background-position-x: calc(100% - 24px);
-    background-size: cover;
     height: 100lvh;
+    object-fit: cover;
     position: sticky;
     top: 0;
-    width: 50%;
   }
 }
