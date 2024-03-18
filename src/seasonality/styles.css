@@ -19,6 +19,8 @@
   --gold-400: #f5d6a3;
   --green-400: #84dcc0;
   --green-500: #24bc8c;
+  --green-600: #09A573;
+  --green-900: #024B32;
   --peach-400: #f2c4b0;
   --red-500: #ed9798;
   --violet-500: #b19cd3;
@@ -26,6 +28,7 @@
   --violet-700: #5f428f;
   --violet-900: #331a5b;
   --yellow-400: #f9e89d;
+  --green-shadow: #09A573;
   --sans-serif-stack: "Quicksand", "Source Sans 3", "Source Sans Pro",
     "Work Sans", "Lato", "Noto Sans", "Assistant", "Libre Franklin", "Open Sans",
     "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -64,6 +67,9 @@
     --gold-400: #ecb255;
     --green-400: #06db97;
     --green-500: #24d59e;
+    --green-600: #84DCC0;
+    --green-900: #ECF9F5;
+    --green-shadow: #067551;
     --peach-400: #ebc19d;
     --red-500: #f59fa3;
     --violet-500: #af98d8;
@@ -646,4 +652,40 @@ textPath.out-of-season {
   overflow: hidden !important;
   clip: rect(1px, 1px, 1px, 1px) !important;
   border: 0 !important;
+}
+
+.seasonal-food-traits {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  list-style: none;
+}
+
+.seasonal-food-traits li {
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
+  background-image: linear-gradient(-14deg,
+      var(--green-600),
+      var(--green-900),
+      var(--green-600),
+      var(--green-900));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-weight: 900;
+  letter-spacing: 0.1rem;
+  padding: 0.5rem 1rem;
+  text-shadow: 0px 0px 16px var(--green-shadow);
+  width: fit-content;
+}
+
+@media (prefers-color-scheme: dark) {
+  .seasonal-food-traits li {
+    background-image: linear-gradient(-14deg,
+        var(--green-900),
+        var(--green-600),
+        var(--green-900),
+        var(--green-600));
+  }
 }
