@@ -722,3 +722,46 @@ textPath.out-of-season {
   letter-spacing: 0.1rem;
   padding: 0.5rem 1rem;
 }
+
+#outro {
+  display: flex;
+  flex-direction: column;
+  margin-top: 144px;
+  max-width: 100vw;
+  position: relative;
+  width: 38rem;
+}
+
+.background-img {
+  aspect-ratio: 3024/4032;
+  background-image: url('./images/flowering-pineapple.jpeg');
+  background-size: contain;
+  background-repeat: no-repeat;
+  width: 100%;
+}
+
+@media only screen and (min-width: 1080px) {
+  #outro {
+    display: flex;
+    flex-basis: 50%;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    margin-top: 6rem;
+    max-width: 100%;
+    width: 100%;
+    position: relative;
+  }
+
+  #outro>div {
+    width: 50%;
+  }
+
+  .background-img {
+    background-position-x: calc(100% - 24px);
+    background-size: cover;
+    height: 100lvh;
+    position: sticky;
+    top: 0;
+    width: 50%;
+  }
+}
