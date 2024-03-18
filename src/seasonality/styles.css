@@ -395,6 +395,47 @@ dialog {
   padding: 1rem 0 0.5rem 0;
   position: sticky;
   top: 0;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#foods-by-color {
+  width: 38rem;
+  max-width: 100%;
+}
+
+.tags-section {
+  width: 38rem;
+  max-width: 100vw;
+  padding-left: 24px;
+  padding-right: 24px
+}
+
+@media (min-width: 1080px) {
+  .tags-section {
+    width: auto;
+  }
+
+  #foods-by-color {
+    max-width: 1280px;
+    width: auto;
+    column-count: 2;
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+
+  #foods-by-color .color-section:first-of-type h2 {
+    margin-top: 0;
+  }
+
+  .selected-favourites-chart-note {
+    margin-left: 24px;
+    margin-right: 24px;
+  }
+
+  .color-section {
+    break-inside: avoid;
+  }
 }
 
 .out-of-season {
