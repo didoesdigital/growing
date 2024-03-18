@@ -57,7 +57,7 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --coolgrey-100: #232027;
+    --coolgrey-100: #1b191f;
     --coolgrey-200: #504c57;
     --coolgrey-300: #676170;
     --coolgrey-400: #868091;
@@ -308,6 +308,52 @@ dialog {
 
   .copyright-para {
     margin-top: 3rem;
+  }
+}
+
+#intro {
+  width: 100%;
+  background-image: linear-gradient(-14deg, var(--violet-500), var(--red-500), var(--peach-400), var(--gold-400));
+  clip-path: polygon(0 0,
+      100% 0,
+      100% calc(100% - 7vw),
+      0 100%);
+}
+
+@media (prefers-color-scheme: dark) {
+  #intro {
+    background: linear-gradient(-14deg, #331a5b, #611f61, #892962, #ab3a5f, #c7525a, #db7054, #e79051, #ecb255);
+  }
+}
+
+.content-area {
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 11rem;
+  padding-left: 24px;
+  padding-right: 24px;
+  max-width: 100%;
+  width: 35rem;
+}
+
+#seasonality {
+  margin-top: 3rem;
+}
+
+.seasonality-disclaimer {
+  background: hsl(0, 0%, 100%, 0.1);
+  /* box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1); */
+  -webkit-backdrop-filter: blur(5px);
+  backdrop-filter: blur(5px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  padding: 1rem 1.5rem;
+  text-align: justify;
+  border-radius: 8px;
+}
+
+@media (prefers-color-scheme: dark) {
+  .seasonality-disclaimer {
+    background: hsl(0, 0%, 100%, 0.1);
   }
 }
 
@@ -664,28 +710,8 @@ textPath.out-of-season {
 
 .seasonal-food-traits li {
   margin-top: 1.5rem;
-  margin-bottom: 1.5rem;
-  background-image: linear-gradient(-14deg,
-      var(--green-600),
-      var(--green-900),
-      var(--green-600),
-      var(--green-900));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  margin-bottom: 2.5rem;
   font-weight: 900;
   letter-spacing: 0.1rem;
   padding: 0.5rem 1rem;
-  text-shadow: 0px 0px 16px var(--green-shadow);
-  width: fit-content;
-}
-
-@media (prefers-color-scheme: dark) {
-  .seasonal-food-traits li {
-    background-image: linear-gradient(-14deg,
-        var(--green-900),
-        var(--green-600),
-        var(--green-900),
-        var(--green-600));
-  }
 }
