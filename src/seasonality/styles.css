@@ -53,6 +53,13 @@
   --food-unknown-fill: #949494;
   --food-unknown-stroke: #949494;
   --transition-radial-viz-rotation: transform 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55) 0s;
+
+  overscroll-behavior: none;
+}
+
+::selection {
+  background-color: #E89BB7;
+  color: #000;
 }
 
 @media (prefers-color-scheme: dark) {
