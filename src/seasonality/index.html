@@ -110,15 +110,17 @@
 
         <section id="seasonality">
           <div class="main-column">
-            <h2 style="text-align: center; margin-bottom: 3rem">
-              What's in season?
-            </h2>
+            <h2 style="text-align: center" id="region-legend">Pick a region</h2>
 
             <div
-              style="margin-top: 1rem; display: flex; justify-content: center"
+              style="
+                margin-top: 1rem;
+                margin-bottom: 6rem;
+                display: flex;
+                justify-content: center;
+              "
             >
-              <fieldset>
-                <legend>Region</legend>
+              <fieldset aria-labelledby="region-legend">
                 <div class="form-group">
                   <div class="radio">
                     <label for="Australia">Australia</label>
@@ -195,6 +197,11 @@
                 </div>
               </fieldset>
             </div>
+            <h2 style="text-align: center">
+              What's in season<span class="selected-region-name">
+                in Australia</span
+              >?
+            </h2>
           </div>
         </section>
 

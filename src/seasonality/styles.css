@@ -145,16 +145,6 @@ fieldset {
   padding: 0;
 }
 
-legend {
-  color: var(--coolgrey-700);
-  font-weight: 600;
-  letter-spacing: 0.1rem;
-  line-height: 1.2;
-  margin-bottom: 0.5rem;
-  padding: 0;
-  text-transform: uppercase;
-}
-
 summary,
 button:hover {
   cursor: pointer;

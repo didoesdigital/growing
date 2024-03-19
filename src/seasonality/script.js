@@ -247,6 +247,11 @@ function setInitialSelectedRegion() {
     getSelectedRegionFromLocalStorage() ||
     getSelectedRegionFromBrowser() ||
     setRegionToDefault();
+
+  // We use a non-breaking space in the text so that "New" is not separated from "South Wales":
+  d3.selectAll(".selected-region-name").text(
+    ` in ${selectedRegionName.replaceAll(" ", " ")}`
+  );
 }
 
 function getSelectedRegionFromURLParams() {
@@ -1149,6 +1154,11 @@ function makeRegionInteractive() {
     pushRegionParam(dashifiedRegion);
     setLocalStorageItem(regionStorage, selectedRegionName);
     updateDataWithRegionSelection();
+
+    // We use a non-breaking space in the text so that "New" is not separated from "South Wales":
+    d3.selectAll(".selected-region-name").text(
+      ` in ${selectedRegionName.replaceAll(" ", " ")}`
+    );
   });
 }
 
