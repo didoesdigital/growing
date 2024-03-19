@@ -466,8 +466,8 @@ dialog {
   }
 
   #foods-by-color {
-    max-width: 1280px;
-    width: auto;
+    max-width: 1080px;
+    width: calc(100vw - 48px);
     column-count: 2;
     padding-left: 24px;
     padding-right: 24px;
