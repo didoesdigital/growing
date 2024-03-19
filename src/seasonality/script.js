@@ -177,6 +177,8 @@ const favouriteFoods = {
   "NT": new Set(defaultSelectedFoods["NT"]),
 };
 
+const defaultTooltipText = "Graphic by @DiDoesDigital";
+
 const minimumFavouriteFoods = 3;
 const maximumFavouriteFoods = 20;
 
@@ -539,7 +541,7 @@ function updateRadialOverviewVizWithRegionSelection() {
   const tooltip = d3.select(".radial-viz-overview .radial-viz-tooltip-content");
 
   svg.on("mouseleave focusout", () => {
-    tooltip.text("");
+    tooltip.text(defaultTooltipText);
   });
 
   const foodMonthArc = foodArcs
@@ -735,7 +737,7 @@ function updateRadialDetailVizWithRegionSelection() {
   const tooltip = d3.select(".radial-viz-detail .radial-viz-tooltip-content");
 
   svg.on("mouseleave focusout", () => {
-    tooltip.text("");
+    tooltip.text(defaultTooltipText);
   });
 
   const foodMonthArc = foodArcs
