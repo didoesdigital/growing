@@ -713,11 +713,11 @@ textPath.out-of-season {
   justify-content: center;
   flex-wrap: wrap;
   list-style: none;
+  margin-top: 1.5rem;
+  margin-bottom: 2.5rem;
 }
 
 .seasonal-food-traits li {
-  margin-top: 1.5rem;
-  margin-bottom: 2.5rem;
   font-weight: 900;
   letter-spacing: 0.1rem;
   padding: 0.5rem 1rem;
