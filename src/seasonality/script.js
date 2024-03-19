@@ -1078,6 +1078,7 @@ function makeInteractive() {
   makeShowOnlyFavouritesCheckboxInteractive();
   makeNextPreviousMonthButtonsInteractive();
   makeDialogInteractive();
+  makeSeasonalFoodTraitsWiggle();
 
   window.addEventListener(
     "popstate",
@@ -1102,6 +1103,29 @@ function makeDialogInteractive() {
   const closeButton = d3.select("dialog button");
   closeButton.on("click", () => {
     dialog.close();
+  });
+}
+
+function makeSeasonalFoodTraitsWiggle() {
+  d3.selectAll(".seasonal-food-traits li").on("click", function () {
+    let thisTrait = d3.select(this);
+    thisTrait.classed("wiggle", true);
+    setTimeout(() => {
+      thisTrait.classed("wiggle", false);
+    }, 300);
+  });
+
+  d3.selectAll(".seasonal-food-traits li").on("dblclick", function () {
+    if (window.getSelection) {
+      const selection = window.getSelection();
+      selection.removeAllRanges();
+    }
+
+    let thisTrait = d3.select(this);
+    thisTrait.classed("bigger-wiggle", true);
+    setTimeout(() => {
+      thisTrait.classed("bigger-wiggle", false);
+    }, 600);
   });
 }
 
