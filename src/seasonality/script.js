@@ -1115,12 +1115,19 @@ function makeSeasonalFoodTraitsWiggle() {
     }, 300);
   });
 
-  d3.selectAll(".seasonal-food-traits li").on("dblclick", function () {
-    if (window.getSelection) {
-      const selection = window.getSelection();
-      selection.removeAllRanges();
+  d3.selectAll(".seasonal-food-traits li").on("mousedown", function (event) {
+    if (
+      event.detail > 1 &&
+      !event.ctrlKey &&
+      !event.shiftKey &&
+      !event.altKey &&
+      !event.metaKey
+    ) {
+      event.preventDefault();
     }
+  });
 
+  d3.selectAll(".seasonal-food-traits li").on("dblclick", function () {
     let thisTrait = d3.select(this);
     thisTrait.classed("bigger-wiggle", true);
     setTimeout(() => {
