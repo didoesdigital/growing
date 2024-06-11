@@ -459,7 +459,7 @@ const regionLocallyGrownDisclaimerMap = {
   "Victoria": `Some popular foods like Bananas aren't grown in Victoria. <a href="/seasonality/?region=Australia">Switch to Australia</a> to find seasonality of other foods that you may find in the supermarket.`,
   "Tasmania": `Some popular, tropical foods like Bananas, Grapes, and Pineapples aren't grown in Tasmania. For seasonality of other foods that you may find in the supermarket, <a href="/seasonality/?region=Australia">switch to Australia</a>.`,
   "Western Australia": `Some popular foods like Pineapples aren't grown in Western Australia. For seasonality of other foods that you may find in the supermarket, <a href="/seasonality/?region=Australia">switch to Australia</a>.`,
-  "South Australia": `Some popular foods like Cucumbers, Kiwifruit, and Pineapples aren't grown in South Australia. For seasonality of other foods that you may find in the supermarket, <a href="/seasonality/?region=Australia">switch to Australia</a>.`,
+  "South Australia": `Some popular foods like Pineapples aren't grown in South Australia. For seasonality of other foods that you may find in the supermarket, <a href="/seasonality/?region=Australia">switch to Australia</a>.`,
 };
 
 const regionsWithoutDisclaimers = [
