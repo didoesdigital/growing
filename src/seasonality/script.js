@@ -490,9 +490,13 @@ function updateLocallyGrownDisclaimer() {
       updateDataWithRegionSelection();
 
       d3.selectAll(".selected-region-name").text(` in Australia`);
-      document
-        .querySelector(".region-heading")
-        .scrollIntoView({ behavior: "smooth" });
+      const regionHeading = document.querySelector(".region-heading");
+
+      regionHeading.scrollIntoView({ behavior: "smooth" });
+
+      setTimeout(() => {
+        regionHeading.focus();
+      }, 500);
     });
 
     d3.select("#locally-grown-disclaimer").style("display", "block");
