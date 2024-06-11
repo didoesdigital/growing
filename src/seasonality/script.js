@@ -448,6 +448,55 @@ function updateDataWithRegionSelection() {
   updateTagsWithRegionSelection();
   updateRadialDetailVizWithRegionSelection();
   updateRadialOverviewVizWithRegionSelection();
+  updateLocallyGrownDisclaimer();
+}
+
+const regionLocallyGrownDisclaimerMap = {
+  "Australia": "",
+  "Queensland": "",
+  "New South Wales": "",
+  "Northern Territory": `For seasonality of other foods that you may find in the supermarket, <a href="/seasonality/?region=Australia">switch to Australia</a>.`,
+  "Victoria": `Some popular foods like Bananas aren't grown in Victoria. <a href="/seasonality/?region=Australia">Switch to Australia</a> to find seasonality of other foods that you may find in the supermarket.`,
+  "Tasmania": `Some popular, tropical foods like Bananas, Grapes, and Pineapples aren't grown in Tasmania. For seasonality of other foods that you may find in the supermarket, <a href="/seasonality/?region=Australia">switch to Australia</a>.`,
+  "Western Australia": `Some popular foods like Pineapples aren't grown in Western Australia. For seasonality of other foods that you may find in the supermarket, <a href="/seasonality/?region=Australia">switch to Australia</a>.`,
+  "South Australia": `Some popular foods like Cucumbers, Kiwifruit, and Pineapples aren't grown in South Australia. For seasonality of other foods that you may find in the supermarket, <a href="/seasonality/?region=Australia">switch to Australia</a>.`,
+};
+
+const regionsWithoutDisclaimers = [
+  "Australia",
+  "New South Wales",
+  "Queensland",
+];
+
+function updateLocallyGrownDisclaimer() {
+  if (regionsWithoutDisclaimers.includes(selectedRegionName)) {
+    d3.select("#locally-grown-disclaimer").style("display", "none");
+    d3.select("#locally-grown-disclaimer p").html(null);
+  } else {
+    d3.select("#locally-grown-disclaimer p").html(
+      regionLocallyGrownDisclaimerMap[selectedRegionName] ?? null
+    );
+
+    d3.select("#locally-grown-disclaimer a").on("click", function (event) {
+      event.preventDefault();
+
+      const selectedRegionRadio = d3.select(`input[name="region"]#Australia`);
+      selectedRegionRadio.property("checked", true);
+
+      selectedRegionName = "Australia";
+      previousSelectedMonthIndex = selectedMonthIndex;
+      pushRegionParam("Australia");
+      setLocalStorageItem(regionStorage, selectedRegionName);
+      updateDataWithRegionSelection();
+
+      d3.selectAll(".selected-region-name").text(` in Australia`);
+      document
+        .querySelector(".region-heading")
+        .scrollIntoView({ behavior: "smooth" });
+    });
+
+    d3.select("#locally-grown-disclaimer").style("display", "block");
+  }
 }
 
 function updateRadialOverviewVizWithRegionSelection() {
