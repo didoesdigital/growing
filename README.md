@@ -1,14 +1,10 @@
 # Growing
 
-
-## Setup
-
-- [yarn](https://yarnpkg.com/lang/en/docs/install/) to install dev dependencies like live-server for hot reloading in local development
 This project uses [D3](https://d3js.org/) v7 and vanilla JavaScript.
 
 ## Development
 
-- `yarn dev`
+- `npx live-server src`
 
 ## License
 
