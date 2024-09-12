@@ -1,10 +1,10 @@
 # Growing
 
-This project uses [D3](https://d3js.org/) and vanilla JavaScript.
 
 ## Setup
 
 - [yarn](https://yarnpkg.com/lang/en/docs/install/) to install dev dependencies like live-server for hot reloading in local development
+This project uses [D3](https://d3js.org/) v7 and vanilla JavaScript.
 
 ## Development
 
@@ -12,7 +12,8 @@ This project uses [D3](https://d3js.org/) and vanilla JavaScript.
 
 ## License
 
-The code is licensed under MIT License, as shown in [LICENSE.md](./LICENSE.md).
+- The code is licensed under MIT License, as shown in [LICENSE.md](./LICENSE.md).
+- The terms of the licenses of third-party libraries are shown in [`LICENSE-3RD-PARTY.md`](./LICENSE-3RD-PARTY.md).
 
 ### Data
 
