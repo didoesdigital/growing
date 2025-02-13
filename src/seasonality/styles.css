@@ -358,8 +358,11 @@ dialog {
   color: var(--coolgrey-700);
   text-transform: uppercase;
   letter-spacing: 0.1rem;
+  font-family: var(--display-stack);
+  line-height: 1.2;
   font-weight: 400;
   font-size: 1rem;
+  margin-top: 1.5rem;
   padding-bottom: 0.5rem;
 }
 
@@ -473,7 +476,7 @@ dialog {
     padding-right: 24px;
   }
 
-  #foods-by-color .color-section:first-of-type h2 {
+  #foods-by-color .color-section:first-of-type h3 {
     margin-top: 0;
   }
 

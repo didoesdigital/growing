@@ -394,7 +394,7 @@ function setUpFoodsByColorTags() {
     .attr("class", (d) => `color-section`);
 
   colorSections
-    .append("h2")
+    .append("h3")
     .attr("class", "color-heading")
     .text((d) => `${d[0]}`);
 
