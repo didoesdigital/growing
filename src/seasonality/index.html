@@ -202,6 +202,7 @@
             </div>
             <h2
               tabindex="-1"
+              id="region-heading"
               class="region-heading"
               style="text-align: center; scroll-margin-top: 1rem"
             >
@@ -236,7 +237,7 @@
                     class="radial-viz-detail-relative-wrapper radial-viz-detail-gradient"
                   >
                     <div class="radial-viz-detail__svg-rotate-wrapper">
-                      <svg class="radial-viz-detail__svg">
+                      <svg aria-labelledby="region-heading" class="radial-viz-detail__svg">
                         <g class="food-arcs"></g>
                       </svg>
                     </div>
@@ -370,7 +371,7 @@
             >
           </div>
           <div class="annual-seasonality-title">
-            <h3 class="semi-bold">Annual seasonality</h3>
+            <h3 id="annual-seasonality" class="semi-bold">Annual seasonality</h3>
           </div>
           <div style="width: 100vw; max-width: 100%">
             <div class="radial-viz-overview-wrapper">
@@ -382,7 +383,7 @@
                     </div>
                   </div>
                   <div class="radial-viz-overview__svg-position-wrapper">
-                    <svg class="radial-viz-overview__svg">
+                    <svg aria-labelledby="annual-seasonality" class="radial-viz-overview__svg">
                       <g class="circle-group"></g>
                       <g class="food-arcs"></g>
                       <g class="month-labels"></g>
