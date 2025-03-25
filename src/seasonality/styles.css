@@ -319,7 +319,12 @@ dialog {
 
 @media (prefers-color-scheme: dark) {
   #intro {
-    background: linear-gradient(-14deg, #331a5b, #611f61, #892962, #ab3a5f, #c7525a, #db7054, #e79051, #ecb255);
+    background: linear-gradient(-14deg, #331a5b, #561d62, #762066, #942765, #ae3360, #c44559, #d55c50, #e17547)
+  }
+
+  .dark-mode-text-shadow {
+    color: #fff;
+    text-shadow: 0px 1px 4px rgba(0, 0, 0, .7);
   }
 }
 
