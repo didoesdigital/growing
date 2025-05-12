@@ -758,6 +758,11 @@ textPath.out-of-season {
   background-color: var(--peach-400, #f2c4b0);
   text-align: center;
 }
+@media (prefers-color-scheme: dark) {
+  .left-section {
+    color: var(--coolgrey-200);
+  }
+}
 
 .pineapple-photo {
   aspect-ratio: 3024/4032;
