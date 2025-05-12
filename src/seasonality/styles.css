@@ -19,8 +19,8 @@
   --gold-400: #f5d6a3;
   --green-400: #84dcc0;
   --green-500: #24bc8c;
-  --green-600: #09A573;
-  --green-900: #024B32;
+  --green-600: #09a573;
+  --green-900: #024b32;
   --peach-400: #f2c4b0;
   --red-500: #ed9798;
   --violet-500: #b19cd3;
@@ -28,7 +28,7 @@
   --violet-700: #5f428f;
   --violet-900: #331a5b;
   --yellow-400: #f9e89d;
-  --green-shadow: #09A573;
+  --green-shadow: #09a573;
   --sans-serif-stack: "Quicksand", "Source Sans 3", "Source Sans Pro",
     "Work Sans", "Lato", "Noto Sans", "Assistant", "Libre Franklin", "Open Sans",
     "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -52,13 +52,14 @@
   --food-white-stroke: var(--truegrey-400);
   --food-unknown-fill: #949494;
   --food-unknown-stroke: #949494;
-  --transition-radial-viz-rotation: transform 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55) 0s;
+  --transition-radial-viz-rotation: transform 0.5s
+    cubic-bezier(0.68, -0.55, 0.27, 1.55) 0s;
 
   overscroll-behavior: none;
 }
 
 ::selection {
-  background-color: #E89BB7;
+  background-color: #e89bb7;
   color: #000;
 }
 
@@ -74,8 +75,8 @@
     --gold-400: #ecb255;
     --green-400: #06db97;
     --green-500: #24d59e;
-    --green-600: #84DCC0;
-    --green-900: #ECF9F5;
+    --green-600: #84dcc0;
+    --green-900: #ecf9f5;
     --green-shadow: #067551;
     --peach-400: #ebc19d;
     --red-500: #f59fa3;
@@ -172,7 +173,7 @@ button.close-dialog:active {
 
 button.close-dialog:focus {
   transition: border-color 0.15s ease-in-out;
-  border-color: var(--coolgrey-900)
+  border-color: var(--coolgrey-900);
 }
 
 button.next-button,
@@ -290,11 +291,13 @@ dialog {
 }
 
 ::backdrop {
-  background-image: linear-gradient(-14deg,
-      var(--violet-500),
-      var(--red-500),
-      var(--peach-400),
-      var(--gold-400));
+  background-image: linear-gradient(
+    -14deg,
+    var(--violet-500),
+    var(--red-500),
+    var(--peach-400),
+    var(--gold-400)
+  );
   opacity: 0.8;
 }
 
@@ -310,21 +313,34 @@ dialog {
 
 #intro {
   width: 100%;
-  background-image: linear-gradient(-14deg, var(--violet-500), var(--red-500), var(--peach-400), var(--gold-400));
-  clip-path: polygon(0 0,
-      100% 0,
-      100% calc(100% - 7vw),
-      0 100%);
+  background-image: linear-gradient(
+    -14deg,
+    var(--violet-500),
+    var(--red-500),
+    var(--peach-400),
+    var(--gold-400)
+  );
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 7vw), 0 100%);
 }
 
 @media (prefers-color-scheme: dark) {
   #intro {
-    background: linear-gradient(-14deg, #331a5b, #561d62, #762066, #942765, #ae3360, #c44559, #d55c50, #e17547)
+    background: linear-gradient(
+      -14deg,
+      #331a5b,
+      #561d62,
+      #762066,
+      #942765,
+      #ae3360,
+      #c44559,
+      #d55c50,
+      #e17547
+    );
   }
 
   .dark-mode-text-shadow {
     color: #fff;
-    text-shadow: 0px 1px 4px rgba(0, 0, 0, .7);
+    text-shadow: 0px 1px 4px rgba(0, 0, 0, 0.7);
   }
 }
 
@@ -465,7 +481,7 @@ dialog {
   width: 38rem;
   max-width: 100vw;
   padding-left: 24px;
-  padding-right: 24px
+  padding-right: 24px;
 }
 
 @media (min-width: 1080px) {
@@ -540,7 +556,15 @@ dialog {
 }
 
 .radial-viz-detail-gradient {
-  mask-image: conic-gradient(from 0.5turn at 50% 50%, rgb(0, 0, 0, 0) 0%, rgb(0, 0, 0, 0) 38%, rgb(0, 0, 0, 1) 42%, rgb(0, 0, 0, 1) 58%, rgb(0, 0, 0, 0) 62%, rgb(0, 0, 0, 0) 100%);
+  mask-image: conic-gradient(
+    from 0.5turn at 50% 50%,
+    rgb(0, 0, 0, 0) 0%,
+    rgb(0, 0, 0, 0) 38%,
+    rgb(0, 0, 0, 1) 42%,
+    rgb(0, 0, 0, 1) 58%,
+    rgb(0, 0, 0, 0) 62%,
+    rgb(0, 0, 0, 0) 100%
+  );
 }
 
 .radial-viz-tooltip-container {
@@ -748,7 +772,7 @@ textPath.out-of-season {
     position: relative;
   }
 
-  #outro>div {
+  #outro > div {
     width: 50%;
   }
 
@@ -770,7 +794,6 @@ textPath.out-of-season {
 }
 
 @keyframes wiggle {
-
   0%,
   50% {
     transform: rotate(0deg);
@@ -790,7 +813,6 @@ textPath.out-of-season {
 }
 
 @keyframes bigger-wiggle {
-
   0%,
   50% {
     transform: rotate(0deg);
