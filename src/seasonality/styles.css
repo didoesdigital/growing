@@ -756,6 +756,7 @@ textPath.out-of-season {
 
 .left-section {
   background-color: var(--peach-400, #f2c4b0);
+  text-align: center;
 }
 
 .pineapple-photo {
