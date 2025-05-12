@@ -754,6 +754,10 @@ textPath.out-of-season {
   width: 38rem;
 }
 
+.left-section {
+  background-color: var(--peach-400, #f2c4b0);
+}
+
 .pineapple-photo {
   aspect-ratio: 3024/4032;
   object-fit: contain;
